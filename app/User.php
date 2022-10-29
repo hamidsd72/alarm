@@ -82,6 +82,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\User','id','reagent_id')->count();
     }
+    public function my_employees()
+    {
+        return $this->hasMany('App\Model\TaskMaster','master_id');
+    }
     protected static function boot()
     {
         parent::boot();

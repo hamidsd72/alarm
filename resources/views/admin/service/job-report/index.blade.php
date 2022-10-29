@@ -3,56 +3,52 @@
 
 @endsection
 @section('content')
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card res_table">
-                        <div class="card-header bg-zard">
-                            {{-- <div class="float-left">
-                                <button class="btn btn-info float-left" data-toggle="modal" data-target="#ModalTicket">محاسبه حقوق کارمندان</button>
-                            </div> --}}
-                            <button type="button" class="btn btn-dark float-left" data-toggle="modal" data-target="#exampleModal">
-                                @if(isset($id)) {{$users->where('id',$id)->first()?$users->where('id',$id)->first()->first_name.' '.$users->where('id',$id)->first()->last_name:$id}} @else فیلترکردن بر اساس کاربران @endif
-                                <i class="fa fa-search"></i>
-                            </button>
-                            <div class="float-right">
-                                <button class="btn btn-light px-3" onclick="ExportToExcel('xlsx')"><i class="fa fa-file-excel-o"></i></button>
-                                <button class="btn btn-light px-3 mx-2" onclick="generatePDF()"><i class="fa fa-file-pdf-o"></i></button>
-                            </div>
-                        </div>
-                        <div class="card-body res_table_in">
-                            <table id="example2" class="table table-bordered table-hover table-striped">
-                                <thead>
-                                <tr>
-                                    <th>کارمند</th>
-                                    <th>{{$title2}}</th>
-                                    <th>عملیات</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @if(count($items)>0)
-                                    @foreach($items as $item)
-                                        <tr >
-                                            <td>{{$item->first_name.' '.$item->last_name}}</td>
-                                            <td>{{$item->setJob()->count().' فعالیت دارد '}}</td>
-                                            <td class="text-center">
-                                                <a href="{{route('admin.job-report.show',$item->id)}}" class="badge bg-primary">بررسی </a>
-                                            </td> 
-                                        </tr>
-                                    @endforeach
-                                @else
-                                    <tr>
-                                        <td colspan="6" class="text-center">موردی یافت نشد</td>
-                                    </tr>
-                                @endif
-                            </table>
-                        </div>
-                    </div>
-                    <div class="pag_ul">
-                        {{ $items->links() }}
+    <section class="row">
+        <div class="col-12">
+            <div class="card res_table">
+                <div class="card-header bg-zard">
+                    {{-- <div class="float-left">
+                        <button class="btn btn-info float-left" data-toggle="modal" data-target="#ModalTicket">محاسبه حقوق کارمندان</button>
+                    </div> --}}
+                    <button type="button" class="btn btn-dark float-left" data-toggle="modal" data-target="#exampleModal">
+                        @if(isset($id)) {{$users->where('id',$id)->first()?$users->where('id',$id)->first()->first_name.' '.$users->where('id',$id)->first()->last_name:$id}} @else فیلترکردن بر اساس کاربران @endif
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <div class="float-right">
+                        <button class="btn btn-light px-3" onclick="ExportToExcel('xlsx')"><i class="fa fa-file-excel-o"></i></button>
+                        <button class="btn btn-light px-3 mx-2" onclick="generatePDF()"><i class="fa fa-file-pdf-o"></i></button>
                     </div>
                 </div>
+                <div class="card-body res_table_in">
+                    <table id="example2" class="table table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>کارمند</th>
+                            <th>{{$title2}}</th>
+                            <th>عملیات</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if(count($items)>0)
+                            @foreach($items as $item)
+                                <tr >
+                                    <td>{{$item->first_name.' '.$item->last_name}}</td>
+                                    <td>{{$item->setJob()->count().' فعالیت دارد '}}</td>
+                                    <td class="text-center">
+                                        <a href="{{route('admin.job-report.show',$item->id)}}" class="badge bg-primary">بررسی </a>
+                                    </td> 
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="6" class="text-center">موردی یافت نشد</td>
+                            </tr>
+                        @endif
+                    </table>
+                </div>
+            </div>
+            <div class="pag_ul">
+                {{ $items->links() }}
             </div>
         </div>
     </section>

@@ -1,19 +1,19 @@
 @extends('user.master')
 @section('content')
-    <section class="col-12 mt-5 p-3">
+    <section class="col-12 mt-5">
         <div class="card res_table" style="background: transparent;">
             <div class="card-header">
-                <h3 class="card-title float-right mt-2">درخواست ها </h3>
-                <a href="#" href="javascript:void(0);" data-toggle="modal" data-target="#ModalTicket" class="float-left btn btn-info">
+                <a href="#" href="javascript:void(0);" data-toggle="modal" data-target="#ModalTicket" class="float-right btn btn-info">
                     ادامه
                     <i class="fa fa-plus"></i>
                 </a>
+                <a href="{{url()->previous()}}" class="float-left text-secondary h3 pt-2 ps-4"><i class="fa fa-arrow-left"></i></a>
             </div>
-            <div class="row mb-0">
+            {{-- <div class="row mb-0">
                 @if($item->answered == "yes")
                     <div class="col p-0"></div>
-                @endif
-                <div class="col-8 p-0 radius20 bg-white card-body res_table_in m-2 p-3 redu20">
+                @endif --}}
+                <div class="radius20 bg-white card-body res_table_in m-2 p-1 redu20">
                     <div class="card-body res_table_in py-0 redu20">
                         <p class="mb-2">
                             وضعیت : 
@@ -28,10 +28,10 @@
                             @endif
                             {{-- <span class="mx-4 text-dark">{{$item->category}}</span> --}}
                         </p>
-                        <h4>{{$item->subject}}
+                        <h6>{{$item->subject}}
                             @if ($item->date){{' از '.explode(",",$item->date)[0].' تا '.explode(",",$item->date)[1]}}@endif
-                        </h4>
-                        <p class="py-2 m-0">{{$item->text}}</p>
+                        </h6>
+                        <p class="py-1 m-0">{{$item->text}}</p>
                         @if ($item->attach)
                             <a class="text-primary" href="/{{ $item->attach }}" target="_blank">
                                 <i class="fa fa-paperclip"></i>
@@ -40,14 +40,14 @@
                         @endif
                     </div>
                 </div>
-                <div class="col p-0"></div>
-            </div>
+                {{-- <div class="col p-0"></div>
+            </div> --}}
             @foreach($items as $sub_item)
-                <div class="row mb-0">
-                    @if($sub_item->answered == "yes")
+                {{-- <div class="row mb-0"> --}}
+                    {{-- @if($sub_item->answered == "yes")
                         <div class="col p-0"></div>
-                    @endif
-                    <div class="col-8 p-0 radius20 bg-white card-body res_table_in m-2 p-3 redu20">
+                    @endif --}}
+                    <div class="radius20 bg-white card-body res_table_in m-2 p-1 redu20">
                         <div class="card-body res_table_in py-0 redu20">
                             <p class="mb-2">
                                 وضعیت : 
@@ -61,10 +61,10 @@
                                     <span class="reply_email_no">پیام از واحد {{$sub_item->category}}</span>
                                 @endif
                             </p>
-                            <h4>{{$item->subject}}
+                            <h6>{{$item->subject}}
                                 @if ($item->date){{' از '.explode(",",$item->date)[0].' تا '.explode(",",$item->date)[1]}}@endif
-                            </h4>
-                            <p class="py-2 m-0">{{$sub_item->text}}</p>
+                            </h6>
+                            <p class="py-1 m-0">{{$sub_item->text}}</p>
                             @if ($sub_item->attach)
                                 <a class="text-primary" target="_blank" href="/{{ $sub_item->attach }}" >
                                     <i class="fa fa-paperclip"></i>
@@ -73,10 +73,10 @@
                             @endif
                         </div>
                     </div>
-                    @unless($sub_item->answered == "yes")
+                    {{-- @unless($sub_item->answered == "yes")
                         <div class="col p-0"></div>
-                    @endunless
-                </div>
+                    @endunless --}}
+                {{-- </div> --}}
             @endforeach
         </div>
         <div class="pag_ul">
@@ -138,6 +138,7 @@
                                                         <option value=" - مرخصی روزانه " selected>روزانه</option>
                                                         <option value=" - مرخصی ساعتی ">ساعتی</option>
                                                         <option value=" - مرخصی استعلاجی ">استعلاجی</option>
+                                                        <option value=" - مرخصی تشویقی ">تشویقی</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-field form-text">
@@ -171,7 +172,4 @@
         </div>
         
     </section>
-
-
-
 @endsection

@@ -6,10 +6,16 @@
                 <h3 class="card-title float-right">{{$title2}}</h3>
             </div>
             @foreach($items as $item)
-                <div class="redu30 bg-white card-body res_table_in m-3 p-3">
-                    @if($item->status=="pending")<i class="fa fa-eye-slash text-danger mx-1"></i> @else <i class="fa fa-eye text-success mx-1"></i> @endif
+                <div class="redu30 bg-white card-body res_table_in m-3 p-2">
+                    @if($item->status=="pending")
+                        <img class="mx-1" src="https://img.icons8.com/ultraviolet/18/000000/invisible.png"/>
+                    @else
+                        <img class="mx-1" src="https://img.icons8.com/ultraviolet/18/000000/visible.png"/>
+                    @endif
                     {{$item->subject}}
-                    <a href="{{route('user.notification.show',$item->id)}}" class="btn btn-primary col-12 mt-3">دیدن پیام</a>
+                    <div class="text-end">
+                        <a href="{{route('user.notification.show',$item->id)}}" class="btn btn-primary mt-2 py-0">نمایش پیام</a>
+                    </div>
                 </div>
             @endforeach
         </div>

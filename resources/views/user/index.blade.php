@@ -87,35 +87,13 @@
         </div>
     </div>
 
-    {{-- <div class="splide double-slider slider-no-dots text-center visible-slider ps-2" id="double-slider-1">
-        <div class="splide__track">
-            <div class="splide__list">
-                @foreach($serviceCat as $service)
-                    <div class="splide__slide">
-                        <a href="/services/{{$service->id}}">
-                            <div class="card card-style m-0" style="border-radius: 20px;">
-                                <img src="{{url($service->pic)}}" alt="{{$service->title}}">
-                                <a href="{{route('user.services',$service->id)}}" class="card-footer">
-                                    <p class="text-dark mb-1" style="text-align: right;">{{'دسته ی '.$service->title}}</p>
-                                    <p class="small text-secondary" style="text-align: right;">نمایش  این دسته </p>
-                                </a>
-                            </div>
-                        </a>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </div> --}}
-
     <div class="container mt-4 @hasanyrole('مدیر ارشد'|'مدیر') d-none @endhasanyrole">
         <div class="card">
             <div class="card-header">
                 <div class="row mb-0">
                     <div class="col">
                         <h6 class="text-dark my-1">
-                            {{-- <i class="fa fa-users"></i><span> --}}
                             <img src="https://img.icons8.com/external-icematte-lafs/28/000000/external-Monitoring-it-icematte-lafs.png"/>
-                            {{-- <i class="fa fa-tasks"></i><span> --}}
                             <span class="vm ml-2">فعالیت های امروز</span>
                         </h6>
                     </div>

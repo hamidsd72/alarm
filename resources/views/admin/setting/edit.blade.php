@@ -33,7 +33,22 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             {{ Form::label('paginate', 'صفحه بندی') }}
-                                            {{ Form::text('paginate', $item->paginate, array('class' => 'form-control', 'required' => 'required')) }}
+                                            {{ Form::number('paginate', $item->paginate, array('class' => 'form-control', 'required' => 'required')) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {{ Form::label('sign_in_type', 'نوع ورود به حساب کاربران') }}
+                                            <select name="sign_in_type" id="sign_in_type" class="form-control">
+                                                <option value="sms" {{$item->paginate=='sms'?'selected':''}}>ورود با کد پیامکی</option>
+                                                <option value="password" {{$item->paginate=='password'?'selected':''}}>ورود با رمز عبور</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {{ Form::label('leave_day_limit', 'تعداد روز مرخصی در سال (میتواند خالی باشد)') }}
+                                            {{ Form::number('leave_day_limit', $item->leave_day_limit, array('class' => 'form-control')) }}
                                         </div>
                                     </div>
                                     <div class="col-12 text-secondary">
@@ -126,7 +141,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="exampleInputFile">تصویر لوگو سایت(png)</label>
+                                        <label for="exampleInputFile">تصویر لوگو(png)</label>
                                         <div class="input-group">
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" id="exampleInputFile" name="logo_site" accept=".png">
@@ -140,7 +155,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-6 mt-2 mb-2">
-                                        <label for="exampleInputFile">تصویر فاوآیکون سایت(png)</label>
+                                        <label for="exampleInputFile">تصویر فاوآیکون(png)</label>
                                         <div class="input-group">
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" id="exampleInputFile" name="icon_site" accept=".png">

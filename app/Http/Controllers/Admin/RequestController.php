@@ -96,7 +96,7 @@ class RequestController extends Controller {
             'description.max' => 'توضیحات نباید بیشتر از ۲۵۰۰ کاراکتر باشد'
         ]);
         if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') ) {
-            $item = Request::where('reagent_id', $this->user_id() )->findOrFail($id);
+            $item = Request::where('reagent_id', $this->user_id() )->findOrFail($wid);
         } else {
             $item = Request::where('reagent_id', $this->user_id() )->where('employee_id', auth()->user()->id)->find($id);
             if (!$item) {
@@ -127,5 +127,4 @@ class RequestController extends Controller {
         }
     }
 }
-
 

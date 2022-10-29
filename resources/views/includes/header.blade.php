@@ -19,12 +19,12 @@
                 </a>
             </div>
             <div class="ml-auto col-auto">
-                <a href="{{route('user.notification.index')}}" class="mx-2">
-                    <img src="https://img.icons8.com/external-icematte-lafs/28/000000/external-Messages-it-icematte-lafs.png"/>
+                <a href="{{route('user.notification.index')}}" class="mx-2 small">
+                    <img src="https://img.icons8.com/ultraviolet/18/000000/reading-confirmation.png"/>
                     {{$notification>0?$notification.' خوانده نشده ':''}}
                 </a>
                 <button class="menu-btn btn btn-link-default" type="button">
-                    <img src="https://img.icons8.com/ultraviolet/28/000000/line-width.png"/>
+                    <img src="https://img.icons8.com/ultraviolet/28/000000/drag-list-down.png"/>
                 </button>
             </div>
         </div>

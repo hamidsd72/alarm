@@ -32,22 +32,6 @@
                         <input type="hidden" name="type" value="package">
                         <input type="text" class="form-control search" name="search" placeholder="جستجو در فعالیت های من">
                     </div>
-                    {{-- <div class="col-auto pl-0">
-                        <button class="sqaure-btn btn btn-info text-white filter-btn" type="button">
-                            <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
-                                <title>ionicons-v5-i</title>
-                                <line x1='368' y1='128' x2='448' y2='128' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
-                                <line x1='64' y1='128' x2='304' y2='128' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
-                                <line x1='368' y1='384' x2='448' y2='384' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
-                                <line x1='64' y1='384' x2='304' y2='384' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
-                                <line x1='208' y1='256' x2='448' y2='256' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
-                                <line x1='64' y1='256' x2='144' y2='256' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
-                                <circle cx='336' cy='128' r='32' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
-                                <circle cx='176' cy='256' r='32' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
-                                <circle cx='336' cy='384' r='32' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
-                            </svg>
-                        </button>
-                    </div> --}}
                 </div>
             </form>
         </div>
@@ -98,7 +82,7 @@
                     <div class="row mb-0">
                         <div class="col">
                             <h6 class="text-dark my-1">
-                                <img src="https://img.icons8.com/ultraviolet/18/000000/approve.png"/>
+                                <img src="https://img.icons8.com/ultraviolet/18/000000/new-job.png"/>
                                 <span class="vm ml-2">فعالیت های امروز</span>
                             </h6>
                         </div>
@@ -186,38 +170,22 @@
                 <div class="row mb-0">
                     <div class="col">
                         <h6 class="text-dark my-1">
-                            <img src="https://img.icons8.com/ultraviolet/18/000000/edit-property.png"/>
+                            <img src="https://img.icons8.com/ultraviolet/18/000000/chat.png"/>
                             <span class="vm ml-2">ارسال درخواست</span>
                         </h6>
                     </div>
                     <div class="col-auto">
-                        {{-- <a class="dropdown-item" href="{{ route('user.packages') }}">نمایش همه</a> --}}
                         <a class="dropdown-item" href="{{ route('user.tickets') }}">نمایش همه</a>
                     </div>
                 </div>
             </div>
             <div class="card-body">
-                {{-- <div class="row px-2 mb-0">
-                    @foreach($serviceCat as $service)
-                        <a href="{{ route('user.services',$service->id) }}" class="col-6 col-lg-4 px-2 mb-3 balabala">
-                            <div>
-                                <input type="radio" name="facilitiestype" class="checkbox-boxed" id="{{$service->title}}">
-                                <label class="checkbox-lable" for="{{$service->title}}">
-                                    <span class="image-boxed text-white">
-                                        <img src="{{url($service->pic)}}" alt="{{$service->title}}" class="img-fluid shadow">
-                                    </span>
-                                    <span class="p-2 h6">{{$service->title}}</span>
-                                </label>
-                            </div>
-                        </a>
-                    @endforeach
-                </div> --}}
                 <div class="row px-2 mb-0" id="mamad">
                     <div class="col-6 col-md-3 px-2 mb-3" onclick="openModal('درخواست مساعده')">
                         <input type="radio" name="facilitiestype" class="checkbox-boxed" id="parking">
                         <label class="checkbox-lable" for="parking">
                             <span class="image-boxed text-white">
-                                <img src="https://img.icons8.com/ultraviolet/40/000000/economic-improvement.png"/>
+                                <img src="https://img.icons8.com/ultraviolet/40/000000/get-cash.png"/>
                             </span>
                             <span class="pt-2 h6">مساعده</span>
                         </label>
@@ -226,7 +194,7 @@
                         <input type="radio" name="facilitiestype" class="checkbox-boxed" id="sport">
                         <label class="checkbox-lable" for="sport">
                             <span class="image-boxed text-white">
-                                <img src="https://img.icons8.com/ultraviolet/40/000000/economic-improvement.png"/>
+                                <img src="https://img.icons8.com/ultraviolet/40/000000/get-cash.png"/>
                             </span>
                             <span class="pt-2 h6">تنخواه</span>
                         </label>
@@ -235,7 +203,7 @@
                         <input type="radio" name="facilitiestype" class="checkbox-boxed" id="garden">
                         <label class="checkbox-lable" for="garden">
                             <span class="image-boxed text-white">
-                                <img src="https://img.icons8.com/ultraviolet/40/000000/change-user-male.png"/>
+                                <img src="https://img.icons8.com/ultraviolet/40/000000/leaving-queue.png"/>
                             </span>
                             <span class="pt-2 h6">مرخصی</span>
                         </label>
@@ -254,6 +222,46 @@
         </div>
     </div>
 
+    <div class="container mt-2">
+        <div class="card" id="addtodevice">               
+            <div class="card-body">
+                <h6 class="text-dark">
+                    <img src="https://img.icons8.com/ultraviolet/18/000000/rebalance-portfolio.png">
+                    بررسی <span class="font-weight-bold">گزارشات اخیر</span>
+                </h6>
+
+                <div class="row my-3 border redu30">
+                    <div class="col-auto align-self-center">
+                        <img src="https://img.icons8.com/ultraviolet/40/000000/rebalance-portfolio.png"/ class="rounded ms-2">
+                    </div>
+                    <div class="col text-secondary pl-0">
+                        <p class=" text-secondary my-1">گزارش کارکرد های اخیر</p>
+                        <a href="{{ route('user.user-my-report.show','rollCall') }}" class="btn btn-primary mb-2 p-0 px-4">نمایش</a>
+                    </div>
+                </div>
+                <div class="row my-3 border redu30">
+                    <div class="col-auto align-self-center">
+                        <img src="https://img.icons8.com/ultraviolet/40/000000/new-job.png"/ class="rounded ms-2">
+                    </div>
+                    <div class="col text-secondary pl-0">
+                        <p class=" text-secondary my-1">گزارش فعالیت های اخیر</p>
+                        <a href="{{ route('user.user-my-report.show','job') }}" class="btn btn-primary mb-2 p-0 px-4">نمایش</a>
+                    </div>
+                </div>
+                <div class="row my-3 border redu30">
+                    <div class="col-auto align-self-center">
+                        <img src="https://img.icons8.com/ultraviolet/40/000000/leaving-queue.png"/ class="rounded ms-2">
+                    </div>
+                    <div class="col text-secondary pl-0">
+                        <p class=" text-secondary my-1">گزارش مرخصی های اخیر</p>
+                        <a href="{{ route('user.user-my-report.show','leave-day') }}" class="btn btn-primary mb-2 p-0 px-4">نمایش</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
     {{-- تماس با پشتیبانی --}}
     <div class="container mt-4">
         <div class="card">
@@ -321,6 +329,7 @@
                                             <option value=" - مرخصی روزانه " selected>روزانه</option>
                                             <option value=" - مرخصی ساعتی ">ساعتی</option>
                                             <option value=" - مرخصی استعلاجی ">استعلاجی</option>
+                                            <option value=" - مرخصی تشویقی ">تشویقی</option>
                                         </select>
                                     </div>
                                     <div class="form-field form-text">

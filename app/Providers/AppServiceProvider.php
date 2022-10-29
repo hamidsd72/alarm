@@ -51,8 +51,13 @@ class AppServiceProvider extends ServiceProvider
             if (!file_exists($setting->logo_site) ) {
                 $setting->logo_site = Setting::first()->logo_site;
             }
+            $permission = Permission::where('user_id', $id)->where('name', auth()->user()->getRoleNames()->first() )->first();
+            $access = false;
+            if ($permission&&$permission->access) {
+                $access = explode(",", $permission->access );
+            }
             $view->with('order', ServiceBuy::where('status','pending')->count());
-            $view->with('permission', Permission::where('user_id', $id)->where('name', auth()->user()->getRoleNames()->first() )->first() );
+            $view->with('access', $access);
             $view->with('setting', $setting);
             $view->with('agent', User::role('نماینده')->where('user_status','pending')->count());
             $view->with('allUsers', $allUsers);

@@ -38,6 +38,7 @@ Route::resource('user-tours', 'TourAdsController');
 Route::resource('sign-up-using-mobile', 'NewRegisterController');
 Route::resource('my-user', 'UserController');
 Route::resource('user-search', 'SearchController');
+Route::resource('user-my-report', 'ReportController');
 // Route::post('user/search/services', 'SearchController@search')->name('services-search');
 
 // ticket 

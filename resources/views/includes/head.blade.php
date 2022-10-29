@@ -14,8 +14,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/fonts/css/fontawesome-all.min.css') }}">
     <link rel="manifest" href="_manifest.json" data-pwa-version="set_in_manifest_and_pwa_js">
     {{-- <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/app/icons/icon-192x192.png') }}"> --}}
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ $setting->icon_site }}">
-    <link rel="icon" type="image/x-icon" href="{{ $setting->icon_site }}"> 
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ $setting->icon_site?url($setting->icon_site):'' }}">
+    <link rel="icon" type="image/x-icon" href="{{ $setting->icon_site?url($setting->icon_site):'' }}"> 
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

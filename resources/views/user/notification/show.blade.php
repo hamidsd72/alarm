@@ -4,7 +4,7 @@
         <div class="card res_table" style="background: transparent;">
             <div class="card-header">
                 <h3 class="card-title float-right mt-2">{{$title2}}</h3>
-                <a href="{{url()->previous()}}" class="float-left text-secondary h3 pt-2"><i class="fa fa-arrow-left"></i></a>
+                <a href="{{url()->previous()}}" class="float-left text-secondary h3 pt-2 ps-4"><i class="fa fa-arrow-left"></i></a>
             </div>
             <div class="redu30 bg-white card-body res_table_in m-3 px-3">
                 <h6 class="py-2">{{$item->subject}}</h6>

@@ -101,8 +101,13 @@
     }
     .card {
         box-shadow: none;
-        
     }
+    .inline-left-logo {
+        float: left;
+        position: relative;
+        top: -42px;
+        left: 2px;
+    }   
 </style>
 
 <body class="theme-light body-scroll d-flex flex-column h-100 menu-overlay" data-highlight="highlight-red" data-gradient="body-default">

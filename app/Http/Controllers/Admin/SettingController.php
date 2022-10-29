@@ -116,19 +116,24 @@ class SettingController extends Controller {
             if ($request->جمعه && $request->جمعه=="on") {
                 $off_day = $off_day."جمعه";
             }
+            if ($request->leave_day_limit > 300) {
+                return redirect()->back()->withInput()->with('err_message', 'میزان روز مرخصی سالانه وارد شده منطقی نیست');
+            }
             $item = new Setting();
             try {
-                $item->user_id      = $request->id;
-                $item->title        = $request->title;
-                $item->keyword      = $request->keyword;
-                $item->description  = $request->description;
-                $item->paginate     = $request->paginate;
-                $item->off_day = $off_day;
-                $item->support_call = $request->support_call;
-                $item->dailyStartTime = $request->dailyStartTime;
-                $item->dailyFinishTime = $request->dailyFinishTime;            
+                $item->user_id          = $request->id;
+                $item->title            = $request->title;
+                $item->keyword          = $request->keyword;
+                $item->description      = $request->description;
+                $item->sign_in_type     = $request->sign_in_type;
+                $item->paginate         = $request->paginate;
+                $item->leave_day_limit  = $request->leave_day_limit;
+                $item->off_day          = $off_day;
+                $item->support_call     = $request->support_call;
+                $item->dailyStartTime   = $request->dailyStartTime;
+                $item->dailyFinishTime  = $request->dailyFinishTime;            
                 if ($request->hasFile('logo_site')) {
-                    $item->logo_site = file_store($request->logo_site, 'source/asset/uploads/setting/' . $request->id. '/' . my_jdate(date('Y/m/d'), 'Y-m-d') . '/photos/', 'logo_site-');
+                    $item->logo_site    = file_store($request->logo_site, 'source/asset/uploads/setting/' . $request->id. '/' . my_jdate(date('Y/m/d'), 'Y-m-d') . '/photos/', 'logo_site-');
                 }
                 
                 if ($request->hasFile('icon_site')) {
@@ -233,15 +238,20 @@ class SettingController extends Controller {
         if ($request->جمعه && $request->جمعه=="on") {
             $off_day = $off_day."جمعه";
         }
+        if ($request->leave_day_limit > 300) {
+            return redirect()->back()->withInput()->with('err_message', 'میزان روز مرخصی سالانه وارد شده منطقی نیست');
+        }
         try {
             $item->title = $request->title;
-            $item->dailyStartTime = $request->dailyStartTime;
-            $item->dailyFinishTime = $request->dailyFinishTime;
-            $item->keyword = $request->keyword;
-            $item->off_day = $off_day;
-            $item->description = $request->description;
-            $item->paginate = $request->paginate;
-            $item->support_call = $request->support_call;
+            $item->dailyStartTime   = $request->dailyStartTime;
+            $item->dailyFinishTime  = $request->dailyFinishTime;
+            $item->keyword          = $request->keyword;
+            $item->leave_day_limit  = $request->leave_day_limit;
+            $item->sign_in_type     = $request->sign_in_type;
+            $item->off_day          = $off_day;
+            $item->description      = $request->description;
+            $item->paginate         = $request->paginate;
+            $item->support_call     = $request->support_call;
             if ($request->hasFile('logo_site')) {
                 if (is_file($item->logo_site)) {
                     $old_path = $item->logo_site;

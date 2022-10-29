@@ -304,7 +304,7 @@
                                 <p>لیست مشتریان</p>
                             </a>
                         @endrole
-                        @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'کاربران' ,explode(",", $permission->access )) )
+                        @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'کاربران' ,  $access ) )
                             <li class="nav-item has-treeview @role('مدیر ارشد') d-none @endrole">
                                 <a href="javascript:void(0);" class="nav-link">
                                     <i class="nav-icon fa fa-group"></i>
@@ -328,7 +328,19 @@
                                                 <p>سطوح دسترسی</p>
                                             </a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a href="{{route('admin.task-master.index')}}" class="nav-link">
+                                                <i class="fa fa-circle-o nav-icon"></i>
+                                                <p>مدیریت سرپرست ها</p>
+                                            </a>
+                                        </li>
                                     @endif
+                                    <li class="nav-item">
+                                        <a href="{{route('admin.leave-day.index')}}" class="nav-link">
+                                            <i class="fa fa-circle-o nav-icon"></i>
+                                            <p>مرخصی کارمندان</p>
+                                        </a>
+                                    </li>
                                     <li class="nav-item">
                                         <a href="{{route('admin.marketer.list')}}" class="nav-link">
                                             <i class="fa fa-circle-o nav-icon"></i>
@@ -356,7 +368,7 @@
                                 </ul>
                             </li>
                         @endif
-                        @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'اعلانات' ,explode(",", $permission->access )) )
+                        @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'اعلانات' ,  $access ) )
                             <li class="nav-item has-treeview">
                                 <a href="javascript:void(0);" class="nav-link">
                                     <i class="nav-icon fa fa-smile-o"></i>
@@ -393,7 +405,7 @@
                                 </ul>
                             </li>
                         @endif
-                        @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'فعالیتها' ,explode(",", $permission->access )) )
+                        @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'فعالیتها' ,  $access ) )
                             <li class="nav-item has-treeview @role('مدیر ارشد') d-none @endrole">
                                 <a href="javascript:void(0);" class="nav-link">
                                     <i class="nav-icon fa fa-handshake-o"></i>
@@ -442,7 +454,7 @@
                                 </ul>
                             </li>
                         @endif
-                        {{-- @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'وبینارها' ,explode(",", $permission->access )) )
+                        {{-- @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'وبینارها' ,  $access ) )
                             <li class="nav-item has-treeview">
                                 <a href="javascript:void(0);" class="nav-link">
                                     <i class="nav-icon fa fa-graduation-cap"></i>
@@ -496,7 +508,7 @@
                                 {{-- </ul>
                             </li>
                         @endif --}}
-                        @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'محتوا' ,explode(",", $permission->access )) )
+                        @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'محتوا' ,  $access ) )
 
                             {{-- <li class="nav-item has-treeview">
                                 <a href="javascript:void(0);" class="nav-link">
@@ -632,7 +644,7 @@
                                 </ul>
                             </li>
                         @endif
-                        @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'تنظیمات' ,explode(",", $permission->access )) )
+                        @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'تنظیمات' ,  $access ) )
                             <li class="nav-item has-treeview">
                                 <a href="javascript:void(0);" class="nav-link">
                                     <i class="nav-icon fa fa-cog"></i>
@@ -699,9 +711,9 @@
                                 @else
                                     <a href="{{url()->previous()}}">
                                 @endif
-                                        {!! $title2 !!}
-                                        <i class='fa fa-arrow-left'></i>
-                                    </a>
+                                    {!! $title2 !!}
+                                    <i class='fa fa-arrow-left'></i>
+                                </a>
                             </li>
                         </ol>
                     </div>

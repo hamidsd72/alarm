@@ -42,6 +42,21 @@
                                             {{ Form::number('paginate',null, array('class' => 'form-control' , 'required' => 'required')) }}
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {{ Form::label('sign_in_type', 'نوع ورود به حساب کاربران') }}
+                                            <select name="sign_in_type" id="sign_in_type" class="form-control">
+                                                <option value="sms" selected>ورود با کد پیامکی</option>
+                                                <option value="password">ورود با رمز عبور</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {{ Form::label('leave_day_limit', 'تعداد روز مرخصی در سال (میتواند خالی باشد)') }}
+                                            {{ Form::number('leave_day_limit', null, array('class' => 'form-control')) }}
+                                        </div>
+                                    </div>
                                     <div class="col-12 text-secondary">
                                         ساعت کاری چیست ؟
                                         <br>

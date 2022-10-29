@@ -12,27 +12,27 @@
 </style>
 
     <div class="container mt-5">
-        <div class="mb-5 mx-md-1 pb-4 px-4 fixed-bottom col-lg-3">
-            <h6>تماس با کارفرما</h6>
-            <button onclick="window.open(`tel:{{$item->agent()->phone}}`);" class="btn p-0 p-md-2 px-2 px-md-3 btn-light">
+        <div class="mx-md-1 p-3 fixed-bottom col-5 col-lg-3" style="margin-bottom: 60px;">
+            <h6 class="text-light rounded mb-2 p-1 me-4" style="background: #0009;">تماس با کارفرما</h6>
+            <button onclick="window.open(`tel:{{$item->agent()->phone}}`);" class="btn btn-dark" style="padding: 6px 13px;">
                 <img src="https://img.icons8.com/ultraviolet/18/000000/phone.png"/>
             </button>
-            <button onclick="window.open(`tel:{{$item->agent()->mobile}}`);" class="btn p-0 p-md-2 px-2 px-md-3 btn-light mx-3">
+            <button onclick="window.open(`tel:{{$item->agent()->mobile}}`);" class="btn btn-dark mx-3" style="padding: 6px 13px;">
                 <img src="https://img.icons8.com/ultraviolet/18/000000/broken-phone.png"/>
             </button>
         </div>
         <div class="card">
             <div class="card-body">
-                <div class="row mb-2">
+                <div class="row mb-1">
                     <div class="col">
-                        <h6>{{$item->packageName()?$item->packageName()->title:'________'}}</h6>
+                        <p class="m-0 text-dark fw-bold">{{$item->packageName()?$item->packageName()->title:'________'}}</p>
                     </div>
                     <div class="col-auto">
                         <a href="{{ URL::previous() }}" class="text-secondary h6"><i class='fas fa-arrow-left'></i></a>
                     </div>
                 </div>
                 <div class="row mb-0">
-                    <div class="col">
+                    <div class="col mb-1">
                         <p class="small vm">
                             {{-- <span class=" text-secondary">4.5</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon-size-12 vm" viewBox="0 0 24 24">
@@ -57,10 +57,10 @@
                 @if($item->file)
                     <a href="{{url($item->file->path)}}" class="btn btn-primary mb-2" download>دانلود فایل پیوست شده</a>
                 @endif
-                <div class="text-secondary px-2">
-                    {!! $item->text !!}
+                {!! $item->text !!}
+                <p class="text-dark px-2">
                     آدرس : {{$item->agent()?$item->agent()->city.' '.$item->agent()->locate.' '.$item->agent()->address:'________'}}
-                </div>
+                </p>
                 @if ($item->agent()&&$item->agent()->long_lat)
                     {{-- <div>
                         <a target="_blank" href="{{'https://www.google.com/maps/@'.$item->agent()->long_lat}}">

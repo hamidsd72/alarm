@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\User;
 use App\Model\Setting;
 use App\Model\Photo;
+use App\Model\LeaveDay;
 use App\Model\UserForm;
 use App\Model\TourForm;
 use App\Model\ProvinceCity;
@@ -22,14 +23,23 @@ class ProfileController extends Controller {
     public function controller_paginate() {
         return Setting::select('paginate')->latest()->firstOrFail()->paginate;
     }
+    function user_id() {
+        if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') ) {
+            return auth()->user()->id;
+        } else {
+            return auth()->user()->reagent_id;
+        }
+    }
     public function __construct() {
         $this->middleware('auth');
     }
     public function show() {
-        $item  = User::find(auth()->user()->id);
-        $forms = UserForm::where('user_id', auth()->user()->id)->get();
-        $tours = TourForm::where('user_id', auth()->user()->id)->get();
-        return view('admin.profile.show',compact('item','forms','tours'),['title1' => $this->controller_title('sum'), 'title2' => $this->controller_title('single')]);
+        $item               = User::find(auth()->user()->id);
+        $forms              = UserForm::where('user_id', auth()->user()->id)->get();
+        $tours              = TourForm::where('user_id', auth()->user()->id)->get();
+        $limit              = Setting::where('user_id', auth()->user()->id )->first()->leave_day_limit;
+        $leave_day_count    = LeaveDay::where('user_id',auth()->user()->id)->sum('count');
+        return view('admin.profile.show',compact('item','forms','tours','limit','leave_day_count'),['title1' => $this->controller_title('sum'), 'title2' => $this->controller_title('single')]);
     }
     public function edit() {
         $item=User::find(auth()->user()->id);

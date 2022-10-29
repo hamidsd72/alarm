@@ -11,9 +11,9 @@
             </div>
             @if(count($items)>0)
                 @foreach($items as $item)
-                    <div class="radius20 bg-white card-body res_table_in m-2 p-3 redu20">
+                    <div class="radius20 bg-white card-body res_table_in m-2 p-2 redu20">
                         <div class="d-flex">
-                            <h6 class="my-2">{{$item->subject}}</h6>
+                            <p class="my-1 text-dark">{{$item->subject}}</p>
                             <span class="text-dark px-2 small">
                                 @if ($item->mobile>0)
                                     {{$item->mobile.' مکالمه '}}
@@ -22,7 +22,9 @@
                                 @endif
                             </span>
                         </div>
-                        <a href="{{route('user.show-ticket',$item->id)}}" class="btn btn-primary col-12 mt-3">نمایش همه</a>
+                        <div class="text-end">
+                            <a href="{{route('user.show-ticket',$item->id)}}" class="btn btn-primary mt-2 py-0">نمایش بیشتر</a>
+                        </div>
                     </div>
                 @endforeach
             @else
@@ -39,7 +41,7 @@
 
                 <div class="modal-content redu20"> 
                     <div class="modal-header">
-                        <h4 class="modal-title">ارسال درخواست</h4>
+                        <h6 class="modal-title">ارسال درخواست</h6>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
@@ -109,6 +111,7 @@
                                                 <option value=" - مرخصی روزانه " selected>روزانه</option>
                                                 <option value=" - مرخصی ساعتی ">ساعتی</option>
                                                 <option value=" - مرخصی استعلاجی ">استعلاجی</option>
+                                                <option value=" - مرخصی تشویقی ">تشویقی</option>
                                             </select>
                                         </div>
                                         <div class="form-field form-text">
