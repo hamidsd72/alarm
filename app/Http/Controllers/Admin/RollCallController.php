@@ -18,6 +18,9 @@ class RollCallController extends Controller {
     public function controller_paginate() {
         return Setting::select('paginate')->where('user_id', $this->user_id())->first()->paginate;
     }
+    function persianStartOfMonth() {
+        return Carbon::now()->subDay( my_jdate(Carbon::now(), 'd') - 1 );
+    }
     public function __construct() {
         $this->middleware('auth');
     }
@@ -34,21 +37,17 @@ class RollCallController extends Controller {
         foreach ($items as $item) {
             $item->reagent_id = $item->created_at->diffInMinutes($item->updated_at, false);
         }
+
         // گروه بندی به ترتیب روزهای شمسی
-        // امسال
-        foreach ($items->where('created_at','>',Carbon::now()->startOfYear()) as $item) {
-            $item->text = 'امسال';
-        }
-        // سه ماه گذشته
-        foreach ($items->where('created_at','>',Carbon::now()->startOfMonth()->subMonth(3)) as $item) {
-            $item->text = 'سه ماهه اخیر ماه';
+        foreach ($items->where('created_at','<',$this->persianStartOfMonth()) as $item) {
+            $item->text = 'بیش از یک ماه قبل';
         }
         // این ماه
-        foreach ($items->where('created_at','>',Carbon::now()->startOfMonth()) as $item) {
+        foreach ($items->where('created_at','>',$this->persianStartOfMonth()) as $item) {
             $item->text = 'این ماه';
         }
         // این هفته
-        foreach ($items->where('created_at','>',Carbon::now()->startOfWeek()) as $item) {
+        foreach ($items->where('created_at','>',Carbon::now()->startOfWeek()->subDay(2)) as $item) {
             $item->text = 'این هفته';
         }
         // امروز
@@ -65,27 +64,24 @@ class RollCallController extends Controller {
         foreach ($items as $item) {
             $item->reagent_id = $item->created_at->diffInMinutes($item->updated_at, false);
         }
+
         // گروه بندی به ترتیب روزهای شمسی
-        // امسال
-        foreach ($items->where('created_at','>',Carbon::now()->startOfYear()) as $item) {
-            $item->text = 'امسال';
-        }
-        // سه ماه گذشته
-        foreach ($items->where('created_at','>',Carbon::now()->startOfMonth()->subMonth(3)) as $item) {
-            $item->text = 'سه ماهه اخیر ماه';
+        foreach ($items->where('created_at','<',$this->persianStartOfMonth()) as $item) {
+            $item->text = 'بیش از یک ماه قبل';
         }
         // این ماه
-        foreach ($items->where('created_at','>',Carbon::now()->startOfMonth()) as $item) {
+        foreach ($items->where('created_at','>',$this->persianStartOfMonth()) as $item) {
             $item->text = 'این ماه';
         }
         // این هفته
-        foreach ($items->where('created_at','>',Carbon::now()->startOfWeek()) as $item) {
+        foreach ($items->where('created_at','>',Carbon::now()->startOfWeek()->subDay(2)) as $item) {
             $item->text = 'این هفته';
         }
         // امروز
         foreach ($items->where('created_at','>',Carbon::now()->startOfDay()) as $item) {
             $item->text = 'امروز';
         }
+
         $users = User::where('reagent_id', $this->user_id() )->get(['id','first_name','last_name']);
         return view('admin.roll-call.index', compact('id','items','users'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
