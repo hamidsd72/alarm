@@ -29,14 +29,16 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         {{ Form::label('start_at', '* از تاریخ '.my_jdate($item->start_at,'d F Y')) }}
-                                        {{ Form::text('start_at',null, array('class' => 'form-control date_p')) }}
+                                        <input type="text" name="start_at" id="start_at" class="form-control date_p">
+                                        {{-- {{ Form::text('start_at',null, array('class' => 'form-control date_p')) }} --}}
                                         <img class="inline-left-logo" src="https://img.icons8.com/external-icematte-lafs/40/000000/external-Calendar-it-icematte-lafs.png">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         {{ Form::label('end_at', '* تا تاریخ '.my_jdate($item->end_at,'d F Y')) }}
-                                        {{ Form::text('end_at',null, array('class' => 'form-control date_p')) }}
+                                        <input type="text" name="end_at" id="end_at" class="form-control date_p">
+                                        {{-- {{ Form::text('end_at',null, array('class' => 'form-control date_p')) }} --}}
                                         <img class="inline-left-logo" src="https://img.icons8.com/external-icematte-lafs/40/000000/external-Calendar-it-icematte-lafs.png">
                                     </div>
                                 </div>

@@ -61,11 +61,11 @@ class JobReportController extends Controller {
             ->where('created_at','<=',j2g($this->toEnNumber($end)))->get(['user_id','created_at','updated_at']);
 
             foreach ($items as $item) {
-                $item->reagent_id = JobReport::where('status','finish')->where('time','>',0)->where('user_id', $item->id)
+                $item->reagent_id = JobReport::where('status','finish')->where('user_id', $item->id)
                 ->where('created_at','>=',j2g($this->toEnNumber($strat)))->where('created_at','<=',j2g($this->toEnNumber($end)))->get(['time','job_id']);
                 
                 // فعالیت ها
-                $item->referrer_code = JobReport::where('status','finish')->where('time','>',0)->where('user_id', $item->id)
+                $item->referrer_code = JobReport::where('status','finish')->where('user_id', $item->id)
                 ->where('created_at','>=',j2g($this->toEnNumber($strat)))->where('created_at','<=',j2g($this->toEnNumber($end)))->distinct()->get('job_id');
 
                 foreach ($user_work_times->where('user_id',$item->id) as $work_time) {
@@ -90,14 +90,14 @@ class JobReportController extends Controller {
         ]);
         return redirect()->back()->withInput()->with('flash_message', 'فعالیت ثبت شد');
     }
-    public function show($id) {
-        $item   = User::findOrFail($id);
-        $items  = ServicePackage::where('reagent_id', $this->user_id())->where('user_id', $id)->orderByDesc('sort_by')->paginate($this->controller_paginate());
+    public function show($job_report) {
+        $item   = User::findOrFail($job_report);
+        $items  = ServicePackage::where('reagent_id', $this->user_id())->where('user_id', $job_report)->orderByDesc('sort_by')->paginate($this->controller_paginate());
         return view('admin.service.job-report.show', compact('item','items'), ['title1' => $item->first_name.' '.$item->last_name, 'title2' => $this->controller_title('sum') ]);
     }
-    public function edit($id) {
-        $item = ServicePackage::where('reagent_id', $this->user_id())->findOrFail($id);
-        $items = JobReport::where('time', '>', 0 )->where('job_id', $id )->orderByDesc('created_at')->paginate($this->controller_paginate());
+    public function edit($job_report) {
+        $item = ServicePackage::where('reagent_id', $this->user_id())->findOrFail($job_report);
+        $items = JobReport::where('job_id', $job_report )->orderByDesc('created_at')->paginate($this->controller_paginate());
         $id = $item->id;
         return view('admin.service.job-report.edit', compact('item','items','id'), ['title1' => $item->packageName()?$item->packageName()->title:'________', 'title2' => $this->controller_title('sum') ]);
     }

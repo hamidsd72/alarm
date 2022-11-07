@@ -14,7 +14,7 @@
                                     @if(isset($id)) {{$users->where('id',$id)->first()?$users->where('id',$id)->first()->first_name.' '.$users->where('id',$id)->first()->last_name:$id}} @else فیلترکردن بر اساس کاربران @endif
                                     <i class="fa fa-search"></i>
                                 </button>
-                                <a href="{{route('admin.request.create')}}" class="btn btn-info">
+                                <a href="{{route('admin.user_request.create')}}" class="btn btn-info">
                                     افزودن
                                     <i class="fa fa-plus"></i>
                                 </a>
@@ -50,7 +50,7 @@
                                             <td>{{my_jdate($item->date,'d F Y')}}</td>
                                             <td>{{$item->user_employee()->first_name.' '.$item->user_employee()->last_name}}</td>
                                             <td class="text-center">
-                                                <a href="{{route('admin.request.edit',$item->id)}}" class="badge bg-primary ml-1" title="ویرایش">
+                                                <a href="{{route('admin.user_request.edit',$item->id)}}" class="badge bg-primary ml-1" title="ویرایش">
                                                    <i class="fa fa-edit"></i></a>
                                                 <a href="javascript:void(0);" onclick="del_row('{{$item->id}}')" class="badge bg-danger ml-1" title="حذف">
                                                     <i class="fa fa-trash"></i></a>
@@ -87,7 +87,7 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <input class="form-control" id="myInput" type="text" placeholder="کاربر را جستحو کنید">
                             @foreach($users as $user)
-                                <li style="padding: 6px;"><a class="text-dark" href="{{route('admin.request.show',$user->id)}}" title="انتخاب کاربر">{{$user->first_name.' '.$user->last_name}}</a></li>
+                                <li style="padding: 6px;"><a class="text-dark" href="{{route('admin.user_request.show',$user->id)}}" title="انتخاب کاربر">{{$user->first_name.' '.$user->last_name}}</a></li>
                             @endforeach
                         </div>
                     </div>

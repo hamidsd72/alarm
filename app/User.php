@@ -86,6 +86,10 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Model\TaskMaster','master_id');
     }
+    
+    public function admin_request() {
+        return $this->belongsTo('App\Model\Visit','user_id')->where('status','pending')->count();
+    }
     protected static function boot()
     {
         parent::boot();

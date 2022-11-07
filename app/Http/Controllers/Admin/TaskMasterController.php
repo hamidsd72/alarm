@@ -35,26 +35,30 @@ class TaskMasterController extends Controller {
     }
     public function store(Request $request) {
         $item = new TaskMaster();
-        // try {
-            $master_id   = User::role('سرپرست')->where('reagent_id', $this->user_id() )->where('id',$request->master_id)->firstOrFail();
-            $employee_id = User::where('reagent_id', $this->user_id() )->where('id',$request->employee_id)->firstOrFail();
+        try {
+            $master_id   = User::role('سرپرست')->where('reagent_id', $this->user_id() )->where('id',$request->master_id)->firstOrFail('id');
+            $employee_id = User::where('reagent_id', $this->user_id() )->where('id',$request->employee_id)->firstOrFail('id');
+
+            if (TaskMaster::where('reagent_id', $this->user_id())->where('master_id', $master_id->id)->where('employee_id', $employee_id->id)->first()) {
+                return redirect()->back()->withInput()->with('err_message', 'کارمند از قبل تحت سرپرستی این سرپرست بوده است, نیازی به ثبت مجدد نیست');
+            }
 
             $item->reagent_id = $this->user_id();
             $item->master_id = $master_id->id;
             $item->employee_id = $employee_id->id;
             $item->save();
             return redirect()->back()->withInput()->with('flash_message', 'آیتم با موفقیت به لیست سرپرست اضافه شد');
-        // } catch (\Throwable $th) {
-        //     return redirect()->back()->withInput()->with('err_message', 'مشکلی در عملیات بوجود آمده،مجددا تلاش کنید');
-        // }
+        } catch (\Throwable $th) {
+            return redirect()->back()->withInput()->with('err_message', 'مشکلی در عملیات بوجود آمده،مجددا تلاش کنید');
+        }
     }
-    public function show($id) {
-        $item  = User::role('سرپرست')->where('reagent_id', $this->user_id() )->findOrFail($id);
-        $users = User::where('reagent_id', $this->user_id() )->where('id','!=',$id)->get(['id','first_name','last_name']);
-        return view('admin.user.task_masters.show', compact('id','item','users'), ['title1' => $item->first_name.' '.$item->last_name, 'title2' => $this->controller_title('sum') ]);
+    public function show($task_master) {
+        $item  = User::role('سرپرست')->where('reagent_id', $this->user_id() )->findOrFail($task_master);
+        $users = User::where('reagent_id', $this->user_id() )->where('id','!=',$task_master)->get(['id','first_name','last_name']);
+        return view('admin.user.task_masters.show', compact('task_master','item','users'), ['title1' => $item->first_name.' '.$item->last_name, 'title2' => $this->controller_title('sum') ]);
     }
-    public function destroy($id) {
-        TaskMaster::where('reagent_id', $this->user_id() )->findOrFail($id)->delete();
+    public function destroy($task_master) {
+        TaskMaster::where('reagent_id', $this->user_id() )->findOrFail($task_master)->delete();
         return redirect()->back()->withInput()->with('flash_message', 'آیتم با موفقیت از لیست سرپرست حذف شد');
     }
 }

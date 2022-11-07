@@ -135,7 +135,7 @@ class UserController extends Controller {
             'photo.max' => 'لطفا حجم تصویر حداکثر 5 مگابایت باشد',
         ]);
              
-        if (auth()->user()->employees_count() <= auth()->user()->employees_number) {
+        if (auth()->user()->employees_count() > auth()->user()->employees_number) {
             return redirect()->back()->withInput()->with('err_message', 'ظرفیت کارمندان شما پر شده, برای ثبت جدید ابتدا پکیج خود را ارتقا دهید');
         }
         try {

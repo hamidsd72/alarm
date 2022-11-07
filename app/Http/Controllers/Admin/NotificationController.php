@@ -37,10 +37,10 @@ class NotificationController extends Controller {
         $users = User::where('reagent_id', $this->user_id())->get(['id','first_name','last_name']);
         return view('admin.notification.index', compact('items','users'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
-    public function edit($id) {
-        $items = Notification::where('reagent_id', $this->user_id())->where('user_id', $id)->paginate($this->controller_paginate());
+    public function edit($notification) {
+        $items = Notification::where('reagent_id', $this->user_id())->where('user_id', $notification)->paginate($this->controller_paginate());
         $users = User::where('reagent_id', $this->user_id())->get(['id','first_name','last_name']);
-        return view('admin.notification.index', compact('items','users','id'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
+        return view('admin.notification.index', compact('items','users','notification'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
     public function create() {
         $users      = User::where('reagent_id', $this->user_id())->get(['id','first_name','last_name','mobile']);
@@ -48,12 +48,12 @@ class NotificationController extends Controller {
         $services   = ServiceCat::where('user_id', $this->user_id())->where('status', 'active')->get();
         return view('admin.notification.create', compact('users','packages','services'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
-    public function show($id) {
-        $item = Notification::where('reagent_id', $this->user_id())->findOrFail($id);
+    public function show($notification) {
+        $item = Notification::where('reagent_id', $this->user_id())->findOrFail($notification);
         $fullname = User::findOrFail($item->user_id);
         return view('admin.notification.show', compact('item','fullname'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
-    public function update(Request $request, $id) {
+    public function update(Request $request, $notification) {
         try {
             $items = Notification::where('reagent_id',$this->user_id())->where('user_id',User::where('mobile',$request->user_mobile)->first()->id)->orderByDesc('id')->paginate($this->controller_paginate());
             $users = auth()->user();

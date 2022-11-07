@@ -11,7 +11,7 @@
                             <div class="card-header bg-zard">
                                 <div class="float-left">
                                     <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal">
-                                        @if(isset($id)) {{$users->where('id',$id)->first()?$users->where('id',$id)->first()->first_name.' '.$users->where('id',$id)->first()->last_name:$id}} @else فیلترکردن بر اساس کاربران @endif
+                                        @if(isset($notification)) {{$users->where('id',$notification)->first()?$users->where('id',$notification)->first()->first_name.' '.$users->where('id',$notification)->first()->last_name:$notification}} @else فیلترکردن بر اساس کاربران @endif
                                         <i class="fa fa-search"></i>
                                     </button>
                                     <a href="{{route('admin.notification.create')}}" class="btn btn-info mr-2">
@@ -78,7 +78,7 @@
                 <div class="modal-body">
                     <div class="dropdown">
                         <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            @if(isset($id)) {{$users->where('id',$id)->first()?$users->where('id',$id)->first()->first_name.' '.$users->where('id',$id)->first()->last_name:$id}} @else کاربر انتخاب کنید @endif
+                            @if(isset($notification)) {{$users->where('id',$notification)->first()?$users->where('id',$notification)->first()->first_name.' '.$users->where('id',$notification)->first()->last_name:$notification}} @else کاربر انتخاب کنید @endif
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <input class="form-control" id="myInput" type="text" placeholder="کاربر را جستحو کنید">

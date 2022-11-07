@@ -25,12 +25,10 @@
                                 <div class="card-body res_table_in border mx-2 my-1 redu20">
                                     <span>
                                         وضعیت : 
-                                            @if($item->reply>0)
-                                                <span class="reply_email_ok text-success">پاسخ داده شده</span>
-                                            @else
-                                                <span class="reply_email_no">در انتظار پاسخ</span>
-                                            @endif
-                                            <span class="mx-4">{{' کاربر : '.$item->user()->first()->first_name.' '.$item->user()->first()->last_name}}</span>
+                                        <span class="reply_email_ok {{$item->reply>0?'text-success':'text-danger'}}">
+                                            {{$item->reply>0?'پاسخ داده شده':'در انتظار پاسخ'}}
+                                        </span>
+                                        <span class="mx-4">{{$item->user()->first()->first_name.' '.$item->user()->first()->last_name}}</span>
                                     </span>
                                     <h6 class="pt-1">{{$item->subject}}
                                         @if ($item->date){{' از '.explode(",",$item->date)[0].' تا '.explode(",",$item->date)[1]}}@endif
@@ -47,11 +45,9 @@
                                         <div class="card-body res_table_in border mx-1 my-1 rounded">
                                             <span>
                                                 وضعیت : 
-                                                @if($sub_item->reply>0)
-                                                    <span class="reply_email_ok text-success">پاسخ داده شده</span>
-                                                @else
-                                                    <span class="reply_email_no">در انتظار پاسخ</span>
-                                                @endif
+                                                <span class="reply_email_ok {{$sub_item->reply>0?'text-success':'text-danger'}}">
+                                                    {{$sub_item->reply>0?'پاسخ داده شده':'در انتظار پاسخ'}}
+                                                </span>
                                                 <span class="mx-4">{{$item->user()->first()->first_name.' '.$item->user()->first()->last_name}}</span>
                                             </span>
                                             <h6 class="pt-1">{{$sub_item->subject}}
@@ -59,9 +55,9 @@
                                             </h6>
                                             <p class="m-0">{{' توضیحات : '.$sub_item->text}}</p>
                                             @if ($sub_item->attach)
-                                                <a class="text-dark pt-1" href="/{{ $sub_item->attach }}" target="_blank">
+                                                <a class="text-dark pt-1" href="{{ url($sub_item->attach) }}" download>
                                                     <i class="fa fa-paperclip mt-2"></i>
-                                                    مشاهده فایل پیوست شده
+                                                    بارگیری فایل پیوست شده
                                                 </a>
                                             @endif
                                         </div>
@@ -96,10 +92,6 @@
                                     <fieldset>
                                         <input type="hidden" name="belongs_to_item" value="{{$item->id}}" id="contactbelongs_to_itemField">
                                         <input type="hidden" name="category" value="{{$item->category}}" id="contactbelongs_to_itemField">
-                                        {{-- <div class="form-field form-email">
-                                            <label class="contactEmailField color-theme" for="contactEmailField">موضوع:<span>(required)</span></label>
-                                            <input type="text" name="subject" value="{{$item->subject}}" class="round-small form-control" id="contactEmailField">
-                                        </div> --}}
                                         <div class="form-field form-text">
                                             <label class="contactMessageTextarea color-theme" for="contactMessageTextarea">متن:<span>(required)</span></label>
                                             <textarea name="text" rows="4" class="round-small form-control mb-2" id="contactMessageTextarea"></textarea>
@@ -121,21 +113,22 @@
             </div>
         @endforeach
 
-
         <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="filterLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">فیلتر بر اساس وضعیت پیام شده</h5>
+                        <h5 class="modal-title">فیلترکردن بر اساس کاربران</h5>
                     </div>
                     <div class="modal-body">
                         <div class="dropdown">
                             <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                فیلتر کردن پیام ها
+                                @if(isset($id)) {{$users->where('id',$id)->first()?$users->where('id',$id)->first()->first_name.' '.$users->where('id',$id)->first()->last_name:$id}} @else کاربر انتخاب کنید @endif
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li style="padding: 6px;"><a class="text-success" href="{{route('admin.contact.list','active')}}" title="Courses">پیام های پاسخ داده شده</a></li>
-                                <li style="padding: 6px;"><a class="text-danger" href="{{route('admin.contact.list','pending')}}" title="Courses">پیام های پاسخ داده نشده</a></li>
+                                <input class="form-control" id="myInput" type="text" placeholder="کاربر را جستحو کنید">
+                                @foreach($users as $user)
+                                    <li style="padding: 6px;"><a class="text-dark" href="{{route('admin.contact.filter',$user->id)}}" title="انتخاب کاربر">{{$user->first_name.' '.$user->last_name}}</a></li>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -145,7 +138,6 @@
                 </div>
             </div>
         </div>
-
 
     </section>
 

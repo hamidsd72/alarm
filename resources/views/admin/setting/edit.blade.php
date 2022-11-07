@@ -40,8 +40,8 @@
                                         <div class="form-group">
                                             {{ Form::label('sign_in_type', 'نوع ورود به حساب کاربران') }}
                                             <select name="sign_in_type" id="sign_in_type" class="form-control">
-                                                <option value="sms" {{$item->paginate=='sms'?'selected':''}}>ورود با کد پیامکی</option>
-                                                <option value="password" {{$item->paginate=='password'?'selected':''}}>ورود با رمز عبور</option>
+                                                <option value="sms" {{$item->sign_in_type=='sms'?'selected':''}}>ورود با کد پیامکی</option>
+                                                <option value="password" {{$item->sign_in_type=='password'?'selected':''}}>ورود با رمز عبور</option>
                                             </select>
                                         </div>
                                     </div>

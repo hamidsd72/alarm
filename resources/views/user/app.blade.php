@@ -8,7 +8,16 @@
         padding: 12px;
     }
 </style>
+
 @section('content')
+
+    @if ($log)
+        <div class="text-center p-0 m-0 mt-4 pt-5 pb-2 alert alert-danger" role="alert">
+            {{ $log }}
+            <button type="button" class="close h6 pb-2" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+        </div>
+    @endif
+
     @if ($runningJob)
         <div class="runningJob">
             <a href="#" class="text-danger" id="clickToOpenModal2"data-toggle="modal" data-target="#ModalTicket2">
@@ -235,7 +244,7 @@
                         <img src="https://img.icons8.com/ultraviolet/40/000000/rebalance-portfolio.png"/ class="rounded ms-2">
                     </div>
                     <div class="col text-secondary pl-0">
-                        <p class=" text-secondary my-1">گزارش کارکرد های اخیر</p>
+                        <p class=" text-secondary my-1">گزارش حضوری های اخیر</p>
                         <a href="{{ route('user.user-my-report.show','rollCall') }}" class="btn btn-primary mb-2 p-0 px-4">نمایش</a>
                     </div>
                 </div>
@@ -470,15 +479,12 @@
                 }
             }
         }
-
         function start_job(id,state) {
             let url = '{{url('/')}}'+`/job/create/${id}`;
-
             let time_now = new Date();
             let date = `${time_now.getFullYear()}-${time_now.getMonth()+1}-${time_now.getDate()}`;
             let time = `${time_now.getHours()}:${time_now.getMinutes()}:${time_now.getSeconds()}`;
             let created_at = `${date} ${time}`;
-
             // اگر آنلاین بود ارسال بشه
             if (navigator.onLine) {
                 location.href = url;
@@ -516,16 +522,13 @@
                 document.getElementById("perDate").style.display = "none";
             }
         }
-
         function openModal2($id) {
             document.getElementById('clickToOpenModal2').click();
             document.getElementById('job_id').value = $id;
         }
-
         function openModal3() {
             document.getElementById('clickToOpenModal3').click();
         }
-
         function ConvertNumberToPersion() {
             let persian = { 0: '۰', 1: '۱', 2: '۲', 3: '۳', 4: '۴', 5: '۵', 6: '۶', 7: '۷', 8: '۸', 9: '۹' };
             function traverse(el) {
@@ -542,7 +545,6 @@
             }
             traverse(document.body);
         }
-
         ConvertNumberToPersion()
         check_job_started()
     </script>

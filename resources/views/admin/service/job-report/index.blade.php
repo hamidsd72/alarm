@@ -35,7 +35,11 @@
                                     <td>{{$item->first_name.' '.$item->last_name}}</td>
                                     <td>{{$item->setJob()->count().' فعالیت دارد '}}</td>
                                     <td class="text-center">
-                                        <a href="{{route('admin.job-report.show',$item->id)}}" class="badge bg-primary">بررسی </a>
+                                        @if ($item->setJob()->count()>0)
+                                            <a href="{{route('admin.job-report.show',$item->id)}}" class="badge bg-primary">بررسی </a>
+                                        @else
+                                            <a href="#" class="badge bg-primary">هنوز فعالیتی ثبت نشده</a>
+                                        @endif
                                     </td> 
                                 </tr>
                             @endforeach

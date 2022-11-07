@@ -245,454 +245,493 @@
     </div>
 
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <a href="javascript:void(0);" class="brand-link">
-            <img src="{{url($setting->logo_site)}}" alt="{{$setting->title}}" class="brand-image">
-            <span class="brand-text font-weight-light">
-                @hasanyrole('مدیر ارشد'|'مدیر')پنل مدیریت@endhasanyrole
-                @role('حسابدار')پنل تیم حسابداری@endrole
-                @role('بازاریاب')پنل تیم بازاریاب@endrole
-                @role('نماینده')پنل نمایندها@endrole
-                @role('فنی')پنل تیم فنی@endrole
-                @role('آموزش')پنل تیم آموزش@endrole
-                @role('انبار')پنل تیم انبار@endrole
-                @role('اداری')پنل تیم اداری@endrole
-                @role('کاربر')پنل کاربری@endrole
-            </span>
-        </a>
-        <div class="sidebar" style="direction: ltr">
-            <div style="direction: rtl">
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image mr-lg-3">
-                        <img src="{{Auth::user()->photo? url(Auth::user()->photo->path) :'https://img.icons8.com/ultraviolet/100/000000/test-account.png'}}" class="img-circle elevation-2" alt="User Image">
-                    </div>
-                    <div class="info">
-                        <a href="{{route('admin.profile.show')}}" title="نمایش پروفایل" class="d-block">@item(auth()->user()->first_name) @item(auth()->user()->last_name)</a>
-                    </div>
+        <div>
+            <a href="javascript:void(0);" class="brand-link">
+                <img src="{{url($setting->logo_site)}}" alt="{{$setting->title}}" class="brand-image">
+                <span class="brand-text font-weight-light">
+                    پنل
+                    @role('مدیر ارشد')  مدیریت ارشد@endrole
+                    @role('مدیر')  مدیریت@endrole
+                    @role('حسابدار')  حسابداری@endrole
+                    @role('بازاریاب')  بازاریاب@endrole
+                    @role('نماینده') نمایندها@endrole
+                    @role('فنی')  فنی@endrole
+                    @role('آموزش')  آموزش@endrole
+                    @role('انبار')  انبار@endrole
+                    @role('اداری')  اداری@endrole
+                    @role('کاربر') کاربری@endrole
+                </span>
+            </a>
+        </div>
+        <div class="sidebar">
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image mr-lg-3">
+                    <img src="{{Auth::user()->photo? url(Auth::user()->photo->path) :'https://img.icons8.com/ultraviolet/100/000000/test-account.png'}}" class="img-circle elevation-2" alt="User Image">
                 </div>
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <a href="{{route('user.index')}}" class="nav-link @role('مدیر ارشد') d-none @endrole">
-                            <i class="fa fa-home" style="font-size: 24px;"></i>
-                            <p class="px-1">صفحه اصلی اپلیکیشن</p>
+                <div class="info">
+                    <a href="{{route('admin.profile.show')}}" title="نمایش پروفایل" class="d-block">@item(auth()->user()->first_name) @item(auth()->user()->last_name)</a>
+                </div>
+            </div>
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <a href="{{route('user.index')}}" class="nav-link @role('مدیر ارشد') d-none @endrole">
+                        <p class="px-1">صفحه اصلی اپلیکیشن</p>
+                        <i class="fa fa-home" style="font-size: 24px;"></i>
+                    </a>
+                    <li class="nav-item has-treeview">
+                        <a href="javascript:void(0);" class="nav-link">
+                            <p>
+                                داشبورد
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                            <i class="nav-icon fa fa-dashboard"></i>
                         </a>
+                        <ul class="nav nav-treeview border-bottom">
+                            <li class="nav-item">
+                                <a href="{{route('admin.profile.edit')}}" class="nav-link">
+                                    <i class="fa fa-circle-o nav-icon"></i>
+                                    <p>ویرایش پروفایل</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{route('admin.password.edit')}}" class="nav-link">
+                                    <i class="fa fa-circle-o nav-icon"></i>
+                                    <p>ویرایش رمز عبور</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    @role('مدیر ارشد')
+                        <a href="{{route('admin.user.list')}}" class="nav-link">
+                            <p>لیست مشتریان</p>
+                            <i class="nav-icon fa fa-group mx-1" style="font-size: 16px;"></i>
+                        </a>
+                    @endrole
+                    @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || ($access?in_array( 'کاربران' ,  $access ):'') )
+                        <li class="nav-item has-treeview @role('مدیر ارشد') d-none @endrole">
+                            <a href="javascript:void(0);" class="nav-link">
+                                <p>
+                                    کارمندان و مشتریان
+                                    <i class="right fa fa-angle-left"></i>
+                                </p>
+                                <i class="nav-icon fa fa-group"></i>
+                            </a>
+                            <ul class="nav nav-treeview border-bottom">
+                                <li class="nav-item">
+                                    <a href="{{route('admin.user.list')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>لیست کاربران</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.marketer.list')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>لیست مشتریان</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.leave-day.index')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>مرخصی کارمندان</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.task-master.index')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>مدیریت سرپرست ها</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.visit_log.index')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>ردیابی کارمندان</p>
+                                    </a>
+                                </li>
+                                {{--<li class="nav-item">--}}
+                                    {{--<a href="{{route('admin.agent.list')}}" class="nav-link">--}}
+                                        {{--<i class="fa fa-circle-o nav-icon"></i>--}}
+                                        {{--<p>لیست نمایندگان</p>--}}
+                                        {{--@if($agent>0)--}}
+                                            {{--<span class="right badge badge-danger">جدید</span>--}}
+                                        {{--@endif--}}
+                                    {{--</a>--}}
+                                {{--</li>--}}
+                                {{--<li class="nav-item">--}}
+                                    {{--<a href="{{route('admin.agent.request.list')}}" class="nav-link">--}}
+                                        {{--<i class="fa fa-circle-o nav-icon"></i>--}}
+                                        {{--<p>درخواست نمایندگی</p>--}}
+                                        {{--@if($agent_request>0)--}}
+                                            {{--<span class="right badge badge-danger">جدید</span>--}}
+                                        {{--@endif--}}
+                                    {{--</a>--}}
+                                {{--</li>--}}
+                            </ul>
+                        </li>
+                    @endif
+                    @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || ($access?in_array( 'اعلانات' ,  $access ):'') )
                         <li class="nav-item has-treeview">
                             <a href="javascript:void(0);" class="nav-link">
-                                <i class="nav-icon fa fa-dashboard"></i>
                                 <p>
-                                    داشبورد
+                                    اعلان و تیکت 
+                                    <i class="fa fa-angle-left right"></i>
+                                </p>
+                                <i class="nav-icon fa fa-smile-o"></i>
+                            </a>
+                            <ul class="nav nav-treeview border-bottom">
+                                <li class="nav-item">
+                                    <a href="{{route('admin.notification.index')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>ارسال اعلان و پیام</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.contact.list')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>همه تیکت ها</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.contact.list','pending')}}" class="nav-link text-danger">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>تیکت های (در انتظار پاسخ)
+                                            @if (auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر'))
+                                                {{\App\Model\Contact::where('reagent_id',auth()->user()->id)->where('answered', 'no')->where('belongs_to_item', '=', 0)->count()}}
+                                            @else
+                                                {{\App\Model\Contact::where('reagent_id',auth()->user()->reagent_id)->where('answered', 'no')->where('belongs_to_item', '=', 0)->count()}}
+                                            @endif
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.contact.list','active')}}" class="nav-link text-success">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>تیکت های (پاسخ داده شده)
+                                            @if (auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر'))
+                                                {{\App\Model\Contact::where('reagent_id',auth()->user()->id)->where('answered', 'yes')->where('belongs_to_item', '=', 0)->count()}}
+                                            @else
+                                                {{\App\Model\Contact::where('reagent_id',auth()->user()->reagent_id)->where('answered', 'yes')->where('belongs_to_item', '=', 0)->count()}}
+                                            @endif
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+                    @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || ($access?in_array( 'فعالیتها' ,  $access ):'') )
+                        <li class="nav-item has-treeview @role('مدیر ارشد') d-none @endrole">
+                            <a href="javascript:void(0);" class="nav-link">
+                                <p>
+                                    کار ها یا فعالیت ها
+                                    <i class="right fa fa-angle-left"></i>
+                                </p>
+                                <i class="nav-icon fa fa-handshake-o"></i>
+                            </a>
+                            <ul class="nav nav-treeview border-bottom">
+                                <li class="nav-item">
+                                    <a href="{{route('admin.jobs.index')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>لیست پروژه ها</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.service.package.list')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>فعالیت های کارمندان</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.job-report.index')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>بررسی پیشرفت فعالیت ها</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+                    @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || ($access?in_array( 'حسابداری' ,  $access ):'') )
+                        <li class="nav-item has-treeview @role('مدیر ارشد') d-none @endrole">
+                            <a href="javascript:void(0);" class="nav-link">
+                                <p>
+                                    مالی و حسابداری
+                                    <i class="right fa fa-angle-left"></i>
+                                </p>
+                                <i class="nav-icon fa fa-line-chart"></i>
+                            </a>
+                            <ul class="nav nav-treeview border-bottom">
+                                <li class="nav-item">
+                                    <a href="{{route('admin.job-report.index')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>بررسی پیشرفت فعالیت ها</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.user_request.index')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>ثبت درخواست های کارمندان</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.roll-call.index')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>ساعت کاری | حضور و غیاب</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" data-toggle="modal" data-target="#ModalTicket" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>محاسبه حقوق کارمندان</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+                    {{-- @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'وبینارها' ,  $access ) )
+                        <li class="nav-item has-treeview">
+                            <a href="javascript:void(0);" class="nav-link">
+                                <i class="nav-icon fa fa-graduation-cap"></i>
+                                <p>
+                                    وبینار و آموزش
                                     <i class="right fa fa-angle-left"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview border-bottom">
                                 <li class="nav-item">
-                                    <a href="{{route('admin.profile.edit')}}" class="nav-link">
+                                    <a href="{{route('admin.service.category.list')}}" class="nav-link ">
                                         <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>ویرایش پروفایل</p>
+                                        <p>دسته بندی های اصلی</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{route('admin.password.edit')}}" class="nav-link">
+                                    <a href="{{route('admin.service.list')}}" class="nav-link">
                                         <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>ویرایش رمز عبور</p>
+                                        <p>آیتم های دسته بندی ها</p>
+                                    </a>
+                                </li> --}}
+                                {{-- <li class="nav-item">
+                                    <a href="{{route('admin.service.learn.list')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>لیست خدمات آموزشگاهی</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.learn.package.category.list')}}" class="nav-link ">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>دسته بندی پکیج ها</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.service.learn.package.list')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>پکیج آموزشگاهی</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.service.buy.list')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>
+                                            لیست خرید
+                                            @if($order>0)
+                                                    <span class="right badge badge-danger">جدید</span>
+                                            @endif
+                                        </p>
+                                    </a>
+                                </li> --}}
+                            {{-- </ul>
+                        </li>
+                    @endif --}}
+                    @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || ($access?in_array( 'محتوا' ,  $access ):'') )
+
+                        {{-- <li class="nav-item has-treeview">
+                            <a href="javascript:void(0);" class="nav-link">
+                                <i class="nav-icon fa fa-th"></i>
+                                <p>
+                                    فرم ها
+                                    <i class="right fa fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview border-bottom">
+                                <li class="nav-item">
+                                    <a href="{{route('admin.forms.show', 1)}}" class="nav-link ">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>عریضه ها</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.forms.show', 2)}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>مشاوره های خصوصی حقوقی</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.forms.show', 3)}}" class="nav-link ">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>همه وبینارها</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item px-3">
+                                    <a href="{{route('admin.forms.show', 7)}}" class="nav-link ">
+                                        <i class="fa fa-circle-o nav-icon text-info"></i>
+                                        <p>وبینارهای حقوقی</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item px-3">
+                                    <a href="{{route('admin.forms.show', 8)}}" class="nav-link ">
+                                        <i class="fa fa-circle-o nav-icon text-info"></i>
+                                        <p>وبینارهای ویزا</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.forms.show', 4)}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>مشاوره های خصوصی ویزا</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.forms.show', 5)}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>فرم استعدادیابی</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.forms.show', 6)}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>درخواست عقد قرارداد</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li> --}}
+                        @role('مدیر ارشد')
+                            <li class="nav-item has-treeview">
+                                <a href="javascript:void(0);" class="nav-link">
+                                    <p>
+                                        گزارشات
+                                        <i class="right fa fa-angle-left"></i>
+                                    </p>
+                                    <i class="nav-icon fa fa-pie-chart"></i>
+                                </a>
+                                <ul class="nav nav-treeview border-bottom">
+                                    <li class="nav-item">
+                                        <a href="{{route('admin.report.transaction.list')}}" class="nav-link">
+                                            <i class="fa fa-circle-o nav-icon"></i>
+                                            <p> تراکنش ها</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endrole
+                        <li class="nav-item has-treeview">
+                            <a href="javascript:void(0);" class="nav-link">
+                                <p>
+                                    محتوا اپلیکیشن
+                                    <i class="fa fa-angle-left right"></i>
+                                </p>
+                                <i class="nav-icon fa fa-cogs"></i>
+                            </a>
+                            <ul class="nav nav-treeview border-bottom">
+                                <li class="nav-item">
+                                    <a href="{{route('admin.slider.list')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>تبلیغات</p>
+                                    </a>
+                                </li>
+                                {{-- <li class="nav-item">
+                                    <a href="{{route('admin.ads-tours.index')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>تورهای گردشگری</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.customer.list')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>مشتریان</p>
+                                    </a>
+                                </li> --}}
+                                <li class="nav-item">
+                                    <a href="{{route('admin.about.index')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>درباره ما</p>
+                                    </a>
+                                </li>
+                                {{-- <li class="nav-item">
+                                    <a href="{{route('admin.guide.edit')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>راهنمای نحوه خرید</p>
+                                    </a>
+                                </li> --}}
+                                @role('مدیر ارشد')
+                                    <li class="nav-item">
+                                        <a href="{{route('admin.rule.edit')}}" class="nav-link">
+                                            <i class="fa fa-circle-o nav-icon"></i>
+                                            <p>قوانین </p>
+                                        </a>
+                                    </li>
+                                @endrole
+                                {{-- <li class="nav-item">
+                                    <a href="{{route('admin.off.list')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>کد های تخفیف</p>
+                                    </a>
+                                </li> --}}
+                            </ul>
+                        </li>
+                    @endif
+                    @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || ($access?in_array( 'تنظیمات' ,  $access ):'') )
+                        <li class="nav-item has-treeview">
+                            <a href="javascript:void(0);" class="nav-link">
+                                <p>
+                                    تنظیمات اپلیکیشن
+                                    <i class="fa fa-angle-left right"></i>
+                                </p>
+                                <i class="nav-icon fa fa-cog"></i>
+                            </a>
+                            <ul class="nav nav-treeview border-bottom">
+                                @role('مدیر ارشد')
+                                    <li class="nav-item">
+                                        <a href="{{route('admin.form-price.index')}}" class="nav-link">
+                                            <i class="fa fa-circle-o nav-icon"></i>
+                                            <p>قیمت پکیج ها</p>
+                                        </a>
+                                    </li>
+                                @endrole
+                                @role('مدیر')
+                                    <li class="nav-item">
+                                        <a href="{{route('admin.permission.index')}}" class="nav-link">
+                                            <i class="fa fa-circle-o nav-icon"></i>
+                                            <p>سطوح دسترسی</p>
+                                        </a>
+                                    </li>
+                                @endrole
+                                <li class="nav-item">
+                                    <a href="{{route('admin.network-setting.index')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>شبکه های اجتماعی</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.off-day.index')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>روزها یا رویداد تعطیل</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.setting.edit')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>تنظیمات</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.meta.list')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>Meta</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        @role('مدیر ارشد')
-                            <a href="{{route('admin.user.list')}}" class="nav-link">
-                                <i class="nav-icon fa fa-group mx-1" style="font-size: 16px;"></i>
-                                <p>لیست مشتریان</p>
-                            </a>
-                        @endrole
-                        @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'کاربران' ,  $access ) )
-                            <li class="nav-item has-treeview @role('مدیر ارشد') d-none @endrole">
-                                <a href="javascript:void(0);" class="nav-link">
-                                    <i class="nav-icon fa fa-group"></i>
-                                    <p>
-                                        کارمندان و مشتریان
-                                        <i class="right fa fa-angle-left"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview border-bottom">
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.user.list')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>لیست کاربران</p>
-                                        </a>
-                                    </li>
-                                    @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') )
-                                    {{-- @hasanyrole('مدیر ارشد'|'مدیر') --}}
-                                        <li class="nav-item">
-                                            <a href="{{route('admin.permission.index')}}" class="nav-link">
-                                                <i class="fa fa-circle-o nav-icon"></i>
-                                                <p>سطوح دسترسی</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{route('admin.task-master.index')}}" class="nav-link">
-                                                <i class="fa fa-circle-o nav-icon"></i>
-                                                <p>مدیریت سرپرست ها</p>
-                                            </a>
-                                        </li>
-                                    @endif
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.leave-day.index')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>مرخصی کارمندان</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.marketer.list')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>لیست مشتریان</p>
-                                        </a>
-                                    </li>
-                                    {{--<li class="nav-item">--}}
-                                        {{--<a href="{{route('admin.agent.list')}}" class="nav-link">--}}
-                                            {{--<i class="fa fa-circle-o nav-icon"></i>--}}
-                                            {{--<p>لیست نمایندگان</p>--}}
-                                            {{--@if($agent>0)--}}
-                                                {{--<span class="right badge badge-danger">جدید</span>--}}
-                                            {{--@endif--}}
-                                        {{--</a>--}}
-                                    {{--</li>--}}
-                                    {{--<li class="nav-item">--}}
-                                        {{--<a href="{{route('admin.agent.request.list')}}" class="nav-link">--}}
-                                            {{--<i class="fa fa-circle-o nav-icon"></i>--}}
-                                            {{--<p>درخواست نمایندگی</p>--}}
-                                            {{--@if($agent_request>0)--}}
-                                                {{--<span class="right badge badge-danger">جدید</span>--}}
-                                            {{--@endif--}}
-                                        {{--</a>--}}
-                                    {{--</li>--}}
-                                </ul>
-                            </li>
-                        @endif
-                        @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'اعلانات' ,  $access ) )
-                            <li class="nav-item has-treeview">
-                                <a href="javascript:void(0);" class="nav-link">
-                                    <i class="nav-icon fa fa-smile-o"></i>
-                                    <p>
-                                        اعلان و تیکت 
-                                        <i class="fa fa-angle-left right"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview border-bottom">
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.notification.index')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>ارسال اعلان و پیام</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.contact.list')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>همه تیکت ها</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.contact.list','pending')}}" class="nav-link text-danger">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>تیکت های (در انتظار پاسخ)</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.contact.list','active')}}" class="nav-link text-success">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>تیکت های (پاسخ داده شده)</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endif
-                        @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'فعالیتها' ,  $access ) )
-                            <li class="nav-item has-treeview @role('مدیر ارشد') d-none @endrole">
-                                <a href="javascript:void(0);" class="nav-link">
-                                    <i class="nav-icon fa fa-handshake-o"></i>
-                                    <p>
-                                        کار ها یا فعالیت ها
-                                        <i class="right fa fa-angle-left"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview border-bottom">
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.jobs.index')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>پروژه ها</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.service.package.list')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>فعالیت ها</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.job-report.index')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>محاسبه فعالیت</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.request.index')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>گزارش درخواست ها</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.roll-call.index')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>ساعت کاری | حضور و غیاب</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" data-toggle="modal" data-target="#ModalTicket" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>محاسبه حقوق کارمندان</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endif
-                        {{-- @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'وبینارها' ,  $access ) )
-                            <li class="nav-item has-treeview">
-                                <a href="javascript:void(0);" class="nav-link">
-                                    <i class="nav-icon fa fa-graduation-cap"></i>
-                                    <p>
-                                        وبینار و آموزش
-                                        <i class="right fa fa-angle-left"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview border-bottom">
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.service.category.list')}}" class="nav-link ">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>دسته بندی های اصلی</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.service.list')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>آیتم های دسته بندی ها</p>
-                                        </a>
-                                    </li> --}}
-                                    {{-- <li class="nav-item">
-                                        <a href="{{route('admin.service.learn.list')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>لیست خدمات آموزشگاهی</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.learn.package.category.list')}}" class="nav-link ">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>دسته بندی پکیج ها</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.service.learn.package.list')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>پکیج آموزشگاهی</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.service.buy.list')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>
-                                                لیست خرید
-                                                @if($order>0)
-                                                        <span class="right badge badge-danger">جدید</span>
-                                                @endif
-                                            </p>
-                                        </a>
-                                    </li> --}}
-                                {{-- </ul>
-                            </li>
-                        @endif --}}
-                        @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'محتوا' ,  $access ) )
-
-                            {{-- <li class="nav-item has-treeview">
-                                <a href="javascript:void(0);" class="nav-link">
-                                    <i class="nav-icon fa fa-th"></i>
-                                    <p>
-                                        فرم ها
-                                        <i class="right fa fa-angle-left"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview border-bottom">
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.forms.show', 1)}}" class="nav-link ">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>عریضه ها</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.forms.show', 2)}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>مشاوره های خصوصی حقوقی</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.forms.show', 3)}}" class="nav-link ">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>همه وبینارها</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item px-3">
-                                        <a href="{{route('admin.forms.show', 7)}}" class="nav-link ">
-                                            <i class="fa fa-circle-o nav-icon text-info"></i>
-                                            <p>وبینارهای حقوقی</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item px-3">
-                                        <a href="{{route('admin.forms.show', 8)}}" class="nav-link ">
-                                            <i class="fa fa-circle-o nav-icon text-info"></i>
-                                            <p>وبینارهای ویزا</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.forms.show', 4)}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>مشاوره های خصوصی ویزا</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.forms.show', 5)}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>فرم استعدادیابی</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.forms.show', 6)}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>درخواست عقد قرارداد</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li> --}}
-                            @role('مدیر ارشد')
-                                <li class="nav-item has-treeview">
-                                    <a href="javascript:void(0);" class="nav-link">
-                                        <i class="nav-icon fa fa-pie-chart"></i>
-                                        <p>
-                                            گزارشات
-                                            <i class="right fa fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview border-bottom">
-                                        <li class="nav-item">
-                                            <a href="{{route('admin.report.transaction.list')}}" class="nav-link">
-                                                <i class="fa fa-circle-o nav-icon"></i>
-                                                <p> تراکنش ها</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            @endrole
-                            <li class="nav-item has-treeview">
-                                <a href="javascript:void(0);" class="nav-link">
-                                    <i class="nav-icon fa fa-cogs"></i>
-                                    <p>
-                                        محتوا اپلیکیشن
-                                        <i class="fa fa-angle-left right"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview border-bottom">
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.slider.list')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>تبلیغات</p>
-                                        </a>
-                                    </li>
-                                    {{-- <li class="nav-item">
-                                        <a href="{{route('admin.ads-tours.index')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>تورهای گردشگری</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.customer.list')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>مشتریان</p>
-                                        </a>
-                                    </li> --}}
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.about.index')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>درباره ما</p>
-                                        </a>
-                                    </li>
-                                    {{-- <li class="nav-item">
-                                        <a href="{{route('admin.guide.edit')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>راهنمای نحوه خرید</p>
-                                        </a>
-                                    </li> --}}
-                                    @role('مدیر ارشد')
-                                        <li class="nav-item">
-                                            <a href="{{route('admin.rule.edit')}}" class="nav-link">
-                                                <i class="fa fa-circle-o nav-icon"></i>
-                                                <p>قوانین </p>
-                                            </a>
-                                        </li>
-                                    @endrole
-                                    {{-- <li class="nav-item">
-                                        <a href="{{route('admin.off.list')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>کد های تخفیف</p>
-                                        </a>
-                                    </li> --}}
-                                </ul>
-                            </li>
-                        @endif
-                        @if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') || in_array( 'تنظیمات' ,  $access ) )
-                            <li class="nav-item has-treeview">
-                                <a href="javascript:void(0);" class="nav-link">
-                                    <i class="nav-icon fa fa-cog"></i>
-                                    <p>
-                                        تنظیمات اپلیکیشن
-                                        <i class="fa fa-angle-left right"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview border-bottom">
-                                    @role('مدیر ارشد')
-                                        <li class="nav-item">
-                                            <a href="{{route('admin.form-price.index')}}" class="nav-link">
-                                                <i class="fa fa-circle-o nav-icon"></i>
-                                                <p>قیمت پکیج ها</p>
-                                            </a>
-                                        </li>
-                                    @endrole
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.network-setting.index')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>شبکه های اجتماعی</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.setting.edit')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>تنظیمات</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.off-day.index')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>روزها یا رویدادهای تعطیل</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('admin.meta.list')}}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>Meta</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endif
-                    </ul>
-                </nav>
-            </div>
+                    @endif
+                </ul>
+            </nav>
         </div>
+
     </aside>
     <div class="content-wrapper">
         <div class="content-header">

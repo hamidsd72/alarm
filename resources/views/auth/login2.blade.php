@@ -15,25 +15,12 @@
                         </div>
                     </div>
                     <div class="container">
-                        <h4 class="mb-3">{{ ' مشترک گرامی : '.$setting->title }}</h4>
-                        {{-- <div class="login-box">
-                            <div class="form-group floating-form-group">
-                                <input type="text" name="first_name" id="first_name" class="form-control floating-input" style="text-align: right;" required autofocus>
-                                <label class="floating-label">نام خود را وارد کنید</label>
-                                <p class="text-danger text-center p-1">{{$ef ?? ''}}</p>
-                            </div>
-                            <div class="form-group floating-form-group">
-                                <input type="text" name="last_name" id="last_name" class="form-control floating-input" style="text-align: right;" required>
-                                <label class="floating-label">نام خانوادگی خود را وارد کنید</label>
-                                <p class="text-danger text-center p-1">{{$el ?? ''}}</p>
-                            </div>
-                            <div class="form-group floating-form-group">
-                                <input type="text" name="email" id="email" class="form-control floating-input"  required>
-                                <label class="floating-label">ایمیل خود را وارد کنید</label>
-                                <p class="text-danger text-center p-1">{{$ee ?? ''}}</p>
-                            </div>
-                            <button type="submit" class="btn btn-block col-12 btn-info mt-3">ارسال فرم مشخصات</button>
-                        </div> --}}
+                        @if ( auth()->user()->hasRole('مدیر') )
+                            <h4 class="mb-3">{{ ' مشترک گرامی برند : '.$setting->title }}</h4>
+                        @else
+                            <h4 class="mb-3">{{ ' کاربر گرامی : '.auth()->user()->first_name.' '.auth()->user()->last_name }}</h4>
+                        @endif
+                        
                         @if (auth()->user()->user_status!='active')
                             <h5 class="text-dark lh-base">حساب شما مسدود شده</h5>
                         @else

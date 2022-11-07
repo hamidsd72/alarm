@@ -33,6 +33,9 @@
             margin: 0px;
         }
     }
+    #checkbar {
+        max-height: 60px;
+    }
     #checkbar input[type="range"] {
         direction: ltr;
         height: 10px;
@@ -51,7 +54,9 @@
     }
     #checkbar .arrow {
         position: relative;
-        left: {{ intval((100 * $leave_day_count) / $limit) }}%;
+        @unless( $limit==0 )
+            left: {{ intval((100 * $leave_day_count) / $limit) }}%;
+        @endunless
     }
     #checkbar .arrow .circle-num {
         border-radius: 50px;
@@ -68,14 +73,15 @@
         <div class="fw-bold"> @item($item->first_name.' '.$item->last_name) <span class="font-weight-bold text-info">{{auth()->user()->getRoleNames()->first()}}</span></div>
     </div>
 
-    <p class="m-0 mb-2 text-muted text-center">سرپرست ها : 
-        @foreach (auth()->user()->my_employees()->get() as $item)
-            {{$item->master()->first_name.' '.$item->master()->last_name.' '}}
-        @endforeach
-    </p>
+    @if(auth()->user()->my_employees()->count())
+        <p class="m-0 mb-2 text-muted text-center">سرپرست ها : 
+            @foreach (auth()->user()->my_employees()->get() as $item)
+                {{$item->master()->first_name.' '.$item->master()->last_name.' '}}
+            @endforeach
+        </p>
+    @endif
 
     <div class="row">
-
         @if ($limit&&$limit > 0)
             <div class="col-lg-6">
                 <div class="small-box bg-warning">
@@ -91,7 +97,7 @@
                             <input class="mx-auto bg-light" id="checkbar_range" onchange="changevalue()" type="range" min="0" max="{{$limit}}" step="1" value="{{$leave_day_count}}" disabled >
                         </div>
                     </div>
-                    <a href="#" class="small-box-footer">مرخصی های استفاده شده</a>
+                    <a href="{{ route('user.user-my-report.show','leave-day') }}" class="small-box-footer">مرخصی های استفاده شده</a>
                 </div>
             </div>
         @endif

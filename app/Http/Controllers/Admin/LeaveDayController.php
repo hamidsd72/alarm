@@ -43,17 +43,17 @@ class LeaveDayController extends Controller {
         $items = LeaveDay::where('reagent_id', $this->user_id() )->paginate($this->controller_paginate());
         return view('admin.leave_days.index', compact('items','users'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
-    public function show($id) {
+    public function show($leave_day) {
         $users = User::where('reagent_id', $this->user_id() )->get(['id','first_name','last_name']);
-        $items = LeaveDay::where('reagent_id', $this->user_id() )->where('user_id',$id)->paginate($this->controller_paginate());
+        $items = LeaveDay::where('reagent_id', $this->user_id() )->where('user_id',$leave_day)->paginate($this->controller_paginate());
         return view('admin.leave_days.index', compact('items','users'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
     public function create() {
         $users = User::where('reagent_id', $this->user_id() )->get(['id','first_name','last_name']);
         return view('admin.leave_days.create', compact('users'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
-    public function edit($id) {
-        $item = LeaveDay::where('reagent_id', $this->user_id() )->findOrFail($id);
+    public function edit($leave_day) {
+        $item = LeaveDay::where('reagent_id', $this->user_id() )->findOrFail($leave_day);
         $users = User::where('reagent_id', $this->user_id() )->get(['id','first_name','last_name']);
         return view('admin.leave_days.edit', compact('item','users'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
@@ -106,7 +106,7 @@ class LeaveDayController extends Controller {
         }
         return redirect()->back()->withInput()->with('flash_message', ' مرخصی کاربر با موفقیت حذف اضافه شد.');
     }
-    public function update(Request $request, $id) {
+    public function update(Request $request, $leave_day) {
         $this->validate($request, [
             'text' => 'required|max:240',
             'count'  => 'required|integer',
@@ -130,9 +130,9 @@ class LeaveDayController extends Controller {
             $user = User::where('reagent_id', $this->user_id() )->findOrFail($request->user_id);
 
             if ( auth()->user()->hasRole('مدیر') ) {
-                $item = LeaveDay::where('reagent_id', $this->user_id() )->findOrFail($id);
+                $item = LeaveDay::where('reagent_id', $this->user_id() )->findOrFail($leave_day);
             } else {
-                $item = LeaveDay::where('reagent_id', $this->user_id() )->where('employee_id', auth()->user()->id)->find($id);
+                $item = LeaveDay::where('reagent_id', $this->user_id() )->where('employee_id', auth()->user()->id)->find($leave_day);
                 if (!$item) {
                     return redirect()->back()->withInput()->with('err_message', 'مرخصی توسط شخص دیگری ثبت شده شما دسترسی به تغییر آن را ندارید');
                 }
@@ -144,7 +144,7 @@ class LeaveDayController extends Controller {
             $item->start_at = j2g($this->toEnNumber($request->start_at));
             $item->end_at   = j2g($this->toEnNumber($request->end_at));
             $item->update();
-            return redirect()->back()->withInput()->with('flash_message', ' مرخصی کاربر با موفقیت ویرایش شد.');
+            return redirect()->route('admin.leave-day.index')->with('flash_message', ' مرخصی کاربر با موفقیت ویرایش شد.');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('err_message', 'مشکلی در ویرایش بوجود آمده،مجددا تلاش کنید');
         }

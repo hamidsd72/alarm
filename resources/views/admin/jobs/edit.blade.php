@@ -20,7 +20,7 @@
                                 </div>
                                 <div class="row my-3">
                                     <div class="col">
-                                        {{ Form::button('ثبت', array('type' => 'submit', 'class' => 'btn btn-success col-12')) }}
+                                        {{ Form::button('ویرایش', array('type' => 'submit', 'class' => 'btn btn-success col-12')) }}
                                     </div>
                                     <div class="col">
                                         <a href="{{ URL::previous() }}" class="btn btn-secondary col-12">بازگشت</a>

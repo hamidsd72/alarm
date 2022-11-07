@@ -9,7 +9,7 @@
                 <div class="col-md-12">
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
-                            {{ Form::open(array('route' => 'admin.request.store', 'method' => 'POST', 'files' => true)) }}
+                            {{ Form::open(array('route' => 'admin.user_request.store', 'method' => 'POST', 'files' => true)) }}
                                 <div class="row">
                                     <div class="col-lg">
                                         <div class="form-group">

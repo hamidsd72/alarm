@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\Model\Sms;
+use App\Model\Setting;
 use Carbon\Carbon;
 
 
@@ -15,20 +16,10 @@ class NewRegisterController extends Controller
         $this->middleware('guest');
     }
 
-    public function index()
-    {
-        //
-    }
-
-    public function create()
-    {
-        //
-    }
-
     public function store(Request $request)
     {
         if ( strlen($request->mobile) == 11 ) {
-            $app_name = ' کد تایید سامانه '.\App\Model\Setting::find(1)->title.' : ';
+            $app_name = ' کد تایید سامانه '.Setting::find(1)->title.' : ';
 
             $number          = $request->mobile;
             $mobile_verified = rand(100000, 999999);
@@ -41,59 +32,79 @@ class NewRegisterController extends Controller
                     $admin = User::find($user->reagent_id);
                 }
 
-                if ($admin->sms_inventory > 0) {
-                    $user->mobile_verified = $mobile_verified;
-                    $user->update();
-                    Sms::SendSms( $app_name.$user->mobile_verified , $number);
-                    $admin->sms_inventory -= 1;
-                    $admin->update(); 
-                    return redirect('/sign-up-using-mobile/'.$number.'/edit');
+                if( Setting::where('user_id' , $admin->id )->first('sign_in_type')->sign_in_type=='sms' ) {
+
+                    if ($admin->sms_inventory > 0 ) {
+                        $user->mobile_verified = $mobile_verified;
+                        $user->update();
+                        Sms::SendSms( $app_name.$user->mobile_verified , $number);
+                        $admin->sms_inventory -= 1;
+                        $admin->update(); 
+                        return redirect()->route('user.sign-up-using-mobile.edit',$number);
+                    } else {
+                        $error = 'اعتبار پنل به پایان رسیده است.';
+                    }
                 } else {
-                    $error = 'اعتبار پنل به پایان رسیده است.';
+                    return redirect()->route('user.sign-up-using-mobile.edit',$number);
                 }
+                    
             }
-            // $user = User::where('email', $request->mobile)->first();
-            // if ($user) {
-                // if ( password_verify( $request->password, $user->password) ) {
-                //     auth()->loginUsingId($user->id, true);
-                //     return redirect()->route('user.index');
-                // }
-            // }
-            // $error = 'ایمیل یا رمزعبور نامعتبر است';
-            // return view('auth.login', compact('error') );
         }
         $error = 'شماره وارد شده نامعتبر است';
         return view('auth.login', compact('error') );
     }
 
-    public function show($id)
+    public function edit($sign_up_using_mobile)
     {
-        //
-    }
+        $number = $sign_up_using_mobile;
+        $user   = User::where('mobile',$sign_up_using_mobile)->first();
+        if ($user->hasRole('مدیر ') || $user->hasRole('مدیر') ) {
+            $admin = $user;
+        } else {
+            $admin = User::find($user->reagent_id);
+        }
 
-    public function edit($id)
-    {
-        $number = $id;
-        return view('auth.verify', compact('number') );
+        $sms = false;
+        if( Setting::where('user_id' , $admin->id )->first('sign_in_type')->sign_in_type=='sms' ) {
+            $sms = true;
+        }
+
+        return view('auth.verify', compact('number','sms') );
     }
 
     public function update(Request $request, $id)
     {
-        
-        if ( strlen($request->code) == 6 ) {
-            $user = User::where('mobile',$id)->first();
-            
-            if ($user->mobile_verified == $request->code  && $user->updated_at->diffInMinutes(Carbon::now(), false) < 5) {
+        $user = User::where('mobile',$id)->first();
+        if ($user->hasRole('مدیر ') || $user->hasRole('مدیر') ) {
+            $admin = $user;
+        } else {
+            $admin = User::find($user->reagent_id);
+        }
+
+        $error = 'کد وارد شده نامعتبر است';
+
+        $sms = false;
+        if( Setting::where('user_id' , $admin->id )->first('sign_in_type')->sign_in_type=='sms' ) {
+            $sms = true;
+
+            if ( strlen($request->code) == 6 ) {            
+                if ($user->mobile_verified == $request->code  && $user->updated_at->diffInMinutes(Carbon::now(), false) < 5) {
+                    auth()->loginUsingId($user->id, true);
+                    return redirect()->route('user.index');
+                }
+                $error  = 'کد صحیح نیست یا تاریخ گذشته است';
+            }
+        } else {
+
+            if ( password_verify( $request->code , $user->password) ) {
                 auth()->loginUsingId($user->id, true);
                 return redirect()->route('user.index');
             }
-            $error  = 'کد صحیح نیست یا تاریخ گذشته است';
-        } else {
-            $error = 'کد وارد شده نامعتبر است';
+            $error  = 'رمزعبور صحیح نیست';
         }
 
         $number = $id;
-        return view('auth.verify', compact('number', 'error') );
+        return view('auth.verify', compact('number', 'error','sms') );
     }
 
     public function destroy($id)

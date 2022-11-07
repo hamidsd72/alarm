@@ -51,7 +51,7 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             {{ Form::label('date_birth', '* تاریخ تولد') }}
-                                            {{ Form::text('date_birth',null, array('class' => 'form-control text-left date_p' , 'readonly')) }}
+                                            {{ Form::text('date_birth',null, array('class' => 'form-control date_p' , 'readonly')) }}
                                             <img class="inline-left-logo" src="https://img.icons8.com/external-icematte-lafs/40/000000/external-Calendar-it-icematte-lafs.png">
                                         </div>
                                     </div>

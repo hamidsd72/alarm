@@ -20,16 +20,20 @@
                         <label class="floating-label">شماره موبایل را وارد شده</label>
                     </div>
                     <div class="form-group floating-form-group">
-                        <input type="text" name="code" id="mobile" class="form-control floating-input" required autofocus>
-                        <label class="floating-label">کد ارسال شده را وارد کنید</label>
+                        <input type="{{$sms===true?'text':'password'}}" name="code" id="mobile" class="form-control floating-input" required autofocus>
+                        <label class="floating-label"> 
+                            {{$sms===true?' کد ارسال شده ':' رمزعبور '}} را وارد کنید
+                        </label>
                         <h6 class="text-danger text-center p-1">{{$error ?? ''}}</h6>
                     </div>
-                    <div class="form-group my-4 text-secondary">
-                        <span id="code_timer"></span>
-                        <a id="resend_verify_code" class="link" href="#" onclick="resend_verify_code()">
-                            ارسال مجدد کد تایید
-                        </a>
-                    </div>
+                    @if ($sms)
+                        <div class="form-group my-4 text-secondary">
+                            <span id="code_timer"></span>
+                            <a id="resend_verify_code" class="link" href="#" onclick="resend_verify_code()">
+                                ارسال مجدد کد تایید
+                            </a>
+                        </div>
+                    @endif
                     <div class="form-group mb-4 text-secondary">
                         با کلیک روی دکمه زیر قوانین را قبول میکنم
                         <br>

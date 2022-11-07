@@ -142,9 +142,9 @@
             <div class="align-self-center col">
                 <div class="logo-loading">
                     <div class="icon icon-100 text-white mb-4">
-                        <img src="{{ asset('assets/app/icons/fav.png') }}" alt="welcome" style="width: 100px;border-radius: 50px;">
+                        <img src="{{ url(\App\Model\Setting::find(1)->icon_site) }}" alt="در حال بارگذاری">
                     </div>
-                    <div class="h6" style="color: #2F2D51 !important">آی مشاور</div>
+                    <div class="h6">در حال بارگذاری</div>
                     <div class="loader-ellipsis">
                         <div></div>
                         <div></div>

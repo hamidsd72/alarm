@@ -59,8 +59,9 @@ class RollCallController extends Controller {
         $users = User::where('reagent_id', $this->user_id() )->get(['id','first_name','last_name']);
         return view('admin.roll-call.index', compact('items','users'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
-    public function show($id) {
-        $items = RollCall::where('reagent_id', $this->user_id())->where('user_id',$id)->orderByDesc('id')->paginate($this->controller_paginate());
+    public function show($roll_call) {
+        $id = $roll_call;
+        $items = RollCall::where('reagent_id', $this->user_id())->where('user_id',$roll_call)->orderByDesc('id')->paginate($this->controller_paginate());
         foreach ($items as $item) {
             $item->reagent_id = $item->created_at->diffInMinutes($item->updated_at, false);
         }

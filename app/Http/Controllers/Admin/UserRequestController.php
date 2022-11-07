@@ -5,8 +5,9 @@ use App\User;
 use App\Model\UserRequest;
 use App\Model\Setting;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-class RequestController extends Controller {
+class UserRequestController extends Controller {
     public function controller_title($type) {
         if ($type == 'sum') {
             return 'ثبت درخواست ها';
@@ -28,7 +29,7 @@ class RequestController extends Controller {
         }
     }
     public function index() {
-        $items = Request::where('reagent_id', $this->user_id() )->orderByDesc('id')->paginate($this->controller_paginate());
+        $items = UserRequest::where('reagent_id', $this->user_id() )->orderByDesc('id')->paginate($this->controller_paginate());
         $users = User::where('reagent_id', $this->user_id() )->get(['id','first_name','last_name']);
         return view('admin.request.index', compact('items','users'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
@@ -41,7 +42,7 @@ class RequestController extends Controller {
         return strtr( $input, $replace_pairs );
     }
     public function show($user_request) {
-        $items = Request::where('reagent_id', $this->user_id() )->where('user_id',$request)->paginate($this->controller_paginate());
+        $items = UserRequest::where('reagent_id', $this->user_id() )->where('user_id',$user_request)->paginate($this->controller_paginate());
         $users = User::where('reagent_id', $this->user_id() )->get(['id','first_name','last_name']);
         $id = $user_request;
         return view('admin.request.index', compact('id','items','users'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
@@ -66,7 +67,7 @@ class RequestController extends Controller {
         ]);
         User::where('reagent_id', $this->user_id() )->where('id',$request->user_id)->firstOrFail();
         try {
-            $item = new Request();
+            $item = new UserRequest();
             $item->user_id      = $request->user_id;
             $item->title        = $request->title;
             $item->date         = j2g($this->toEnNumber($request->date));
@@ -74,55 +75,55 @@ class RequestController extends Controller {
             $item->employee_id  = auth()->user()->id;
             $item->reagent_id   = $this->user_id();
             $item->save();
-            return redirect()->route('admin.request.index')->with('flash_message', 'درخواست با موفقیت ثبت شد.');
+            return redirect()->route('admin.user_request.index')->with('flash_message', 'درخواست با موفقیت ثبت شد.');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('err_message', 'مشکلی در ثبت درخواست بوجود آمده،مجددا تلاش کنید');
         }
     }
     public function edit($user_request) {
-        $item = Request::where('reagent_id', $this->user_id())->findOrFail($request);
+        $item = UserRequest::where('reagent_id', $this->user_id())->findOrFail($user_request);
         $items = User::where('reagent_id', $this->user_id() )->get(['id','first_name','last_name']);
         return view('admin.request.edit', compact('item','items'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum') ]);
     }
     public function update(Request $request, $user_request) {
         $this->validate($request, [
             'title'         => 'required|max:255',
-            'date'          => 'required',
             'description'   => 'required|max:2500'
         ],[
             'title.required' => 'لطفا عنوان را وارد کنید',
-            'date.required' => 'لطفا تاریخ درخواست را انتخاب کنید',
             'title.max' => 'عنوان نباید بیشتر از ۲۵۵ کاراکتر باشد',
             'description.required' => 'لطفا توضیحات را وارد کنید',
             'description.max' => 'توضیحات نباید بیشتر از ۲۵۰۰ کاراکتر باشد'
         ]);
         if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') ) {
-            $item = Request::where('reagent_id', $this->user_id() )->findOrFail($user_request);
+            $item = UserRequest::where('reagent_id', $this->user_id() )->findOrFail($user_request);
         } else {
-            $item = Request::where('reagent_id', $this->user_id() )->where('employee_id', auth()->user()->id)->find($user_request);
+            $item = UserRequest::where('reagent_id', $this->user_id() )->where('employee_id', auth()->user()->id)->find($user_request);
             if (!$item) {
                 return redirect()->back()->withInput()->with('err_message', 'گزارش توسط شخص دیگری نوشته شده شما دسترسی به تغییر آن را ندارید');
             }
         }
         try {
             $item->title        = $request->title;
-            $item->date         = j2g($this->toEnNumber($request->date));
+            if ($request->date) {
+                $item->date         = j2g($this->toEnNumber($request->date));
+            }
             $item->description  = $request->description;
             $item->update();
-            return redirect()->route('admin.request.index')->with('flash_message', 'درخواست با موفقیت ویرایش شد.');
+            return redirect()->route('admin.user_request.index')->with('flash_message', 'درخواست با موفقیت ویرایش شد.');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('err_message', 'مشکلی در ویرایش درخواست بوجود آمده،مجددا تلاش کنید');
         }
     }
     public function destroy($user_request) {
         if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') ) {
-            $item = Request::where('reagent_id', $this->user_id() )->findOrFail($user_request);
+            $item = UserRequest::where('reagent_id', $this->user_id() )->findOrFail($user_request);
         } else {
-            $item = Request::where('reagent_id', $this->user_id() )->where('employee_id', auth()->user()->id)->findOrFail($user_request);
+            $item = UserRequest::where('reagent_id', $this->user_id() )->where('employee_id', auth()->user()->id)->findOrFail($user_request);
         }
         try {
             $item->delete();
-            return redirect()->route('admin.request.index')->with('flash_message', 'درخواست با موفقیت حذف شد.');
+            return redirect()->route('admin.user_request.index')->with('flash_message', 'درخواست با موفقیت حذف شد.');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('err_message', 'مشکلی در حذف درخواست بوجود آمده،مجددا تلاش کنید');
         }

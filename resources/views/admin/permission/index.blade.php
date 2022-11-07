@@ -25,6 +25,9 @@
                                     <th>بخش فعالیتها
                                         <i class="nav-icon fa fa-handshake-o"></i>
                                     </th>
+                                    <th>بخش مالی و حسابداری
+                                        <i class="nav-icon fa fa-cogs"></i>
+                                    </th>
                                     <th>بخش محتوا
                                         <i class="nav-icon fa fa-cogs"></i>
                                     </th>
@@ -41,55 +44,74 @@
                                             {{$item->name}}
                                             @foreach ($permissions->where('name',$item->name) as $permission)
                                                 {{ Form::open(array('route' => ['admin.permission.destroy',$permission->id], 'method' => 'DELETE', 'files' => true)) }}
-                                                    {{-- <h6>{{$permission->access}}</h6> --}}
                                                     {{ Form::button(' بازنشانی دسترسی ', array('type' => 'submit', 'class' => 'd-none')) }}
                                                 {{ Form::close() }}
                                             @endforeach
                                         </td>
                                         {{ Form::open(array('route' => ['admin.permission.store'], 'method' => 'POST', 'files' => true)) }}
-                                            {{-- <td>
-                                                <div class="form-group mb-0">
-                                                    <select multiple class="form-control" name="access[]" required>
-                                                        <option value="کاربران">بخش کاربران</option>
-                                                        <option value="اعلانات">بخش اعلانات</option>
-                                                        <option value="فعالیتها">بخش فعالیتها</option>
-                                                        <option value="وبینارها">بخش وبینارها</option>
-                                                        <option value="محتوا">بخش محتوا</option>
-                                                        <option value="تنظیمات">بخش تنظیمات</option>
-                                                    </select>
-                                                </div>
-                                            </td> --}}
-                                            <input type="hidden" name="role_name" value="{{$item->name}}">
+                                        <input type="hidden" name="role_name" value="{{$item->name}}">
                                             <td>
                                                 <label class="switch-wrap switch-success ml-2">
-                                                    <input name="کاربران" type="checkbox" {{ in_array('کاربران', explode(",", $permission->access) )?'checked':'' }} >
+                                                    @if ($permission??'')
+                                                        <input name="کاربران" type="checkbox" {{ in_array('کاربران', explode(",", $permission->access) )?'checked':'' }} >
+                                                    @else
+                                                        <input name="کاربران" type="checkbox"  >
+                                                    @endif
                                                     <div class="switch"></div>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label class="switch-wrap switch-success ml-2">
-                                                    <input name="اعلانات" type="checkbox" {{ in_array('اعلانات', explode(",", $permission->access) )?'checked':'' }}>
+                                                    @if ($permission??'')
+                                                        <input name="اعلانات" type="checkbox" {{ in_array('اعلانات', explode(",", $permission->access) )?'checked':'' }}>
+                                                    @else
+                                                        <input name="اعلانات" type="checkbox" >
+                                                    @endif
                                                     <div class="switch"></div>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label class="switch-wrap switch-success ml-2">
-                                                    <input name="فعالیتها" type="checkbox" {{ in_array('فعالیتها', explode(",", $permission->access) )?'checked':'' }}>
+                                                    @if ($permission??'')
+                                                        <input name="فعالیتها" type="checkbox" {{ in_array('فعالیتها', explode(",", $permission->access) )?'checked':'' }}>
+                                                    @else
+                                                        <input name="فعالیتها" type="checkbox" >
+                                                    @endif
                                                     <div class="switch"></div>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label class="switch-wrap switch-success ml-2">
-                                                    <input name="محتوا" type="checkbox" {{ in_array('محتوا', explode(",", $permission->access) )?'checked':'' }}>
+                                                    @if ($permission??'')
+                                                        <input name="حسابداری" type="checkbox" {{ in_array('حسابداری', explode(",", $permission->access) )?'checked':'' }}>
+                                                    @else
+                                                        <input name="حسابداری" type="checkbox" >
+                                                    @endif
                                                     <div class="switch"></div>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label class="switch-wrap switch-success ml-2">
-                                                    <input name="تنظیمات" type="checkbox" {{ in_array('تنظیمات', explode(",", $permission->access) )?'checked':'' }}>
+                                                    @if ($permission??'')
+                                                        <input name="محتوا" type="checkbox" {{ in_array('محتوا', explode(",", $permission->access) )?'checked':'' }}>
+                                                    @else
+                                                        <input name="محتوا" type="checkbox" >
+                                                    @endif
                                                     <div class="switch"></div>
                                                 </label>
-                                                <div class="d-none">{{$permission->access=''}}</div>
+                                            </td>
+                                            <td>
+                                                <label class="switch-wrap switch-success ml-2">
+                                                    @if ($permission??'')
+                                                        <input name="تنظیمات" type="checkbox" {{ in_array('تنظیمات', explode(",", $permission->access) )?'checked':'' }}>
+                                                    @else
+                                                        <input name="تنظیمات" type="checkbox" >
+                                                    @endif
+                                                    <div class="switch"></div>
+                                                </label>
+                                                @if ($permission??'')
+                                                    <div class="d-none">{{$permission->access=''}}</div>
+                                                @endif
                                             </td>
                                             <td>
                                                 <div class="row mb-0">
@@ -100,7 +122,6 @@
     
                                                     @foreach ($permissions->where('name',$item->name) as $permission)
                                                         {{ Form::open(array('route' => ['admin.permission.destroy',$permission->id], 'method' => 'DELETE', 'files' => true)) }}
-                                                            {{-- <h6>{{$permission->access}}</h6> --}}
                                                             {{ Form::button(' بازنشانی دسترسی ', array('type' => 'submit', 'class' => 'btn btn-secondary col-auto mx-1')) }}
                                                         {{ Form::close() }}
                                                     @endforeach

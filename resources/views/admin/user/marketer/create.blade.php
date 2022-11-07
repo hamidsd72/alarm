@@ -36,13 +36,13 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             {{ Form::label('phone', '* تلفن') }}
-                                            {{ Form::text('phone',null, array('class' => 'form-control text-left', 'required' => 'required')) }}
+                                            {{ Form::number('phone',null, array('class' => 'form-control text-left', 'required' => 'required')) }}
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             {{ Form::label('mobile', '* موبایل') }}
-                                            {{ Form::text('mobile',null, array('class' => 'form-control text-left', 'required' => 'required')) }}
+                                            {{ Form::number('mobile',null, array('class' => 'form-control text-left', 'required' => 'required')) }}
                                         </div>
                                     </div>
                                     <div class="col-lg-6 d-none">

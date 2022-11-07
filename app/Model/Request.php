@@ -4,7 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Request extends Model
+class UserRequest extends Model
 {
     protected $table = 'requests';
 

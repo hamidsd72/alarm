@@ -14,7 +14,7 @@
                 <div class="col-md-12">
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
-                            {{ Form::model($item,array('route' => array('admin.request.update', $item->id), 'method' => 'PATCH', 'files' => true)) }}
+                            {{ Form::model($item,array('route' => array('admin.user_request.update', $item->id), 'method' => 'PATCH', 'files' => true)) }}
                             <div class="row">
                                 <div class="col-lg">
                                     <div class="form-group">
@@ -35,7 +35,8 @@
                                 <div class="col-lg">
                                     <div class="form-group">
                                         {{ Form::label('date', '* تاریخ درخواست '.my_jdate($item->date,'d F Y')) }}
-                                        {{ Form::text('date',null, array('class' => 'form-control date_p')) }}
+                                        {{-- {{ Form::text('date',null, array('class' => 'form-control date_p')) }} --}}
+                                        <input type="text" name="date" id="date" class="form-control date_p">
                                         <img class="inline-left-logo" src="https://img.icons8.com/external-icematte-lafs/40/000000/external-Calendar-it-icematte-lafs.png">
                                     </div>
                                 </div>

@@ -16,6 +16,7 @@ class JobReport extends Model
         "job_id",
         "time",
         'price',
+        'divice',
         "description",
         "attach",
         "created_at",

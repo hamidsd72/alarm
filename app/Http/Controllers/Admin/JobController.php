@@ -31,8 +31,8 @@ class JobController extends Controller {
         $items = Job::where('reagent_id', $this->user_id() )->orderByDesc('id')->paginate($this->controller_paginate());
         return view('admin.jobs.index', compact('items'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
-    public function show($id) {
-        $items = Job::findOrFail($id);
+    public function show($job) {
+        $items = Job::findOrFail($job);
         return view('admin.jobs.index', compact('items'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
     public function create() {
@@ -55,11 +55,11 @@ class JobController extends Controller {
             return redirect()->back()->withInput()->with('err_message', 'مشکلی در ثبت پروژه بوجود آمده،مجددا تلاش کنید');
         }
     }
-    public function edit($id) {
-        $item = Job::where('reagent_id', $this->user_id())->findOrFail($id);
+    public function edit($job) {
+        $item = Job::where('reagent_id', $this->user_id())->findOrFail($job);
         return view('admin.jobs.edit', compact('item'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum') ]);
     }
-    public function update($id, Request $request) {
+    public function update(Request $request, $job) {
         $this->validate($request, [
             'title'         => 'required|max:255',
         ],[
@@ -67,7 +67,7 @@ class JobController extends Controller {
             'title.max' => 'عنوان نباید بیشتر از ۲۵۵ کاراکتر باشد',
         ]);
         try {
-            $item = Job::where('reagent_id', $this->user_id())->findOrFail($id);
+            $item = Job::where('reagent_id', $this->user_id())->findOrFail($job);
             $item->title = $request->title;
             $item->update();
             return redirect()->route('admin.jobs.index')->with('flash_message', 'پروژه با موفقیت ویرایش شد.');

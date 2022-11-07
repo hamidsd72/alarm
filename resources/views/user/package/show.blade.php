@@ -13,7 +13,7 @@
 
     <div class="container mt-5">
         <div class="mx-md-1 p-3 fixed-bottom col-5 col-lg-3" style="margin-bottom: 60px;">
-            <h6 class="text-light rounded mb-2 p-1 me-4" style="background: #0009;">تماس با کارفرما</h6>
+            <h6 class="text-dark fw-bold mb-2 p-1 me-4">تماس با کارفرما</h6>
             <button onclick="window.open(`tel:{{$item->agent()->phone}}`);" class="btn btn-dark" style="padding: 6px 13px;">
                 <img src="https://img.icons8.com/ultraviolet/18/000000/phone.png"/>
             </button>
@@ -103,7 +103,7 @@
                                     <textarea name="description" class="round-small mb-0" id="description" required></textarea>
                                 </div>
                                 <div class="form-field form-text">
-                                    <label class="contactMessage color-theme" for="price">هزینه ها:<span>(required)</span></label>
+                                    <label class="contactMessage color-theme" for="price">هزینه ها:</label>
                                     <input type="number" name="price" id="price" class="col-12 text-end round-small mb-0">
                                 </div>
                                 <div class="mb-4">

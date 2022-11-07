@@ -12,24 +12,32 @@
             </div>
             <div class="card-body res_table_in">
                 <table id="example2" class="table table-bordered table-hover table-striped">
-                    @if ($id=='rollCall')
+                    @if ($user_my_report=='rollCall')
                         <thead>
                             <tr>
-                                <th>سه ماه گذشته</th>
-                                <th>این ماه</th>
-                                <th>هفته</th>
-                                <th>امروز</th>
+                                <th>بازه زمانی</th>
+                                <th>تاریخ</th>
+                                <th>اولین حضور</th>
+                                <th>آخرین بروزرسانی</th>
+                                <th>زمان کار</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>{{intval($treeMonth / 60).':'.($treeMonth % 60).' ساعت '}}</td>
-                                <td>{{intval($Month / 60).':'.($Month % 60).' ساعت '}}</td>
-                                <td>{{intval($week / 60).':'.($week % 60).' ساعت '}}</td>
-                                <td>{{intval($today / 60).':'.($today % 60).' ساعت '}}</td>
-                            </tr>
+                            @foreach($items as $item)
+                                <tr>
+                                    <td>{{$item->title}}</td>
+                                    <td>{{my_jdate($item->created_at,'d F Y')}}</td>
+                                    <td>{{$item->created_at->format('H:i:s')}}</td>
+                                    <td>{{$item->updated_at->format('H:i:s')}}</td>
+                                    <td>{{intval($item->time / 60).':'.$item->time % 60}}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
-                    @elseif($id=='job')
+                        @if ($workDay < 0)
+                            <h5 class="pb-3">{{intval($workDay).' روز غیبت در این ماه '}}</h5>
+                        @endif
+                        
+                    @elseif($user_my_report=='job')
                         <thead>
                             <tr>
                                 <th>عنوان</th>
@@ -48,27 +56,49 @@
                                 </tr>
                             @endforeach
                         </tbody>
-                    @elseif($id=='leave-day')
+                    @elseif($user_my_report=='leave-day')
                         <thead>
                             <tr>
                                 <th>روز</th>
                                 <th>از تاریخ</th>
                                 <th>تا تاریخ</th>
+                                <th>جزيیات</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($items as $item)
+                            @foreach($items as $key => $item)
                                 <tr>
                                     <td>{{$item->count.' روز '}}</td>
                                     <td>{{my_jdate($item->start_at,'d F Y')}}</td>
                                     <td>{{my_jdate($item->end_at,'d F Y')}}</td>
+                                    <td>
+                                        <button  class="btn btn-primary py-0" data-toggle="modal" data-target="#description{{$key}}">نمایش جزيیات</button>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
-                        <h5 class="pb-3">مرخصی های استفاده شده : {{$items->count('sum').' روز '}}</h5>
+                        <h5 class="pb-3">مرخصی های استفاده شده : {{$items->sum('count').' روز '}}</h5>
                     @endif
                 </table>
             </div>
         </div>
     </section>
+
+    @if($user_my_report=='leave-day')
+        @foreach($items as $key => $item)
+            <div class="modal fade mt-5" id="description{{$key}}" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content redu20">
+                        <div class="modal-header">
+                            <button type="button" id="description{{$key}}" class="close btn btn-danger" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            {{$item->text}}
+                        </div>
+                    </div>
+            
+                </div>
+            </div>
+        @endforeach
+    @endif
 @endsection

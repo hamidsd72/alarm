@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\User;
 use App\Model\Setting;
 use App\Model\Contact;
 use Illuminate\Http\Request;
@@ -30,6 +31,7 @@ class ContactController extends Controller {
         $this->middleware('auth');
     }
     public function index($type=null) {
+        $users = User::where('reagent_id', $this->user_id() )->get(['id','first_name','last_name']);
         if (Auth::user()->hasRole('مدیر ارشد') || Auth::user()->hasRole('مدیر'))  {
             $items = Contact::where('reagent_id',auth()->user()->id)->where('answered', 'no')->where('belongs_to_item', '=', 0)->orderByDesc('id');
         } else {
@@ -45,7 +47,20 @@ class ContactController extends Controller {
         if ($items->count()) {
             $sub_items = Contact::where('answered', 'no')->whereIn('belongs_to_item', $items->pluck('id') )->get();
         }
-        return view('admin.content.contact.index', compact('items','sub_items'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
+        return view('admin.content.contact.index', compact('users','items','sub_items'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
+    }
+    public function show($id) {
+        $users = User::where('reagent_id', $this->user_id() )->get(['id','first_name','last_name']);
+        if (Auth::user()->hasRole('مدیر ارشد') || Auth::user()->hasRole('مدیر'))  {
+            $items = Contact::where('reagent_id',auth()->user()->id)->where('user_id',$id)->where('answered', 'no')->where('belongs_to_item', '=', 0)->orderByDesc('id')->paginate($this->controller_paginate());
+        } else {
+            $items = Contact::where('reagent_id',auth()->user()->reagent_id)->where('user_id',$id)->where('category',auth()->user()->getRoleNames()->first())->where('answered', 'no')->where('belongs_to_item', '=', 0)->orderByDesc('id')->paginate($this->controller_paginate());
+        }
+        $sub_items = '';
+        if ($items->count()) {
+            $sub_items = Contact::where('answered', 'no')->whereIn('belongs_to_item', $items->pluck('id') )->get();
+        }
+        return view('admin.content.contact.index', compact('id','users','items','sub_items'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
     public function send_email(Request $request,$id) {
         $item=Contact::findOrFail($id);

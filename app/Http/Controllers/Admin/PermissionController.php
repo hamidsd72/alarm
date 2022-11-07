@@ -35,6 +35,7 @@ class PermissionController extends Controller {
             if ($request->کاربران) { array_push($access, 'کاربران'); }
             if ($request->اعلانات) { array_push($access, 'اعلانات'); }
             if ($request->فعالیتها) { array_push($access, 'فعالیتها'); }
+            if ($request->حسابداری) { array_push($access, 'حسابداری'); }
             if ($request->محتوا) { array_push($access, 'محتوا'); }
             if ($request->تنظیمات) { array_push($access, 'تنظیمات'); }
 
@@ -53,9 +54,9 @@ class PermissionController extends Controller {
         }
         abort(503);
     }
-    public function destroy($id) {
+    public function destroy($permission) {
         if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') ) {
-            Permission::where('user_id',auth()->user()->id)->findOrFail($id)->delete();
+            Permission::where('user_id',auth()->user()->id)->findOrFail($permission)->delete();
             return redirect()->back()->with('flash_message', 'حذف دسترسی با موفقیت انجام شد');
         }
         abort(503);

@@ -58,7 +58,7 @@
                         <button type="button" class="close" data-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" name="master_id" value="{{$id}}">
+                        <input type="hidden" name="master_id" value="{{$task_master}}">
                         <div class="form-group">
                             <label for="employee_id" >انتخاب کارمند</label>
                             <select id="employee_id" name="employee_id" class="form-control select2">

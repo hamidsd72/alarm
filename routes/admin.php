@@ -8,7 +8,7 @@ Route::get('job-report/map/{id}', 'JobReportController@map')->name('job-report-s
 Route::get('job-report/filter/{id}', 'JobReportController@index')->name('job-report.filter');
 Route::resource('jobs', 'JobController');
 Route::get('jobs/force/delete/{id}', 'JobController@destroy')->name('jobs.force.delete');
-Route::resource('request', 'RequestController');
+Route::resource('user_request', 'UserRequestController');
 Route::get('request/force/delete/{id}', 'RequestController@destroy')->name('request.force.delete');
 Route::resource('network-setting', 'SettingController');
 Route::resource('form-price', 'FormPriceController');
@@ -47,6 +47,7 @@ Route::post('guide-update/{id}', 'GuideController@update')->name('guide.update')
 Route::get('about-destroy/{id}', 'GuideController@destroy')->name('about.destroy');
 // contact
 Route::get('contact-list/{type?}', 'ContactController@index')->name('contact.list');
+Route::get('contact-filter/{id?}', 'ContactController@show')->name('contact.filter');
 Route::post('contact-send-email/{id}', 'ContactController@send_email')->name('contact.send.email');
 Route::post('contact-send-ticket/{id}', 'ContactController@send_ticket')->name('contact.send.ticket');
 Route::get('contact-destroy/{id}', 'ContactController@destroy')->name('contact.destroy');
@@ -240,6 +241,8 @@ Route::get('meta-active/{id}/{type}', 'MetaController@active')->name('meta.activ
 
 
 // visitlog
-Route::get('visit_log', 'VisitLogController@index')->name('visit.log');
+// Route::get('visit_log', 'VisitLogController@index')->name('visit.log');
+Route::resource('visit_log', 'VisitLogController');
+
 
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\Slider;
 use App\Model\OffDay;
+use App\Model\Visit;
 use App\User;
 use App\Model\JobReport;
 use App\Model\ServiceCat;
@@ -96,7 +97,7 @@ class HomeController extends Controller {
             return redirect()->route('admin.profile.show');
         } else {
             // ثبت حضور و غیاب
-            $this->RollCall();
+            $log = $this->RollCall();
             // بررسی اشتراک نمایندگی یا فعال بودن کاربر
             if( auth()->user()->user_status!='active' || !User::is_special_user($this->user_id()) ) {
                 $setting = Setting::where('user_id', $this->user_id())->first();
@@ -121,36 +122,70 @@ class HomeController extends Controller {
                 $package->price = $this->fa_number($package->price);
             }
         }
-        return view('user.app', compact('serviceCat','sliders', 'about', 'packages','network','slidersPhotos','runningJob','setting'));
+        if ($log=='انجام شد') $log=false;
+        return view('user.app', compact('log','serviceCat','sliders', 'about', 'packages','network','slidersPhotos','runningJob','setting'));
         // return view('user.index', compact('serviceCat','sliders', 'about', 'packages','network','slidersPhotos','runningJob','setting'));
         // return view('user.index', compact('serviceCat','sliders', 'about', 'packages', 'customers', 'service_custom','gold_package','slidersPhotos','network'));
     }
     public function RollCall() {
-        if ( auth()->user()->hasRole('مدیر ارشد') && auth()->user()->hasRole('مدیر') ) {
+        if ( !auth()->user()->hasRole('مدیر') ) {
+            $visits = Visit::where('reagent_id', $this->user_id() )->where('user_id', auth()->user()->id )->get();
+            if ( $visits->count() ) {
+
+                $divice = (request()->userAgent())??'';
+                $location = 'UNKNOWN';
+                if (getenv('HTTP_CLIENT_IP'))
+                    $location = getenv('HTTP_CLIENT_IP');
+                else if (getenv('HTTP_X_FORWARDED_FOR'))
+                    $location = getenv('HTTP_X_FORWARDED_FOR');
+                else if (getenv('HTTP_X_FORWARDED'))
+                    $location = getenv('HTTP_X_FORWARDED');
+                else if (getenv('HTTP_FORWARDED_FOR'))
+                    $location = getenv('HTTP_FORWARDED_FOR');
+                else if (getenv('HTTP_FORWARDED'))
+                    $location = getenv('HTTP_FORWARDED');
+                else if (getenv('REMOTE_ADDR'))
+                    $location = getenv('REMOTE_ADDR');
+
+                foreach ($visits as $visit) {
+                    $visit->location = $location;
+                    $visit->divice   = $divice;
+                    $visit->save();
+                }
+            }
+
             $set                = Setting::where('user_id',$this->user_id())->first();
             $dailyStartTime     = $set->dailyStartTime;
             $dailyFinishTime    = $set->dailyFinishTime;
 
             $rollCall = RollCall::where('created_at','>', Carbon::now()->today())->where('user_id', auth()->user()->id)->first();
-            // روزها یا رویدادهای تعطیل نمایندگی
-            if( OffDay::where( 'user_id',$this->user_id() )->where( 'date', Carbon::now()->startOfDay() )->count() < 1 ) {
-            // ساعت حضور و غیاب کارمند
-            // اگر روز کاری بود
-                if ( ! $this->is_off_day() ) {
-                    // بروزرسانی ساعت حضور و غیاب کارمند
-                    if ( $rollCall ) {
-                        // ایا محدودیت کاری وحود دارد
-                        if ( $dailyFinishTime ) {
-                            // زمان محدودیت کاری
-                            if ( Carbon::parse($dailyFinishTime)->diffInMinutes(Carbon::now(), false) < 0 ) {
-                                $rollCall->updated_at = Carbon::now();
-                                $rollCall->update();
-                            }
-                        } else {
-                            $rollCall->updated_at = Carbon::now();
-                            $rollCall->update();
-                        }
+            $log = 'انجام شد';
+
+            // بروزرسانی ساعت حضور و غیاب کارمند
+            if ( $rollCall ) {
+                // ایا محدودیت کاری وحود دارد
+                if ( $dailyFinishTime ) {
+                    // زمان محدودیت کاری
+                    if ( Carbon::parse($dailyFinishTime)->diffInMinutes(Carbon::now(), false) < 0 ) {
+                        $rollCall->updated_at = Carbon::now();
+                        $rollCall->update();
+                    }
+                } else {
+                    $rollCall->updated_at = Carbon::now();
+                    $rollCall->update();
+                }
+            } else {
+
+                // روزها یا رویدادهای تعطیل نمایندگی
+                if( OffDay::where( 'user_id',$this->user_id() )->where( 'date', Carbon::now()->startOfDay() )->count() > 0 ) {
+                    $log = 'امروز تعطیل مناسبتی است و ساعت کاری روزانه ثبت نمیشود';
+                } else {
+                    // ساعت حضور و غیاب کارمند
+                    // اگر روز کاری بود
+                    if ( $this->is_off_day() ) {
+                        $log = 'امروز تعطیل است و ساعت کاری روزانه ثبت نمیشود';
                     } else {
+                        
                         // ایا محدودیت کاری وحود دارد
                         if ( $dailyStartTime ) {
                             // زمان محدودیت کاری
@@ -166,15 +201,18 @@ class HomeController extends Controller {
                                 "reagent_id" => $this->user_id()
                             ]);
                         }
+                        
                     }
                 }
-                
+
             }
+
+            return $log;
         }
     }
     public function updateRollCall() {
-        $this->RollCall();
-        return response()->json(['updatedRollCall' => 'ok'], 200);
+        $log = $this->RollCall();
+        return response()->json(['updatedRollCall' => $log], 200);
     }
     public function tickets()  {
         $items = Contact::where('user_id', Auth::user()->id )->where('belongs_to_item', '=', 0)->orderBy('id','desc')->paginate($this->controller_paginate());
@@ -240,6 +278,7 @@ class HomeController extends Controller {
         }*/
     }
     public function job_create($package_id) {
+        $divice = (request()->userAgent())??'';
         $location = 'UNKNOWN';
         if (getenv('HTTP_CLIENT_IP'))
             $location = getenv('HTTP_CLIENT_IP');
@@ -254,28 +293,8 @@ class HomeController extends Controller {
         else if (getenv('REMOTE_ADDR'))
             $location = getenv('REMOTE_ADDR');
 
-
-        // $client  = @$_SERVER['HTTP_CLIENT_IP'];
-        // $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
-        // $remote  = $_SERVER['REMOTE_ADDR'];
-        // $location  = "Unknown";
-        
-        // if(filter_var($client, FILTER_VALIDATE_IP)) {
-        //     $ip = $client;
-        // } elseif(filter_var($forward, FILTER_VALIDATE_IP)) {
-        //     $ip = $forward;
-        // } else {
-        //     $ip = $remote;
-        // }
-
-        // $ip_data = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $ip));
-
-        // if ($ip_data && $ip_data->geoplugin_latitude != null && $ip_data->geoplugin_longitude != null) {
-        //     $location = $ip_data->geoplugin_latitude.','.$ip_data->geoplugin_longitude;
-        // }
         if (ServicePackage::find($package_id)) {
             $runningJob = JobReport::where('user_id', auth()->user()->id)->where('status', 'start')->get();
-    
             if ($runningJob->count()) {
                 foreach ($runningJob as $job) {
                     $job->status = 'finish';
@@ -283,8 +302,7 @@ class HomeController extends Controller {
                     $job->save();
                 }
             }
-            JobReport::create([ 'user_id' => auth()->user()->id,'location' => $location,'job_id' => $package_id ]);
-    
+            JobReport::create([ 'user_id' => auth()->user()->id,'location' => $location,'job_id' => $package_id, 'divice' => $divice]);
             return redirect()->back()->withInput()->with('flash_message', 'فعالیت آغاز شد');
         }
         return redirect()->back()->withInput()->with('err_message', 'فعالیت یافت نشد');

@@ -24,8 +24,9 @@
                         <tr>
                             <th>تاریخ اجرای فعالیت</th>
                             <th>زمان اجرا</th>
-                            <th>نمایش مکان</th>
                             <th>گزارش فعالیت</th>
+                            <th>نمایش مکان</th>
+                            <th>دستگاه کاربر</th>
                             <th>هزینه ی گزارش شده</th>
                             <th>ضمیمه گزارش فعالیت</th>
                         </tr>
@@ -37,21 +38,24 @@
                                     <td>{{my_jdate($item->created_at,'d F Y')}}</td>
                                     <td>{{$item->time.' دقیقه '}}</td>
                                     <td>
-                                        @if ($item->location)
-                                            <a target="_blank" href="{{'https://www.google.com/maps/@'.$item->location}}">نمایش مکان از روی نقشه</a>
-                                            {{-- <a target="_blank" href="{{route('admin.job-report-show-map',$item->id)}}">نمایش مکان از روی نقشه</a> --}}
-                                        @else ______ @endif
-                                    </td>
-                                    <td class="col-5">
-                                        <a href="#" data-toggle="tooltip" data-placement="left" title="{{$item->description}}">
-                                            {{substr($item->description,0,200).'...'}}
+                                        <a href="#" data-toggle="tooltip" data-placement="left" title="{{$item->description==''?'ثبت نشده':$item->description}}">
+                                            {{$item->description==''?'ثبت نشده':'جهت نمایش ماوس را اینجا قرار دهید'}}
                                         </a>
+                                    </td>
+                                    <td>
+                                        @if ($item->location && $item->location!='UNKNOWN')
+                                            <a target="_blank" href="{{'https://www.google.com/maps/@'.$item->location}}">جهت نمایش مکان کلیک کنید</a>
+                                            {{-- <a target="_blank" href="{{route('admin.job-report-show-map',$item->id)}}">نمایش مکان از روی نقشه</a> --}}
+                                        @else مکان نامشخص @endif
+                                    </td>
+                                    <td>
+                                        {{$item->divice==''?'ثبت نشده':$item->divice}}
                                     </td>
                                     <td>{{$item->price.' تومان '}}</td>
                                     <td>
                                         @if ($item->attach)
                                             <a href="{{url($item->attach)}}" download>دانلود فابل ضمیمه شده</a>
-                                        @else ______ @endif
+                                        @else بدون ضمیمه @endif
                                     </td>
                                 </tr>
                             @endforeach
