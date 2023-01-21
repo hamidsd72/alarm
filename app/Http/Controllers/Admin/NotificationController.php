@@ -69,6 +69,7 @@ class NotificationController extends Controller {
         }
     }
     public function store(Request $request)  {
+        $app_name   = Setting::where('user_id', $this->user_id())->first('title');
         if ($request->type == 'single') {
             $notife = new Notification();
             try {
@@ -80,7 +81,9 @@ class NotificationController extends Controller {
                     $notife->atach = file_store($request->attach, 'source/asset/uploads/notification/' . my_jdate(date('Y/m/d'), 'Y-m-d') . '/photos/', 'photo-');
                 }
                 $notife->save();
-                Sms::SendSms( 'با سلام, شما یک اعلان جدید دارید. سامانه بست آلارم' , $request->user_id);
+                // if ($request->send_sms) {
+                //     Sms::SendSms( (' یک اعلان جدید دارید. سامانه '.$app_name->title) , $request->user_id);
+                // }
                 return redirect()->route('admin.notification.index');
             } catch (\Throwable $th) {
                 return redirect()->back()->withInput()->with('err_message','کاربر پیدا نشد , احتمالا شماره اشتباه است یا وارد نشده');
@@ -100,7 +103,9 @@ class NotificationController extends Controller {
                             $notife->atach = file_store($request->attach, 'source/asset/uploads/notification/' . my_jdate(date('Y/m/d'), 'Y-m-d') . '/photos/', 'photo-');
                         }
                         $notife->save();
-                        Sms::SendSms( 'با سلام, شما یک اعلان جدید دارید. سامانه بست آلارم' , $user->mobile);
+                        // if ($request->send_sms) {
+                        //     Sms::SendSms( (' یک اعلان جدید دارید. سامانه '.$app_name->title) , $user->mobile);
+                        // }
                     } catch (\Throwable $th) {
                         
                     }
@@ -108,9 +113,6 @@ class NotificationController extends Controller {
                 return redirect()->route('admin.notification.index');
             } else { return redirect()->back()->withInput()->with('err_message','کاربری پیدا نشد'); }
         } elseif($request->type == 'package') {
-            // $bascket = Basket::where('type' , 'package')->where('status' , 'active')->where('sale_id' , ServicePackage::findOrFail($request->package)->id)->pluck('user_id');
-            // if ($bascket->count()) {
-                // foreach (User::whereIn('id',$bascket)->get() as $user) {
                     $notife = new Notification();
                     try {
                         $user = User::find(ServicePackage::findOrFail($request->package)->user_id);
@@ -122,7 +124,9 @@ class NotificationController extends Controller {
                             $notife->atach = file_store($request->attach, 'source/asset/uploads/notification/' . my_jdate(date('Y/m/d'), 'Y-m-d') . '/photos/', 'photo-');
                         }
                         $notife->save();
-                        Sms::SendSms( 'با سلام, شما یک اعلان جدید دارید. سامانه بست آلارم' , $user->mobile);
+                        // if ($request->send_sms) {
+                        //     Sms::SendSms( (' یک اعلان جدید دارید. سامانه '.$app_name->title) , $user->mobile);
+                        // }
                     } catch (\Throwable $th) {
                         
                     }
@@ -143,7 +147,9 @@ class NotificationController extends Controller {
                             $notife->atach = file_store($request->attach, 'source/asset/uploads/notification/' . my_jdate(date('Y/m/d'), 'Y-m-d') . '/photos/', 'photo-');
                         }
                         $notife->save();
-                        Sms::SendSms( 'با سلام, شما یک اعلان جدید دارید. سامانه بست آلارم' , $user->mobile);
+                        // if ($request->send_sms) {
+                        //     Sms::SendSms( (' یک اعلان جدید دارید. سامانه '.$app_name->title) , $user->mobile);
+                        // }
                     } catch (\Throwable $th) {
                         
                     }

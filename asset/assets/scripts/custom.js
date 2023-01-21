@@ -355,47 +355,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         //Page Highlights
-        var highlightData = document.querySelectorAll('[data-change-highlight]');
-        highlightData.forEach(el => el.addEventListener('click', e =>{
-            var highlight = el.getAttribute('data-change-highlight');
-            var pageHighlight = document.querySelectorAll('.page-highlight');
-            if(pageHighlight.length){pageHighlight.forEach(function(e){e.remove();});}
-            var loadHighlight = document.createElement("link");
-            loadHighlight.rel = "stylesheet";
-            loadHighlight.className = "page-highlight";
-            loadHighlight.type = "text/css";
-            loadHighlight.href = 'styles/highlights/highlight_' + highlight +'.css';
-            document.getElementsByTagName("head")[0].appendChild(loadHighlight);
-            document.body.setAttribute('data-highlight', 'highlight-'+highlight)
-            localStorage.setItem(pwaName+'-Highlight', highlight)
-        }))
-        var rememberHighlight = localStorage.getItem(pwaName+'-Highlight');
-        if(rememberHighlight){
-            document.body.setAttribute('data-highlight', rememberHighlight);
-            var loadHighlight = document.createElement("link");
-            loadHighlight.rel = "stylesheet";
-            loadHighlight.className = "page-highlight";
-            loadHighlight.type = "text/css";
-            loadHighlight.href = 'styles/highlights/highlight_' + rememberHighlight +'.css';
-            if(!document.querySelectorAll('.page-highlight').length){
-                document.getElementsByTagName("head")[0].appendChild(loadHighlight);
-                document.body.setAttribute('data-highlight', 'highlight-'+rememberHighlight)
-            }
-        } else {
-            var bodyHighlight = document.body.getAttribute('data-highlight');
-            var defaultHighlight = bodyHighlight.split("highlight-")
-            document.body.setAttribute('data-highlight', defaultHighlight[1]);
-            var loadHighlight = document.createElement("link");
-            loadHighlight.rel = "stylesheet";
-            loadHighlight.className = "page-highlight";
-            loadHighlight.type = "text/css";
-            loadHighlight.href = 'styles/highlights/highlight_' + defaultHighlight[1] +'.css';
-            if(!document.querySelectorAll('.page-highlight').length){
-                document.getElementsByTagName("head")[0].appendChild(loadHighlight);
-                document.body.setAttribute('data-highlight', 'highlight-'+defaultHighlight[1])
-                localStorage.setItem(pwaName+'-Highlight', defaultHighlight[1])
-            }
-        }
+        // var highlightData = document.querySelectorAll('[data-change-highlight]');
+        // highlightData.forEach(el => el.addEventListener('click', e =>{
+        //     var highlight = el.getAttribute('data-change-highlight');
+        //     var pageHighlight = document.querySelectorAll('.page-highlight');
+        //     if(pageHighlight.length){pageHighlight.forEach(function(e){e.remove();});}
+        //     var loadHighlight = document.createElement("link");
+        //     loadHighlight.rel = "stylesheet";
+        //     loadHighlight.className = "page-highlight";
+        //     loadHighlight.type = "text/css";
+        //     loadHighlight.href = 'styles/highlights/highlight_' + highlight +'.css';
+        //     document.getElementsByTagName("head")[0].appendChild(loadHighlight);
+        //     document.body.setAttribute('data-highlight', 'highlight-'+highlight)
+        //     localStorage.setItem(pwaName+'-Highlight', highlight)
+        // }))
+        // var rememberHighlight = localStorage.getItem(pwaName+'-Highlight');
+        // if(rememberHighlight){
+        //     document.body.setAttribute('data-highlight', rememberHighlight);
+        //     var loadHighlight = document.createElement("link");
+        //     loadHighlight.rel = "stylesheet";
+        //     loadHighlight.className = "page-highlight";
+        //     loadHighlight.type = "text/css";
+        //     loadHighlight.href = 'styles/highlights/highlight_' + rememberHighlight +'.css';
+        //     if(!document.querySelectorAll('.page-highlight').length){
+        //         document.getElementsByTagName("head")[0].appendChild(loadHighlight);
+        //         document.body.setAttribute('data-highlight', 'highlight-'+rememberHighlight)
+        //     }
+        // } else {
+        //     var bodyHighlight = document.body.getAttribute('data-highlight');
+        //     var defaultHighlight = bodyHighlight.split("highlight-")
+        //     document.body.setAttribute('data-highlight', defaultHighlight[1]);
+        //     var loadHighlight = document.createElement("link");
+        //     loadHighlight.rel = "stylesheet";
+        //     loadHighlight.className = "page-highlight";
+        //     loadHighlight.type = "text/css";
+        //     loadHighlight.href = 'styles/highlights/highlight_' + defaultHighlight[1] +'.css';
+        //     if(!document.querySelectorAll('.page-highlight').length){
+        //         document.getElementsByTagName("head")[0].appendChild(loadHighlight);
+        //         document.body.setAttribute('data-highlight', 'highlight-'+defaultHighlight[1])
+        //         localStorage.setItem(pwaName+'-Highlight', defaultHighlight[1])
+        //     }
+        // }
 
         //Background Gradient Color
         var gradientData = document.querySelectorAll('[data-change-background]');
@@ -1237,11 +1237,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if(isPWA === true){
             var checkPWA = document.getElementsByTagName('html')[0];
             if(!checkPWA.classList.contains('isPWA')){
-                if ('serviceWorker' in navigator) {
-					window.addEventListener('load', function() {
-						navigator.serviceWorker.register(pwaLocation, {scope: pwaScope}).then(function(registration){registration.update();})
-					});
-				}
+                // if ('serviceWorker' in navigator) {
+				// 	window.addEventListener('load', function() {
+				// 		navigator.serviceWorker.register(pwaLocation, {scope: pwaScope}).then(function(registration){registration.update();})
+				// 	});
+				// }
 
                 //Setting Timeout Before Prompt Shows Again if Dismissed
                 var hours = pwaRemind * 24; // Reset when storage is more than 24hours

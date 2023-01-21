@@ -8,7 +8,6 @@
         padding: 12px;
     }
 </style>
-
 @section('content')
 
     @if ($log)
@@ -84,93 +83,91 @@
     </div>
 
     {{-- فعالیت ها --}}
-    @unless ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') )
-        <div class="container mt-4">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row mb-0">
-                        <div class="col">
-                            <h6 class="text-dark my-1">
-                                <img src="https://img.icons8.com/ultraviolet/18/000000/new-job.png"/>
-                                <span class="vm ml-2">فعالیت های امروز</span>
-                            </h6>
-                        </div>
-                        <div class="col-auto">
-                            <a class="dropdown-item" href="{{ route('user.packages') }}">نمایش همه</a>
-                        </div>
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <div class="row mb-0">
+                    <div class="col">
+                        <h6 class="text-dark my-1">
+                            <img src="https://img.icons8.com/ultraviolet/18/000000/new-job.png"/>
+                            <span class="vm ml-2">فعالیت های امروز</span>
+                        </h6>
+                    </div>
+                    <div class="col-auto">
+                        <a class="dropdown-item" href="{{ route('user.packages') }}">نمایش همه</a>
                     </div>
                 </div>
-                @if ($packages->count()<1)
-                    <h6 class="text-center mb-2">برای امروز موردی یافت نشد</h6>
-                @endif
-                @foreach($packages as $key => $package)
-                    <div class="col-lg-12">
-                        <div class="card product-card-small mb-0" style="box-shadow: none;">
-                            <div class="card-body pt-0">
-                                <div class="row mb-0 border redu30">
-                                    <div class="col mt-2 px-3">
-                                        <div class="row mb-1">
-                                            <div class="col">
-                                                {{-- <p ><a href="{{route('user.package',$package->slug)}}" class="text-dark">{{$package->title }}</a></p> --}}
-                                                <h6>{{$package->packageName()?$package->packageName()->title:'________'}}</h6>
-                                                <p>
-                                                    {{-- {{$package->agent()?$package->agent()->city.' '.$package->agent()->locate.' '.$package->agent()->address:'________'}} --}}
-                                                    {{$package->agent()?$package->agent()->city.' '.$package->agent()->locate.' ...':'________'}}
-                                                </p>
-                                            </div>
-                                            <div class="col-auto">
-                                                <p class="small vm show_job_time" id="{{$package->id.'show_job_time'}}">
-                                                    <span class=" text-secondary">
-                                                        @if ($package->jobRuning->count())
-                                                            <a href="#" id="clickToOpenModal2"data-toggle="modal" data-target="#ModalTicket2">
-                                                                <i class="fa fa-refresh fa-spin" style="font-size:12px"></i>
-                                                                {{( $package->jobTodayTime() + $package->jobRuning->first()->created_at->diffInMinutes(\Carbon\Carbon::now(), false) + 1 ).' دقیقه '}}
-                                                            </a>
-                                                            <br>
-                                                        @endif
-                                                        @if ($package->job->count())
-                                                            {{ ' کل زمان '.$package->jobTodayTime().' دقیقه '}}
-                                                        @else
-                                                            هنوز شروع نکرده اید
-                                                        @endif
-                                                    </span>
-                                                </p>
-                                            </div>
+            </div>
+            @if ($packages->count()<1)
+                <h6 class="text-center mb-2">برای امروز موردی یافت نشد</h6>
+            @endif
+            @foreach($packages as $key => $package)
+                <div class="col-lg-12">
+                    <div class="card product-card-small mb-0" style="box-shadow: none;">
+                        <div class="card-body pt-0">
+                            <div class="row mb-0 border redu30">
+                                <div class="col mt-2 px-3">
+                                    <div class="row mb-1">
+                                        <div class="col">
+                                            {{-- <p ><a href="{{route('user.package',$package->slug)}}" class="text-dark">{{$package->title }}</a></p> --}}
+                                            <h6>{{$package->packageName()?$package->packageName()->title:'________'}}</h6>
+                                            <p>
+                                                {{-- {{$package->agent()?$package->agent()->city.' '.$package->agent()->locate.' '.$package->agent()->address:'________'}} --}}
+                                                {{$package->agent()?$package->agent()->city.' '.$package->agent()->locate.' ...':'________'}}
+                                            </p>
                                         </div>
-                                        <div class="row mb-0 no-gutters">
-                                            <div class="col">
-                                                <p class="small vm">
-                                                    {{-- <span class="text-secondary">{{$package->started_at}}</span> --}}
-                                                    <span class="text-dark">{{' محل فعالیت : '.$package->location_work}}</span>
-                                                </p>
-                                            </div>
-                                            <div class="col-auto mb-1">
-                                                <p class="small text-secondary">
-                                                    <a href="{{ route('user.package',$package->slug) }}" class="btn btn-primary p-0 px-3">نمایش جزییات</a>
+                                        <div class="col-auto">
+                                            <p class="small vm show_job_time" id="{{$package->id.'show_job_time'}}">
+                                                <span class=" text-secondary">
+                                                    @if ($package->jobRuning->count())
+                                                        <a href="#" id="clickToOpenModal2"data-toggle="modal" data-target="#ModalTicket2">
+                                                            <i class="fa fa-refresh fa-spin" style="font-size:12px"></i>
+                                                            {{( $package->jobTodayTime() + $package->jobRuning->first()->created_at->diffInMinutes(\Carbon\Carbon::now(), false) + 1 ).' دقیقه '}}
+                                                        </a>
+                                                        <br>
+                                                    @endif
+                                                    @if ($package->job->count())
+                                                        {{ ' کل زمان '.$package->jobTodayTime().' دقیقه '}}
+                                                    @else
+                                                        هنوز شروع نکرده اید
+                                                    @endif
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-0 no-gutters">
+                                        <div class="col">
+                                            <p class="small vm">
+                                                {{-- <span class="text-secondary">{{$package->started_at}}</span> --}}
+                                                <span class="text-dark">{{' محل فعالیت : '.$package->location_work}}</span>
+                                            </p>
+                                        </div>
+                                        <div class="col-auto mb-1">
+                                            <p class="small text-secondary">
+                                                <a href="{{ route('user.package',$package->slug) }}" class="btn btn-primary p-0 px-3">نمایش جزییات</a>
 
-                                                    <small class="job_staus_run_btn ms-1" id="{{$package->id.'job_staus_run_btn'}}">
-                                                        @if ($package->jobRuning->count())
-                                                            <button onclick="openModal2('{{$package->id}}')" class="btn btn-danger p-0 px-3">پایان فعالیت</button>
-                                                        @else
-                                                            {{-- @if ($package->job->where('created_at','>',\Carbon\Carbon::now()->startOfDay())->count())
-                                                                <a href="{{ route('user.job_create',$package->id ) }}" class="text-success">ادامه فعالیت</a>
-                                                            @else --}}
-                                                            <button onclick="start_job('{{$package->id,$package->location_work}}')" class="btn btn-success p-0 px-3">شروع کردن</button>
-                                                            {{-- @endif --}}
-                                                        @endif
-                                                    </small>
-                                                </p>
-                                            </div>
+                                                <small class="job_staus_run_btn ms-1" id="{{$package->id.'job_staus_run_btn'}}">
+                                                    @if ($package->jobRuning->count())
+                                                        <button onclick="openModal2('{{$package->id}}')" class="btn btn-danger p-0 px-3">پایان فعالیت</button>
+                                                    @else
+                                                        {{-- @if ($package->job->where('created_at','>',\Carbon\Carbon::now()->startOfDay())->count())
+                                                            <a href="{{ route('user.job_create',$package->id ) }}" class="text-success">ادامه فعالیت</a>
+                                                        @else --}}
+                                                        <button onclick="start_job('{{$package->id,$package->location_work}}')" class="btn btn-success p-0 px-3">شروع کردن</button>
+                                                        {{-- @endif --}}
+                                                    @endif
+                                                </small>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endforeach
-            </div>
+                </div>
+            @endforeach
         </div>
-    @endunless
+    </div>
     
     {{-- درخواست ها --}}
     <div class="container mt-4">
@@ -303,7 +300,7 @@
                                                                 
                                 <div class="col-12" id="perDate">
                                     <div class="row m-0 ms-3">
-                                        <div class="col">
+                                        <div class="col p-0">
                                             <div class="form-field form-text">
                                                 <label class="contactMessageTextarea color-theme" for="date">از تاریخ</label>
                                                 <div class="row">
@@ -316,7 +313,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col">
+                                        <div class="col p-0">
                                             <div class="form-field form-text">
                                                 <label class="contactMessageTextarea color-theme" for="date">تا تاریخ</label>
                                                 <div class="row">

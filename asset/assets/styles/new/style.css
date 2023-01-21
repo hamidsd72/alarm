@@ -35,7 +35,7 @@ body {
   font-size: 16px;
   font-family: 'Roboto', sans-serif;
   color: #222222;
-  background: url("{{ asset('assets/app/icons/fav.png') }}") #F3F7FA fixed;
+  /* background: url("{{ asset('assets/app/icons/fav.png') }}") #F3F7FA fixed; */
   background-position: center top;
   background-size: cover;
   overflow-x: hidden;
@@ -267,7 +267,7 @@ table.no-border tfoot tr td {
 }
 
 main { 
-  background: url("{{ asset('assets/app/icons/fav.png') }}") #F3F7FA fixed;
+  /* background: url("{{ asset('assets/app/icons/fav.png') }}") #F3F7FA fixed; */
   background-size: cover;
   padding-top: 60px;
   display: block;
@@ -360,7 +360,7 @@ main {
   position: fixed;
   top: 0;
   left: 0;
-  background: url("{{ asset('assets/app/icons/fav.png') }}") #F3F7FA fixed;
+  /* background: url("{{ asset('assets/app/icons/fav.png') }}") #F3F7FA fixed; */
   background-position: center top;
   background-size: cover;
   z-index: 9999;
@@ -1009,7 +1009,7 @@ textarea:focus,
 
 /*------ 12. Menu -------*/
 .menu-overlay .main-menu {
-  background: url("{{ asset('assets/app/icons/fav.png') }}") rgba(255, 255, 255, 0.95) fixed;
+  /* background: url("{{ asset('assets/app/icons/fav.png') }}") rgba(255, 255, 255, 0.95) fixed; */
   background-size: cover;
   padding: 60px 30px 50px 30px;
   height: 100%;

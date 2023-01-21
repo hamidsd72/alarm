@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Model\RollCall;
 use App\Model\Setting;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class RollCallController extends Controller {
     public function controller_title($type) {
@@ -33,6 +34,37 @@ class RollCallController extends Controller {
     }
     public function index() {
         $items = RollCall::where('reagent_id', $this->user_id())->orderByDesc('id')->paginate($this->controller_paginate());
+        // محاسبه ساعت کاری روز فرد
+        foreach ($items as $item) {
+            $item->reagent_id = $item->created_at->diffInMinutes($item->updated_at, false);
+        }
+
+        // گروه بندی به ترتیب روزهای شمسی
+        foreach ($items->where('created_at','<',$this->persianStartOfMonth()) as $item) {
+            $item->text = 'بیش از یک ماه قبل';
+        }
+        // این ماه
+        foreach ($items->where('created_at','>',$this->persianStartOfMonth()) as $item) {
+            $item->text = 'این ماه';
+        }
+        // این هفته
+        foreach ($items->where('created_at','>',Carbon::now()->startOfWeek()->subDay(2)) as $item) {
+            $item->text = 'این هفته';
+        }
+        // امروز
+        foreach ($items->where('created_at','>',Carbon::now()->startOfDay()) as $item) {
+            $item->text = 'امروز';
+        }
+
+        $users = User::where('reagent_id', $this->user_id() )->get(['id','first_name','last_name']);
+        return view('admin.roll-call.index', compact('items','users'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
+    }
+    public function filter(Request $request) {
+        $start  = Carbon::parse(j2g(num_to_en($request->start)));
+        $end    = Carbon::parse(j2g(num_to_en($request->end)))->addDay();
+        $items  = RollCall::where('reagent_id', $this->user_id())->whereBetween('created_at', [$start ,$end ]);
+        if ($request->user_id!='all') $items = $items->where('user_id', $request->user_id);
+        $items  = $items->orderByDesc('id')->paginate($this->controller_paginate());
         // محاسبه ساعت کاری روز فرد
         foreach ($items as $item) {
             $item->reagent_id = $item->created_at->diffInMinutes($item->updated_at, false);

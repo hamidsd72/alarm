@@ -94,7 +94,7 @@ class UserController extends Controller {
             'last_name' => 'required|max:240',
             'mobile' => 'required|regex:/(09)[0-9]{9}/|digits:11|numeric|unique:users',
             'email' => 'required|email|unique:users',
-            'whatsapp' => 'required',
+            // 'whatsapp' => 'required',
             'reagent_code' => 'integer',
             // 'date_birth' => 'required',
             // 'state_id' => 'required',
@@ -154,6 +154,8 @@ class UserController extends Controller {
             $item->education    = $request->education;
             $item->password     = $request->password;
             $item->reagent_code = $request->reagent_code;
+            $item->employee_id  = $request->employee_id;
+            $item->join_date    = $request->join_date;
             $item->reagent_id   = $this->user_id();
             if ( auth()->user()->hasRole('مدیر ارشد') ) {
                 $item->special_user = \Carbon\Carbon::now()->addWeek();
@@ -215,14 +217,13 @@ class UserController extends Controller {
             'last_name' => 'required|max:240',
             'mobile' => 'required|regex:/(09)[0-9]{9}/|digits:11|numeric|unique:users,mobile,'.$id,
             'email' => 'required|email|unique:users,email,'.$id,
-            'whatsapp' => 'required',
             'reagent_code' => 'integer',
-            'date_birth' => 'required',
+            // 'date_birth' => 'required',
             'state_id' => 'required',
             'city_id' => 'required',
             'locate' => 'required',
             'address' => 'required',
-            'education' => 'required',
+            // 'education' => 'required',
             'password' => 'nullable|min:6|confirmed',
             'photo' => 'nullable|image|mimes:jpeg,jpg,png|max:5120',
         ],
@@ -253,11 +254,9 @@ class UserController extends Controller {
                 'photo.mimes' => 'لطفا یک تصویر با پسوندهای (png,jpg,jpeg) انتخاب کنید',
                 'photo.max' => 'لطفا حجم تصویر حداکثر 5 مگابایت باشد',
             ]);
-        if (auth()->user()->hasRole('مدیر ارشد')) {
-            $item = User::find($id);
-        } else {
-            $item = User::where('reagent_id',  $this->user_id())->find($id);
-        }
+        if (auth()->user()->hasRole('مدیر ارشد')) $item = User::find($id);
+        else $item = User::where('reagent_id',  $this->user_id())->find($id);
+        
         try {
             $item->first_name   = $request->first_name;
             $item->last_name    = $request->last_name;
@@ -270,6 +269,8 @@ class UserController extends Controller {
             $item->locate       = $request->locate;
             $item->address      = $request->address;
             $item->education    = $request->education;
+            $item->employee_id  = $request->employee_id;
+            $item->join_date    = $request->join_date;
             $item->reagent_code = $request->reagent_code;
             if ($request->password) {
                 $item->password = $request->password;

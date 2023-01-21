@@ -17,10 +17,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ $setting->icon_site?url($setting->icon_site):'' }}">
     <link rel="icon" type="image/x-icon" href="{{ $setting->icon_site?url($setting->icon_site):'' }}"> 
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="{{ asset('assets/scripts/js/jquery-3.3.1.min.js') }}"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> --}}
  
     <style>
         @font-face {
@@ -48,6 +46,16 @@
         .btn {
             font-weight: normal !important;
             font-family: "Vazirmatn" !important;
+        }
+        .text-danger {
+            color: #dc3545 !important;
+        }
+        .bg-zard {
+            background-color: #ffc10794 !important;
+        }
+        th {
+            text-align: center;
+            font-size: 10px;
         }
     </style>
     @yield('css')

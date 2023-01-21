@@ -20,9 +20,31 @@ use Illuminate\Queue\CallQueuedClosure;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\HtmlString;
 use App\Model\Optimizer;
+use Carbon\Carbon;
 use App\Model\ServicePlusBuy;
 use Symfony\Component\HttpFoundation\Response;
 use Intervention\Image\ImageManagerStatic as Image;
+
+if (!function_exists('persianStartOfMonth')) {
+    function persianStartOfMonth() {
+        return Carbon::today()->subDay( my_jdate(Carbon::now(), 'd') - 1 );
+    }
+}
+
+if (!function_exists('persianEndOfMonth')) {
+    function persianEndOfMonth() {
+        $firstOfMonth = persianStartOfMonth();
+        $month = my_jdate(Carbon::today(), 'm');
+
+        if ($month == 12) $endOfMonth = $firstOfMonth->addDay(29);
+        elseif ($month < 12 && $month > 6) $endOfMonth = $firstOfMonth->addDay(30);
+        else $endOfMonth = $firstOfMonth->addDay(31);
+
+        if ($month < my_jdate($endOfMonth, 'm')) return $endOfMonth;
+        // برای سال کبیسه
+        return $endOfMonth->addDay();
+    }
+}
 
 if (!function_exists('img_resize')) {
     function img_resize($address_1, $address_2, $w,$h)

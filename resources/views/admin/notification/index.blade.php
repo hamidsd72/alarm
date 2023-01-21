@@ -37,6 +37,7 @@
                                         <th>کاربر</th>
                                         <th>وضعیت</th>
                                         <th>عنوان</th>
+                                        <th>تاریخ</th>
                                         <th>عملیات</th>
                                     </tr>
                                     </thead>
@@ -47,9 +48,10 @@
                                                 <td>{{$item->user()->first_name.' '.$item->user()->last_name}}</td>
                                                 <td class="{{$item->status=='active'?'text-success':''}}">{{$item->status=='active'?'خوانده شده':'خوانده نشده'}}</td>
                                                 <td>@item($item->subject)</td>
+                                                <td>{{my_jdate($item->created_at,'d F Y')}}</td>
                                                 <td class="text-center">
-                                                    <a href="{{route('admin.notification.show',$item->id)}}" class="badge bg-primary"><i class="fa fa-edit"></i></a>
-                                                    <a href="javascript:void(0);" onclick="del_row('{{$item->id}}')" class="badge bg-danger ml-1" title="حذف"><i class="fa fa-trash"></i></a>
+                                                    <a href="{{route('admin.notification.show',$item->id)}}" class="badge bg-primary mx-2"><i class="fa fa-eye"></i></a>
+                                                    <a href="javascript:void(0);" onclick="del_row('{{$item->id}}')" class="badge bg-danger" title="حذف"><i class="fa fa-trash"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach

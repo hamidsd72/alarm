@@ -15,28 +15,6 @@ class ReportController extends Controller {
     public function __construct() {
         $this->middleware('auth');
     }
-    function persianStartOfMonth() {
-        return Carbon::now()->subDay( my_jdate(Carbon::now(), 'd') - 1 );
-    }
-    function persianEndOfMonth() {
-        $firstOfMonth = $this->persianStartOfMonth();
-        $month = my_jdate(Carbon::now(), 'm');
-
-
-        if ($month == 12) {
-            $endOfMonth = $firstOfMonth->addDay(29);
-        } elseif ($month < 12 && $month > 6) {
-            $endOfMonth = $firstOfMonth->addDay(30);
-        } else {
-            $endOfMonth = $firstOfMonth->addDay(31);
-        }
-
-        if ($month < my_jdate($endOfMonth, 'm')) {
-            return $endOfMonth;
-        }
-        // برای سال کبیسه
-        return $endOfMonth->addDay();
-    }
     public function controller_paginate() {
         return Setting::select('paginate')->where('user_id', $this->user_id())->first()->paginate;
     }
@@ -56,17 +34,13 @@ class ReportController extends Controller {
         }
     }
     public function show($user_my_report) {
-
         if ($user_my_report=='rollCall') {
-            // این فانکشن تغداد روزهای تعطیل این ماه را حساب میکند
+            // این فانکشن تعداد روزهای تعطیل این ماه را حساب میکند
             function offDayCount( $offDay , $month = null , $endOfMonth = null) {
                 if ($month === null) $month = Carbon::today()->startOfMonth();
             
-                if ($endOfMonth === null) {
-                    $nextMonth   = $month->copy()->endOfMonth();
-                } else {
-                    $nextMonth   = $endOfMonth;
-                }
+                if ($endOfMonth === null) $nextMonth = $month->copy()->endOfMonth();
+                else $nextMonth = $endOfMonth;
 
                 $offDaycount = 0;
 
@@ -116,7 +90,7 @@ class ReportController extends Controller {
             }
 
             // حضور و غیاب روزانه
-            $items = RollCall::where('user_id',auth()->user()->id)->where('created_at','>', $this->persianStartOfMonth())->orderByDesc('id')->get(['created_at','updated_at']);
+            $items = RollCall::where('user_id',auth()->user()->id)->where('created_at','>', persianStartOfMonth())->orderByDesc('id')->get(['created_at','updated_at']);
 
             foreach ($items->where('created_at','>',Carbon::now()->startOfMonth()) as $item) {
                 $item->title = 'این ماه';
@@ -133,8 +107,8 @@ class ReportController extends Controller {
             $offDay = $set->off_day?explode(',',$set->off_day):false;
 
             // روزهای تعطیل مناسبتی
-            $offDayCount = OffDay::where('user_id' , $this->user_id() )->where('created_at' , '>' , $this->persianStartOfMonth())->where('created_at' , '<' , $this->persianEndOfMonth())->count();
-            $workDay     = $offDayCount + offDayCount($offDay , $this->persianStartOfMonth() , $this->persianEndOfMonth()) + $items->count();
+            $offDayCount = OffDay::where('user_id' , $this->user_id() )->where('created_at' , '>' , persianStartOfMonth())->where('created_at' , '<' , persianEndOfMonth())->count();
+            $workDay     = $offDayCount + offDayCount($offDay , persianStartOfMonth() , persianEndOfMonth()) + $items->count();
 
             $month = my_jdate(Carbon::now(), 'm');
             if ($month == 12) {
@@ -145,7 +119,9 @@ class ReportController extends Controller {
                 $workDay -= 31;
             }
 
-            return view('user.reports.show', compact('items','user_my_report','workDay'), ['title1' => 'گزارش کارکرد اخیر', 'title2' => 'گزارش کارکرد های اخیر']);
+            $pie = intVal(12 * abs($workDay) );
+
+            return view('user.reports.show', compact('items','user_my_report','workDay','pie'), ['title1' => 'گزارش کارکرد اخیر', 'title2' => 'گزارش کارکرد های اخیر']);
         } elseif ($user_my_report=='job') {
 
             $items  = ServicePackage::where('created_at', '>', Carbon::now()->startOfMonth()->subMonth())->where('user_id', auth()->user()->id)->take(100)->orderByDesc('sort_by')->get(['id','title']);

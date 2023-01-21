@@ -9,6 +9,34 @@
         margin: auto;
     }
 </style>
+@if($pie??'')
+    <style>
+        .pie {
+            float: right;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: mediumseagreen;
+            background-image:
+            linear-gradient(to right, transparent 50%, red 0);
+        }
+        .pie::before {
+            content: "";
+            display: block;
+            margin-left: 50%;
+            height: 100%;
+            border-radius: 0 100% 100% 0 / 50%;
+            transform-origin: left;
+            @if($pie<181)
+                background: mediumseagreen;
+                transform: rotate({{$pie}}deg);
+            @elseif($pie>180)
+                background: red;
+                transform: rotate({{$pie-180}}deg); 
+            @endif
+        }
+    </style>
+@endif
+
 <style>
     #perDate , #lorem-box { 
         display: none; 
@@ -110,9 +138,9 @@
     }   
 </style>
 
-<body class="theme-light body-scroll d-flex flex-column h-100 menu-overlay" data-highlight="highlight-red" data-gradient="body-default">
+{{-- <body class="theme-light body-scroll d-flex flex-column h-100 menu-overlay" data-highlight="highlight-red" data-gradient="body-default"> --}}
+<body class="theme-light body-scroll d-flex flex-column h-100 menu-overlay">
 @include('includes.preLoader')
-
 <div id="page" >
     
     @if (auth()->user())

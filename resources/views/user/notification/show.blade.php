@@ -12,6 +12,7 @@
                 @if ($item->atach)
                     <a href="{{url('/').'/'.$item->atach}}"  class="btn btn-info col-12 mt-3" target="_blank">نمایش فایل پیوست شده</a>
                 @endif
+                <p class="m-0 mt-1">{{my_jdate($item->created_at,'d F Y')}}</p>
             </div>
         </div>
     </section>

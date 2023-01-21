@@ -3,6 +3,7 @@ Route::get('/', 'AdminController@index')->name('index');
 Route::resource('off-day', 'OffDayController');
 Route::resource('job-report', 'JobReportController');
 Route::resource('roll-call', 'RollCallController');
+Route::get('roll-call/filter/users-date', 'RollCallController@filter')->name('job-call.filter');
 Route::post('job-report/adminAddReport', 'JobReportController@adminAddReport')->name('job-report-add-report');
 Route::get('job-report/map/{id}', 'JobReportController@map')->name('job-report-show-map');
 Route::get('job-report/filter/{id}', 'JobReportController@index')->name('job-report.filter');

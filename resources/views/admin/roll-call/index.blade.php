@@ -33,7 +33,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @if(count($items)>0)
+                                @if($items->count())
                                     @foreach($items as $key=>$item)
                                         <tr>
                                             <td class="bg-warning">{{$item->text}}</td>
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <div class="pag_ul">
-                        {{ $items->links() }}
+                        {{ $items->count()?$items->links():'' }}
                     </div>
                 </div>
             </div>
@@ -61,27 +61,48 @@
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">فیلترکردن بر اساس کاربران</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="dropdown">
-                        <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            @if(isset($id)) {{$users->where('id',$id)->first()?$users->where('id',$id)->first()->first_name.' '.$users->where('id',$id)->first()->last_name:$id}} @else کاربر انتخاب کنید @endif
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <input class="form-control" id="myInput" type="text" placeholder="کاربر را جستحو کنید">
-                            @foreach($users as $user)
-                                <li style="padding: 6px;"><a class="text-dark" href="{{route('admin.roll-call.show',$user->id)}}" title="انتخاب کاربر">{{$user->first_name.' '.$user->last_name}}</a></li>
-                            @endforeach
+            <form action="{{route('admin.job-call.filter')}}" class="get">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">فیلترکردن بر اساس کاربران</h5>
+                    </div>
+                    <div class="modal-body">
+                        {{-- <div class="dropdown">
+                            <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @if(isset($id)) {{$users->where('id',$id)->first()?$users->where('id',$id)->first()->first_name.' '.$users->where('id',$id)->first()->last_name:$id}} @else کاربر انتخاب کنید @endif
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <input class="form-control" id="myInput" type="text" placeholder="کاربر را جستحو کنید">
+                                @foreach($users as $user)
+                                    <li style="padding: 6px;"><a class="text-dark" href="{{route('admin.roll-call.show',$user->id)}}" title="انتخاب کاربر">{{$user->first_name.' '.$user->last_name}}</a></li>
+                                @endforeach
+                            </div>
+                        </div> --}}
+                        @csrf
+                        <div class="row my-2">
+                            <div class="col-12 mb-3">
+                                <select name="user_id" id="user_id" class="form-control select2">
+                                    <option value="all" selected>همه کاربران</option>
+                                    @foreach ($users as $user)
+                                        <option value="{{$user->id}}">{{$user->first_name.' '.$user->last_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control date_p" name="start" id="start" required>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control date_p" name="end" id="end" required>
+                            </div>
                         </div>
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-success">جستحو</button>
+                            <button type="button" class="btn btn-secondary mx-2" data-dismiss="modal">انصراف</button>
+                        </div>
+
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 

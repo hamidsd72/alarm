@@ -11,7 +11,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{asset('admin/plugins/font-awesome/css/font-awesome.min.css')}}">
     <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    {{-- <link rel="stylesheet" href="{{asset('admin/css/ionicons2.0.1.min.css')}}"> --}}
     <!-- Select2 -->
     <link rel="stylesheet" href="{{asset('admin/plugins/select2/select2.min.css')}}">
     <!-- Theme style -->
@@ -27,138 +27,7 @@
     <link rel="stylesheet" href="{{asset('admin/css/persian-datepicker.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/styles/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/styles/new/style.css') }}">
-    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <style>
-        @font-face {
-            font-family: 'Vazirmatn';
-            src: url({{ asset('fonts/webfonts/Vazirmatn-Light.woff2') }}); /* IE9 Compat Modes */
-            src: url({{ asset('fonts/webfonts/Vazirmatn-Light.woff2') }}) format('embedded-opentype'), /* IE6-IE8 */
-            url({{ asset('fonts/webfonts/Vazirmatn-Light.woff2') }}) format('woff2'), /* Super Modern Browsers */
-            url({{ asset('fonts/webfonts/Vazirmatn-Light.woff2') }}) format('woff'), /* Pretty Modern Browsers */
-            url({{ asset('fonts/ttf/Vazirmatn-Light.ttf') }})  format('truetype'), /* Safari, Android, iOS */
-        }
-        body {
-            font-size: 13px;
-            font-family: "Vazirmatn" !important;
-            line-height: 26px !important;
-            color: #6c6c6c !important;
-            background-color: #f0f0f0;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        .btn {
-            font-weight: normal !important;
-            font-family: "Vazirmatn" !important;
-        }
-    </style>
     @yield('css')
-    <style>
-        .select2-container--open .select2-dropdown--below {
-            z-index: 99999 !important;
-        }
-        .select2-container--default .select2-selection--single, .select2-selection .select2-selection--single {
-            height: 46px;
-        }
-        .select2-container {
-            width: 100% !important;
-        }
-        .fa-file-pdf-o {
-            font-size: 24px;
-            color: tomato;
-        }
-        .fa-file-excel-o {
-            font-size: 24px;
-            color: green;
-        }
-        .switch-wrap {
-            width: 48px;
-            height: 24px;
-        }
-        .bg-zard {
-            background-color: #ffc10794 !important;
-        }
-        .bg-zard h3 {
-            line-height: 40px;
-        }
-        .btn.btn-success {
-            color: black;
-        }
-        .modal-content {
-            border-radius: 20px;
-        }
-        .switch-wrap .switch::after {
-            left: 2px;
-            top: 1px;
-            height: 22px;
-            width: 22px;
-        }
-        .switch-wrap input:checked + .switch::after {
-            left: 26px;
-        }
-        .sidebar {
-            /* overflow-y: initial; */
-            overflow-y: auto;
-            padding-top: 0.5rem;
-        }
-        .sidebar-dark-primary , .navbar-expand , .navbar-expand .navbar-nav .dropdown-menu {
-            background-color: #2F2D51 !important;
-        }
-        .sidebar-dark-primary .sidebar a , .sidebar-dark-primary .nav-treeview>.nav-item>.nav-link , .dropdown-item , .navbar-light .navbar-nav .nav-link {
-            color: white;
-        }
-        #lorem a { 
-            color: rgba(0, 0, 0, 0.719);
-        }
-        a.nav-link:hover {
-            color: white !important;
-        }
-        .card-primary.card-outline , .res_table{
-            border-radius: 20px;
-        }
-        .main-sidebar .brand-text, .sidebar .nav-link p, .sidebar .user-panel .info {
-            color: white !important;
-        }
-        .footer-bar-1 .active-nav i, .footer-bar-1 .active-nav span, .footer-bar-3 .active-nav i{
-            color: #2F2D51 !important;
-        }
-        .form-control {
-            height: auto !important;
-        }
-        .small-box .icon {
-            top: 10px;
-            font-size: 60px;
-        }
-        .btn-info {
-            background: #fe5722 !important;
-        }
-        .btn-danger {
-            background: #20364b !important;
-        }
-        .bg-dark {
-            background: #20364b !important;
-        }
-        .text-dark {
-            color: #20364b !important;
-        }
-        .small-box h3 {
-            font-size: 28px;
-        }
-        .card-body>.table>thead>tr>td, .card-body>.table>thead>tr>th {
-            text-align: center !important;
-        }
-        .inline-left-logo {
-            float: left;
-            position: relative;
-            top: -42px;
-            left: 2px;
-        }
-    </style>
 
 </head>
 <body class="hold-transition sidebar-mini">
@@ -772,6 +641,8 @@
 </div>
 
 <!-- jQuery -->
+<script src="{{asset('assets/scripts/js/xlsx.min.js')}}"></script>
+<script src="{{asset('assets/scripts/js/html2pdf.min.js')}}"></script>
 <script src="{{asset('admin/plugins/jquery/jquery.min.js')}}"></script>
 <!-- jQuery UI 1.11.4 -->
 {{--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>--}}
@@ -811,15 +682,12 @@
 <script src="{{asset('admin/js/persian-datepicker.min.js')}}"></script>
 <!-- Select2 -->
 <script src="{{asset('admin/plugins/select2/select2.full.min.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+<script src="{{asset('assets/scripts/js/sweetalert2-10.js')}}"></script>
+<script src="{{asset('assets/scripts/js/clipboard2.0.6.min.js')}}"></script>
 
 <script>
     new ClipboardJS('.copy_btn');
-    $(function () {
-        //Initialize Select2 Elements
-        $('.select2').select2()
-    });
+    $('.select2').select2();
     $('.date_p').persianDatepicker({
         observer: true,
         format: 'YYYY/MM/DD',

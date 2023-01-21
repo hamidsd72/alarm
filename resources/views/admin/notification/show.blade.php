@@ -16,7 +16,8 @@
                     </div>
                     <div class="radius20 bg-white card-body res_table_in mx-3 my-1 p-3">
                         <h6 class="pt-1">{{' عنوان : '.$item->subject}}</h6>
-                        <p class="pt-1">{{' محتوا : '.$item->description}}</p>
+                        <p class="my-1">{{' محتوا : '.$item->description}}</p>
+                        <p class="m-0">{{my_jdate($item->created_at,'d F Y')}}</p>
                         @if ($item->atach)
                             <a href="{{url('/').'/'.$item->atach}}" 
                             class="float-left bg-highlight text-uppercase font-900 btn-s btn-full rounded-sm shadow-xl" target="_blank">نمایش فایل پیوست شده</a>

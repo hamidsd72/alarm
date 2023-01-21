@@ -1,6 +1,6 @@
 @extends('user.master')
 @section('content')
-    <section class="col-12 mt-5">
+    <section class="col-12 px-1 mt-5">
         <div class="card res_table" style="background: transparent;">
             <div class="card-header bg-zard">
                 <div class="float-left">
@@ -10,7 +10,7 @@
                     {{$title1}}
                 </div>
             </div>
-            <div class="card-body res_table_in">
+            <div class="card-body bg-light rounded">
                 <table id="example2" class="table table-bordered table-hover table-striped">
                     @if ($user_my_report=='rollCall')
                         <thead>
@@ -34,9 +34,9 @@
                             @endforeach
                         </tbody>
                         @if ($workDay < 0)
-                            <h5 class="pb-3">{{intval($workDay).' روز غیبت در این ماه '}}</h5>
+                            <div class="pie me-3"></div>
+                            <p class="m-0 pb-3 text-danger">{{abs($workDay).' روز غیبت در این ماه '}}</p>
                         @endif
-                        
                     @elseif($user_my_report=='job')
                         <thead>
                             <tr>
@@ -49,7 +49,7 @@
                         <tbody>
                             @foreach($items as $item)
                                 <tr >
-                                    <td class="col-4 small">{{$item->packageName()?$item->packageName()->title:'________'}}</td>
+                                    <td class="col-4 p">{{$item->packageName()?$item->packageName()->title:'________'}}</td>
                                     <td>{{$item->job()->sum('price').' تومان '}}</td>
                                     <td>{{my_jdate($item->created_at,'d F Y')}}</td>
                                     <td class="small">{{$item->jobTime()>0?$item->jobTime().' دقیقه ':'__________'}}</td>
@@ -90,10 +90,10 @@
                 <div class="modal-dialog">
                     <div class="modal-content redu20">
                         <div class="modal-header">
-                            <button type="button" id="description{{$key}}" class="close btn btn-danger" data-dismiss="modal">&times;</button>
+                            {{$item->text}}
                         </div>
                         <div class="modal-body">
-                            {{$item->text}}
+                            <button type="button" id="description{{$key}}" class="btn btn-secondary" data-dismiss="modal">بستن</button>
                         </div>
                     </div>
             

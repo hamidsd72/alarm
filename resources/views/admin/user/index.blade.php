@@ -30,13 +30,13 @@
                                         <th>نام و نام خانوادگی</th>
                                         @if ( auth()->user()->hasRole('مدیر') )
                                             <th>سمت</th>
+                                            <th>شماره پرسنلی</th>
                                         @endif
                                         @if ( auth()->user()->hasRole('مدیر ارشد') )
                                             <th>وضعیت اشتراک</th>
                                         @endif
                                         <th>موبایل</th>
                                         <th>ایمیل</th>
-                                        <th>واتساپ</th>
                                         {{-- <th>معرف</th> --}}
                                         {{-- @if ( auth()->user()->hasRole('مدیر ارشد') )
                                             <th>تنظیمات | درباره ما</th>
@@ -54,16 +54,16 @@
                                             <td>@item($item->first_name) @item($item->last_name)</td>
                                             @if ( auth()->user()->hasRole('مدیر') )
                                                 <td>
-                                                    {{$item->getRoleNames()->first()}}
                                                     <a href="javascript:void(0);" class="badge bg-info mx-1" data-toggle="modal" data-target="#role{{$item->id}}"><i class="fa fa-edit"></i> </a>
+                                                    {{$item->getRoleNames()->first()}}
                                                 </td>
+                                                <td>{{$item->employee_id?$item->employee_id:'__________'}}</td>
                                             @endif
                                             @if ( auth()->user()->hasRole('مدیر ارشد') )
                                                 <td class="{{$item->web_site=='فعال'?'text-success':'text-danger'}}">{{$item->web_site.' '.my_jdate($item->special_user,'d F Y')}}</td>
                                             @endif
                                             <td>@item($item->mobile)</td>
                                             <td>@item($item->email)</td>
-                                            <td>@item($item->whatsapp)</td>
                                             {{-- <td>@if($item->reagent) @item($item->reagent->first_name) @item($item->reagent->last_name) @else ندارد @endif</td> --}}
                                             {{-- @if ( auth()->user()->hasRole('مدیر ارشد') )
                                                 <td>

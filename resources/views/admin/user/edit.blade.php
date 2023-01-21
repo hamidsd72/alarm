@@ -50,15 +50,28 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        {{ Form::label('whatsapp', '* شماره واتساپ فعال') }}
+                                        {{ Form::label('whatsapp', ' شماره واتساپ فعال') }}
                                         {{ Form::text('whatsapp',null, array('class' => 'form-control text-left')) }}
                                     </div>
                                 </div>
                                 @unless ( auth()->user()->hasRole('مدیر ارشد') )
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            {{ Form::label('date_birth', '* تاریخ تولد') }}
+                                            {{ Form::label('date_birth', ' تاریخ تولد') }}
                                             {{ Form::text('date_birth',null, array('class' => 'form-control date_p' , 'readonly')) }}
+                                            <img class="inline-left-logo" src="https://img.icons8.com/external-icematte-lafs/40/000000/external-Calendar-it-icematte-lafs.png">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            {{ Form::label('employee_id', ' شماره پرسنلی') }}
+                                            {{ Form::text('employee_id',null, array('class' => 'form-control text-left')) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            {{ Form::label('join_date', ' تاریخ استخدام') }}
+                                            {{ Form::text('join_date',null, array('class' => 'form-control date_p' , 'readonly')) }}
                                             <img class="inline-left-logo" src="https://img.icons8.com/external-icematte-lafs/40/000000/external-Calendar-it-icematte-lafs.png">
                                         </div>
                                     </div>
@@ -95,7 +108,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            {{ Form::label('education', '* مدرک تحصیلی') }}
+                                            {{ Form::label('education', ' مدرک تحصیلی') }}
                                             {{ Form::text('education',null, array('class' => 'form-control')) }}
                                         </div>
                                     </div>

@@ -1,8 +1,9 @@
 @extends('user.master')
 @section('content')
+
 <style>
-    #footer-bar , .header { display: none; }
-    .card { background: unset; }
+  #footer-bar , .header { display: none; }
+  .card { background: unset; }
 </style>
 
         <main class="flex-shrink-0 mt-lg-5">
@@ -16,7 +17,7 @@
                     </div>
                     <div class="container">
                         @if ( auth()->user()->hasRole('مدیر') )
-                            <h4 class="mb-3">{{ ' مشترک گرامی برند : '.$setting->title }}</h4>
+                            <h4 class="mb-3">{{ ' مشترک گرامی : '.$setting->title }}</h4>
                         @else
                             <h4 class="mb-3">{{ ' کاربر گرامی : '.auth()->user()->first_name.' '.auth()->user()->last_name }}</h4>
                         @endif

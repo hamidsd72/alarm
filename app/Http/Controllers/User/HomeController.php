@@ -93,7 +93,7 @@ class HomeController extends Controller {
     public function index() {
         // پیامک یادآوری پایان سرویس
         User::send_warning_end_time($this->user_id());
-        if (auth()->user()->hasRole('مدیر ارشد')) {
+        if (auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر')) {
             return redirect()->route('admin.profile.show');
         } else {
             // ثبت حضور و غیاب
@@ -212,7 +212,7 @@ class HomeController extends Controller {
     }
     public function updateRollCall() {
         $log = $this->RollCall();
-        return response()->json(['updatedRollCall' => $log], 200);
+        return response()->json(['updatedRollCall' => $log] , 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
     }
     public function tickets()  {
         $items = Contact::where('user_id', Auth::user()->id )->where('belongs_to_item', '=', 0)->orderBy('id','desc')->paginate($this->controller_paginate());

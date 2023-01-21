@@ -10,6 +10,9 @@
                     <div class="card res_table">
                         <div class="card-header bg-zard">
                             <h3 class="card-title float-right">{{$title2}}</h3>
+                            <a href="#" data-toggle="modal" data-target="#ModalTicket" class="float-left btn btn-info">
+                                محاسبه حقوق کارمندان
+                            </a>
                         </div>
                         <div class="card-body res_table_in">
                             <table id="example2" class="table table-bordered table-hover table-striped">

@@ -38,8 +38,10 @@
                                     <div class="form-group">
                                         <label for="package" >کاربران فعالیت ها *</label>
                                         <select id="package" name="package" class="form-control select2">
-                                            @foreach ($packages as $key => $item)
-                                                <option value="{{$item->id}}" @if($key==0) selected @endif>{{$item->title}}</option>
+                                            @foreach ($packages as $item)
+                                                @if ($item->packageName())
+                                                    <option value="{{$item->id}}">{{$item->packageName()->title.'-'.$item->id}}</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
