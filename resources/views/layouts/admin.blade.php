@@ -28,7 +28,6 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/styles/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/styles/new/style.css') }}">
     @yield('css')
-
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -118,17 +117,7 @@
             <a href="javascript:void(0);" class="brand-link">
                 <img src="{{url($setting->logo_site)}}" alt="{{$setting->title}}" class="brand-image">
                 <span class="brand-text font-weight-light">
-                    پنل
-                    @role('مدیر ارشد')  مدیریت ارشد@endrole
-                    @role('مدیر')  مدیریت@endrole
-                    @role('حسابدار')  حسابداری@endrole
-                    @role('بازاریاب')  بازاریاب@endrole
-                    @role('نماینده') نمایندها@endrole
-                    @role('فنی')  فنی@endrole
-                    @role('آموزش')  آموزش@endrole
-                    @role('انبار')  انبار@endrole
-                    @role('اداری')  اداری@endrole
-                    @role('کاربر') کاربری@endrole
+                    پنل {{auth()->user()->roles->first()->name}}
                 </span>
             </a>
         </div>
@@ -264,9 +253,9 @@
                                         <i class="fa fa-circle-o nav-icon"></i>
                                         <p>تیکت های (در انتظار پاسخ)
                                             @if (auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر'))
-                                                {{\App\Model\Contact::where('reagent_id',auth()->user()->id)->where('answered', 'no')->where('belongs_to_item', '=', 0)->count()}}
+                                                {{\App\Model\Contact::where('reagent_id',auth()->user()->id)->where('answered', 'no')->where('reply', '=', 0)->count()}}
                                             @else
-                                                {{\App\Model\Contact::where('reagent_id',auth()->user()->reagent_id)->where('answered', 'no')->where('belongs_to_item', '=', 0)->count()}}
+                                                {{\App\Model\Contact::where('reagent_id',auth()->user()->reagent_id)->where('answered', 'no')->where('reply', '=', 0)->count()}}
                                             @endif
                                         </p>
                                     </a>
@@ -276,9 +265,9 @@
                                         <i class="fa fa-circle-o nav-icon"></i>
                                         <p>تیکت های (پاسخ داده شده)
                                             @if (auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر'))
-                                                {{\App\Model\Contact::where('reagent_id',auth()->user()->id)->where('answered', 'yes')->where('belongs_to_item', '=', 0)->count()}}
+                                                {{\App\Model\Contact::where('reagent_id',auth()->user()->id)->where('reply', '>', 0)->count()}}
                                             @else
-                                                {{\App\Model\Contact::where('reagent_id',auth()->user()->reagent_id)->where('answered', 'yes')->where('belongs_to_item', '=', 0)->count()}}
+                                                {{\App\Model\Contact::where('reagent_id',auth()->user()->reagent_id)->where('reply', '>', 0)->count()}}
                                             @endif
                                         </p>
                                     </a>
@@ -561,6 +550,12 @@
                                             <p>قیمت پکیج ها</p>
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('admin.items.index')}}" class="nav-link">
+                                            <i class="fa fa-circle-o nav-icon"></i>
+                                            <p>محتوا صفحه لندینگ</p>
+                                        </a>
+                                    </li>
                                 @endrole
                                 @role('مدیر')
                                     <li class="nav-item">
@@ -588,12 +583,12 @@
                                         <p>تنظیمات</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a href="{{route('admin.meta.list')}}" class="nav-link">
                                         <i class="fa fa-circle-o nav-icon"></i>
                                         <p>Meta</p>
                                     </a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </li>
                     @endif
@@ -636,7 +631,7 @@
     </div>
 
     <footer class="main-footer text-left mb-5 pb-4 mb-lg-0" style="font-size: smaller;">
-        <strong>copyright &copy; 2022 <a href="https://adib-it.com/">Adib Group</a></strong>
+        <strong>copyright &copy; {{\Carbon\Carbon::now()->format('Y')}} <a href="https://adib-it.com/">Adib Group</a></strong>
     </footer>
 </div>
 
@@ -746,14 +741,12 @@
     });
     @endif
 
-
     $(document).ready(function () {
         $('.numberPrice').text(function (index, value) {
             return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         });
     });
-</script>
-<script>
+
     function loadDoc() {
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
@@ -765,19 +758,23 @@
     }
     loadDoc();
 
-    function generatePDF() {
-        // Choose the element that our invoice is rendered in.
-        const element = document.getElementById('example2');
-        // Choose the element and save the PDF for our user.
-        html2pdf().from(element).save();
+    if ( document.getElementById('example2') ) {
+        function generatePDF() {
+            // Choose the element that our invoice is rendered in.
+            const element = document.getElementById('example2');
+            // Choose the element and save the PDF for our user.
+            html2pdf().from(element).save();
+        }
     }
     
-    function ExportToExcel(type, fn, dl) {
-        var elt = document.getElementById('example2');
-        var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
-        return dl ?
-            XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
-            XLSX.writeFile(wb, fn || ('MySheetName.' + (type || 'xlsx')));
+    if ( document.getElementById('example2') ) {
+        function ExportToExcel(type, fn, dl) {
+            var elt = document.getElementById('example2');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+                XLSX.writeFile(wb, fn || ('MySheetName.' + (type || 'xlsx')));
+        }
     }
 </script>
 @yield('js')

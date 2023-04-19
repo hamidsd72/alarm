@@ -3,13 +3,26 @@
 namespace App\Http\Controllers\User;
 use App\Model\Contact;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 
 class TicketController extends Controller {
     public function __construct() {
        $this->middleware('auth');
     }  
-    public function form_post(Request $request) {   
+    public function form_post(Request $request) {
+        // validate
+        if ($request->subject=='درخواست مرخصی' || $request->subject=='درخواست ثبت گزارش کار') {
+            if (!$request->date || !$request->date2) {
+                return redirect()->back()->with('err_message', 'تاریخ وارد نشده');
+            }
+            $start_date = Carbon::parse(j2g(num_to_en($request->date)));
+            $end_date   = Carbon::parse(j2g(num_to_en($request->date2)));
+            if ($start_date->diffInDays($end_date ,false) < 0) {
+                return redirect()->back()->with('err_message', 'تاریخ وارد شده صحیح نیست');
+            }
+        }
+
         try {
             $name = 'بدون نام';
             $belongs_to_item = 0;
@@ -23,7 +36,6 @@ class TicketController extends Controller {
             $ticket->user_id         = auth()->user()->id; 
             $ticket->full_name       = $name;
             $ticket->subject         = $request->subject;
-            // $ticket->category        = $request->category;
             switch ($request->subject) {
                 case 'درخواست پاداش':
                     $ticket->category = 'حسابدار';
@@ -49,6 +61,8 @@ class TicketController extends Controller {
                 $ticket->date = $request->date;
                 if ($request->date2) {
                     $ticket->date = $request->date.','.$request->date2;
+                    $ticket->start_date = $start_date;
+                    $ticket->end_date   = $end_date;
                 }
             }
             if ($ticket->subject=='درخواست مرخصی') {
@@ -57,6 +71,10 @@ class TicketController extends Controller {
                 }
                 if ($request->lorem3) {
                     $ticket->date       = $ticket->date.' '.$request->lorem3;
+                }
+                if ($request->type_ticket == 'hourly') {
+                    $ticket->time1 = $request->time1;
+                    $ticket->time2 = $request->time2;
                 }
             }
             $ticket->text           = $ticket->text.' '.$request->text;

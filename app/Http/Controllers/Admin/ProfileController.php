@@ -31,14 +31,19 @@ class ProfileController extends Controller {
         }
     }
     public function __construct() {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'SpecialUser']);
     }
     public function show() {
         $item               = User::find(auth()->user()->id);
         $forms              = UserForm::where('user_id', auth()->user()->id)->get();
         $tours              = TourForm::where('user_id', auth()->user()->id)->get();
         $limit              = Setting::where('user_id', $this->user_id() )->first()?Setting::where('user_id', $this->user_id() )->first()->leave_day_limit:0;
-        $leave_day_count    = LeaveDay::where('user_id',auth()->user()->id)->sum('count');
+        $leave_day          = LeaveDay::where('user_id',auth()->user()->id)->get();
+        $leave_day_count    = $leave_day->sum('count');
+        $sum    = $leave_day->sum('minute');
+        // ۸ ساعت
+        // ۴۸۰دقیقه
+        if ($sum > 480) $leave_day_count += intVal($sum / 480);
         return view('admin.profile.show',compact('item','forms','tours','limit','leave_day_count'),['title1' => $this->controller_title('sum'), 'title2' => $this->controller_title('single')]);
     }
     public function edit() {

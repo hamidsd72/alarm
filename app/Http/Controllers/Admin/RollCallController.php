@@ -23,7 +23,7 @@ class RollCallController extends Controller {
         return Carbon::now()->subDay( my_jdate(Carbon::now(), 'd') - 1 );
     }
     public function __construct() {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'SpecialUser','Access']);
     }
     function user_id() {
         if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') ) {

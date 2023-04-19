@@ -35,7 +35,8 @@
                         </tbody>
                         @if ($workDay < 0)
                             <div class="pie me-3"></div>
-                            <p class="m-0 pb-3 text-danger">{{abs($workDay).' روز غیبت در این ماه '}}</p>
+                            <div class="pie2" style="position: absolute;right: 22px;margin-top: 7px;height: 26px;background: #ececec;padding: 0px 6px;border-radius: 50px;font-weight: bold;width: 26px;">{{num2fa(abs($workDay))}}</div>
+                            <p class="m-0 pb-3 text-danger">{{num2fa(abs($workDay)).' روز غیبت در این ماه '}}</p>
                         @endif
                     @elseif($user_my_report=='job')
                         <thead>
@@ -59,7 +60,7 @@
                     @elseif($user_my_report=='leave-day')
                         <thead>
                             <tr>
-                                <th>روز</th>
+                                <th>نوع</th>
                                 <th>از تاریخ</th>
                                 <th>تا تاریخ</th>
                                 <th>جزيیات</th>
@@ -68,16 +69,16 @@
                         <tbody>
                             @foreach($items as $key => $item)
                                 <tr>
-                                    <td>{{$item->count.' روز '}}</td>
+                                    <td>{{$item->type=='daily' ? 'روزانه' : 'ساعتی' }}</td>
                                     <td>{{my_jdate($item->start_at,'d F Y')}}</td>
                                     <td>{{my_jdate($item->end_at,'d F Y')}}</td>
                                     <td>
-                                        <button  class="btn btn-primary py-0" data-toggle="modal" data-target="#description{{$key}}">نمایش جزيیات</button>
+                                        <button  class="btn btn-primary py-0" data-toggle="modal" data-target="#description{{$key}}">نمایش</button>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
-                        <h5 class="pb-3">مرخصی های استفاده شده : {{$items->sum('count').' روز '}}</h5>
+                        <h5 class="pb-3">مرخصی های استفاده شده : {{$leave.' روز '}}</h5>
                     @endif
                 </table>
             </div>
@@ -90,9 +91,16 @@
                 <div class="modal-dialog">
                     <div class="modal-content redu20">
                         <div class="modal-header">
-                            {{$item->text}}
+                            @if ($item->type=='daily')
+                                <h6 class="my-2">{{ $item->count }} روزه </h6>
+                            @else
+                                <h6 class="my-2">{{ intVal($item->minute/60).' ساعت '}}
+                                    <span class="text-secondary">{{($item->minute%60) > 0 ? ($item->minute%60).' دقیقه ' : '' }}</span>
+                                </h6>
+                            @endif
                         </div>
                         <div class="modal-body">
+                            <p>{{$item->text}}</p>
                             <button type="button" id="description{{$key}}" class="btn btn-secondary" data-dismiss="modal">بستن</button>
                         </div>
                     </div>

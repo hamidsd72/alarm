@@ -19,7 +19,7 @@ class MetaController extends Controller {
         return Setting::select('paginate')->where('user_id', $this->user_id())->first()->paginate;
     }
     public function __construct() {
-        $this->middleware(['auth','isAdmin']);
+        $this->middleware(['auth', 'SpecialUser','isAdmin']);
     } 
     function user_id() {
         if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') ) {

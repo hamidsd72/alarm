@@ -12,15 +12,17 @@
 </style>
 
     <div class="container mt-5">
-        <div class="mx-md-1 p-3 fixed-bottom col-5 col-lg-3" style="margin-bottom: 60px;">
-            <h6 class="text-dark fw-bold mb-2 p-1 me-4">تماس با کارفرما</h6>
-            <button onclick="window.open(`tel:{{$item->agent()->phone}}`);" class="btn btn-dark" style="padding: 6px 13px;">
-                <img src="https://img.icons8.com/ultraviolet/18/000000/phone.png"/>
-            </button>
-            <button onclick="window.open(`tel:{{$item->agent()->mobile}}`);" class="btn btn-dark mx-3" style="padding: 6px 13px;">
-                <img src="https://img.icons8.com/ultraviolet/18/000000/broken-phone.png"/>
-            </button>
-        </div>
+        @if ($item->agent()->show=='show')
+            <div class="mx-md-1 p-3 fixed-bottom col-5 col-lg-3" style="margin-bottom: 60px;">
+                <h6 class="text-dark fw-bold mb-2 p-1 me-4">تماس با کارفرما</h6>
+                <button onclick="window.open(`tel:{{$item->agent()->phone}}`);" class="btn btn-dark" style="padding: 6px 13px;">
+                    <img src="https://img.icons8.com/ultraviolet/18/000000/phone.png"/>
+                </button>
+                <button onclick="window.open(`tel:{{$item->agent()->mobile}}`);" class="btn btn-dark mx-3" style="padding: 6px 13px;">
+                    <img src="https://img.icons8.com/ultraviolet/18/000000/broken-phone.png"/>
+                </button>
+            </div>
+        @endif
         <div class="card">
             <div class="card-body">
                 <div class="row mb-1">

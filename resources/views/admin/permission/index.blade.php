@@ -10,6 +10,7 @@
                     <div class="card res_table">
                         <div class="card-header bg-zard">
                             <h3 class="card-title float-right">{{$title2}}</h3>
+                            <div class="float-left"><button class="btn btn-info" data-toggle="modal" data-target="#createRoll">افزودن</button></div>
                         </div>
                         <div class="card-body res_table_in">
                             <table id="example2" class="table table-bordered table-hover table-striped">
@@ -137,6 +138,28 @@
             </div>
         </div>
     </section>
+
+    <div class="modal fade" id="createRoll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            {{ Form::open(array('route' => 'admin.user-role.add-new', 'method' => 'POST', 'files' => true)) }}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">افزودن سطح دسترسی</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            {{ Form::label('name', '* عنوان دسترسی') }}
+                            {{ Form::text('name',null, array('class' => 'form-control')) }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary m-0 mx-2" data-dismiss="modal">انصراف</button>
+                        {{ Form::button('افزودن', array('type' => 'submit', 'class' => 'btn btn-success m-0')) }}
+                    </div>
+                </div>
+            {{ Form::close() }}
+        </div>
+    </div>
 
 @endsection
 @section('js')

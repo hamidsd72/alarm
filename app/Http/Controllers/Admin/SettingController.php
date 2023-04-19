@@ -35,7 +35,7 @@ class SettingController extends Controller {
         return Setting::select('paginate')->where('user_id', $this->user_id())->first()->paginate;
     }
     public function __construct() {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'SpecialUser','Access']);
     }
     public function index() {
         $items = Network::where('user_id', $this->user_id() )->get();
@@ -65,7 +65,6 @@ class SettingController extends Controller {
     }
     public function setting_store(Request $request) {
         if ( auth()->user()->getRoleNames()->first()=='مدیر ارشد' ) {
-            
             $this->validate($request, [
                 'id' => 'required',
                 'title' => 'required|max:240',
@@ -186,12 +185,14 @@ class SettingController extends Controller {
         return view('admin.setting.edit', compact('item','shanbe','yekshanbe','doshanbe','seshanbe','charshanbe','panjshanbe','jome'), ['title1' => $this->controller_title2('single'), 'title2' => $this->controller_title2('sum')]);
     }
     public function update(Request $request, $id) {
+
         $this->validate($request, [
             'title' => 'required|max:240',
             'keyword' => 'nullable|max:500',
             'description' => 'nullable|max:500',
             'paginate' => 'required',
-            'support_call' => 'required|regex:/(09)[0-9]{9}/|digits:11|numeric',
+            // 'support_call' => 'required|regex:/(09)[0-9]{9}/|digits:11|numeric',
+            'support_call' => 'required|numeric',
             'logo_site' => 'nullable|image|mimes:png|max:5120',
             'icon_site' => 'nullable|image|mimes:png|max:5120',
         ],

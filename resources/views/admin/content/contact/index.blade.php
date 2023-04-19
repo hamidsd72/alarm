@@ -1,6 +1,5 @@
 @extends('layouts.admin')
 @section('css')
-
 @endsection 
 @section('content')
     <section class="content">
@@ -32,6 +31,7 @@
                                     </span>
                                     <h6 class="pt-1">{{$item->subject}}
                                         @if ($item->date){{' از '.explode(",",$item->date)[0].' تا '.explode(",",$item->date)[1]}}@endif
+                                        @if ($item->time1 && $item->time2){{' از '.$item->time1.' تا '.$item->time2}}@endif
                                     </h6>
                                     <p class="m-0">{{' توضیحات : '.$item->text}}</p>
                                     @if ($item->attach)
@@ -52,6 +52,7 @@
                                             </span>
                                             <h6 class="pt-1">{{$sub_item->subject}}
                                                 @if ($item->date){{' از '.explode(",",$item->date)[0].' تا '.explode(",",$item->date)[1]}}@endif
+                                                @if ($item->time1 && $item->time2){{' از '.$item->time1.' تا '.$item->time2}}@endif
                                             </h6>
                                             <p class="m-0">{{' توضیحات : '.$sub_item->text}}</p>
                                             @if ($sub_item->attach)
@@ -62,7 +63,23 @@
                                             @endif
                                         </div>
                                     @endforeach
-                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#ModalAnsweTicket{{$item->id}}" class="float-left btn btn-success">پاسخ درخواست</a>
+
+                                    <div class="float-left">
+                                        @switch($item->subject)
+                                            @case('درخواست مساعده')
+                                                <a href="javascript:void(0)" onclick="set_requ('btn_user_request','{{$item->id}}','{{$item->user_id}}','درخواست مساعده')" class="mx-3 btn btn-primary">ثبت درخواست</a>
+                                                @break    
+                                            @case('درخواست تنخواه')
+                                                <a href="javascript:void(0)" onclick="set_requ('btn_user_request','{{$item->id}}','{{$item->user_id}}','درخواست تنخواه')" class="mx-3 btn btn-primary">ثبت درخواست</a>
+                                                @break
+                                            @case('درخواست مرخصی')
+                                                <a href="javascript:void(0)" onclick="set_requ('btn_leaveDayCreate','{{$item->id}}','{{$item->user_id}}','{{$item->day}}','{{$item->start}}','{{$item->end}}','{{$item->time}}','{{$item->time1}}','{{$item->time2}}')" class="mx-3 btn btn-primary">ثبت درخواست</a>
+                                                @break
+                                            @default
+                                                
+                                        @endswitch
+                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#ModalAnsweTicket{{$item->id}}" class="btn btn-success">پاسخ درخواست</a>
+                                    </div>
                                 </div> 
                             @endforeach
                         @else
@@ -138,6 +155,97 @@
                 </div>
             </div>
         </div>
+        
+        <div class="modal fade" id="leaveDayCreate" tabindex="-1" role="dialog" aria-labelledby="leaveDayCreateLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    {{ Form::open(array('route' => 'admin.leave-day.store', 'method' => 'POST', 'files' => true)) }}
+                        <div class="modal-header"><h5 class="leaveDayCreate-title"></h5></div>
+                        <div class="modal-body">
+                            {{ Form::hidden('user_id',null, array('class' => 'form-control','id' => 'leaveDayCreate_userId')) }}
+                            {{ Form::hidden('type',null, array('class' => 'form-control','id' => 'leaveDayCreate_type')) }}
+                            {{ Form::hidden('minute',null, array('class' => 'form-control','id' => 'leave_time_minute')) }}
+                            {{ Form::hidden('ticket_id',null, array('class' => 'form-control','id' => 'leave_day_ticket_id')) }}
+                            <div class="form-group daily">
+                                {{ Form::label('count', '* تعداد روز') }}
+                                {{ Form::number('count',null, array('class' => 'form-control text-left' ,'id' => 'leave_count')) }}
+                            </div>
+                            <div class="row m-0">
+                                <div class="form-group col-lg-6 m-0">
+                                    {{ Form::label('start_at', '* از تاریخ ') }}
+                                    {{ Form::text('start_at',null, array('class' => 'form-control' ,'id' => 'leave_start_at', 'readonly' => 'readonly')) }}
+                                    <img class="inline-left-logo" src="https://img.icons8.com/external-icematte-lafs/40/000000/external-Calendar-it-icematte-lafs.png">
+                                </div>
+                                <div class="form-group col-lg-6 m-0">
+                                    {{ Form::label('end_at', '* تا تاریخ ') }}
+                                    {{ Form::text('end_at',null, array('class' => 'form-control' ,'id' => 'leave_end_at', 'readonly' => 'readonly')) }}
+                                    <img class="inline-left-logo" src="https://img.icons8.com/external-icematte-lafs/40/000000/external-Calendar-it-icematte-lafs.png">
+                                </div>
+    
+                                <div class="form-group col-lg-6 m-0 hourly">
+                                    {{ Form::label('start_time', ' از ساعت ') }}
+                                    <input type="time" name="start_time" id="start_time" class="form-control" readonly>
+                                    <img class="inline-left-logo" src="https://img.icons8.com/ultraviolet/40/null/clock--v1.png"/>
+                                </div>
+                                <div class="form-group col-lg-6 m-0 hourly">
+                                    {{ Form::label('end_time', ' تا ساعت ') }}
+                                    <input type="time" name="end_time" id="end_time" class="form-control" readonly>
+                                    <img class="inline-left-logo" src="https://img.icons8.com/ultraviolet/40/null/clock--v1.png"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group hourly">
+                                {{ Form::label('time', '* دقیقه (مرخصی ساعتی) ') }}
+                                {{ Form::text('time',null, array('class' => 'form-control' ,'id' => 'leave_time_show', 'readonly' => 'readonly')) }}
+                                <img class="inline-left-logo" src="https://img.icons8.com/ultraviolet/38/null/clock--v1.png"/>
+                            </div>
+                            <div class="form-group">
+                                {{ Form::label('text', '* شرح مرخصی') }}
+                                {{ Form::textarea('text',null, array('class' => 'form-control textarea')) }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary m-0 mx-3" data-dismiss="modal">انصراف</button>
+                            {{ Form::button('ثبت', array('type' => 'submit', 'class' => 'btn btn-success')) }}
+                        </div>
+                    {{ Form::close() }}
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="user_request" tabindex="-1" role="dialog" aria-labelledby="user_requestLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    {{ Form::open(array('route' => 'admin.user_request.store', 'method' => 'POST', 'files' => true)) }}
+                        <div class="modal-header"><h5 class="user_request-title"></h5></div>
+                        <div class="modal-body">
+                            {{ Form::hidden('user_id',null, array('class' => 'form-control','id' => 'user_request_userId')) }}
+                            {{ Form::hidden('ticket_id',null, array('class' => 'form-control','id' => 'user_request_ticket')) }}
+                            <div class="form-group">
+                                {{ Form::label('title', '* عنوان') }}
+                                {{ Form::text('title',null, array('class' => 'form-control' ,'id' => 'request_title')) }}
+                            </div>
+                            <div class="form-group">
+                                {{ Form::label('date', '* تاریخ درخواست') }}
+                                {{ Form::text('date',null, array('class' => 'form-control date_p')) }}
+                                <img class="inline-left-logo" src="https://img.icons8.com/external-icematte-lafs/40/000000/external-Calendar-it-icematte-lafs.png">
+                            </div>
+                            <div class="form-group">
+                                {{ Form::label('description', '* توضیحات') }}
+                                {{ Form::textarea('description',null, array('class' => 'form-control textarea')) }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary m-0 mx-3" data-dismiss="modal">انصراف</button>
+                            {{ Form::button('ثبت', array('type' => 'submit', 'class' => 'btn btn-success')) }}
+                        </div>
+                    {{ Form::close() }}
+                </div>
+            </div>
+        </div>
+
+        <button data-toggle="modal" data-target="#leaveDayCreate" id="btn_leaveDayCreate" class="d-none">btn_leaveDayCreateLabel</button>
+        <button data-toggle="modal" data-target="#user_request" id="btn_user_request" class="d-none">btn_user_requestLabel</button>
 
     </section>
 
@@ -157,6 +265,51 @@
                 location.href = '{{url('/')}}/admin/contact-destroy/'+id;
             }
         })
+    }
+    function set_requ(modal, id, user_id, day_or_title, start_date, end_date, minute, s_time, e_time) {
+        console.log(modal, id, user_id, day_or_title, start_date, end_date);
+        if (modal=='btn_user_request') {
+            document.getElementById('user_request_ticket').value    = id;
+            document.getElementById('user_request_userId').value    = user_id;
+            document.getElementById('request_title').value          = day_or_title;
+        }
+        else if(modal=='btn_leaveDayCreate') {
+            document.getElementById('leave_day_ticket_id').value    = id;
+            document.getElementById('leaveDayCreate_userId').value  = user_id;
+            document.getElementById('leave_count').value            = day_or_title;
+            document.getElementById('leave_start_at').value         = start_date;
+            document.getElementById('leave_end_at').value           = end_date;
+            document.getElementById('start_time').value             = s_time;
+            document.getElementById('end_time').value               = e_time;
+            if (minute > 0) {
+                let text    = '';
+                let minutes = minute%60;
+                if (minute > 60) {
+                    let hour    = parseInt(minute/60);
+                    if (hour > 0) {text += ` ${hour} ساعت `;}
+                }
+                if (minutes > 0) {text += ` ${minutes} دقیقه `;}
+                document.getElementById('leave_time_show').value    = text;
+                document.getElementById('leave_time_minute').value  = minute;
+                document.getElementById('leaveDayCreate_type').value= 'minutely';
+                
+                document.querySelectorAll('.hourly').forEach( item => {
+                    item.classList.remove('d-none');
+                });
+
+                document.querySelector('.daily').classList.add('d-none');
+            } else {
+                document.querySelector('.daily').classList.remove('d-none');
+                
+                document.querySelectorAll('.hourly').forEach( item => {
+                    item.classList.add('d-none');
+                });
+
+                document.getElementById('leaveDayCreate_type').value= 'daily';
+            }
+        }
+        
+        document.getElementById(modal).click();
     }
 </script>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\User;
 use App\Model\Setting;
 use App\Model\Contact;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -28,21 +29,32 @@ class ContactController extends Controller {
         }
     }
     public function __construct() {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'SpecialUser','Access']);
     }
     public function index($type=null) {
         $users = User::where('reagent_id', $this->user_id() )->get(['id','first_name','last_name']);
-        if (Auth::user()->hasRole('مدیر ارشد') || Auth::user()->hasRole('مدیر'))  {
-            $items = Contact::where('reagent_id',auth()->user()->id)->where('answered', 'no')->where('belongs_to_item', '=', 0)->orderByDesc('id');
-        } else {
-            $items = Contact::where('reagent_id',auth()->user()->reagent_id)->where('category',auth()->user()->getRoleNames()->first())->where('answered', 'no')->where('belongs_to_item', '=', 0)->orderByDesc('id');
-        }
+        // if (Auth::user()->hasRole('مدیر ارشد') || Auth::user()->hasRole('مدیر'))  {
+        $items = Contact::where('reagent_id',auth()->user()->id)->where('answered', 'no')->where('belongs_to_item', '=', 0)->orderByDesc('updated_at');
+        // } else {
+        //     $items = Contact::where('reagent_id',auth()->user()->reagent_id)->where('category',auth()->user()->getRoleNames()->first())->where('answered', 'no')->where('belongs_to_item', '=', 0)->orderByDesc('id');
+        // }
         if ($type && $type=='pending') {
             $items->where('reply', '=', 0);
         } else if($type && $type=='active') {
             $items->where('reply', '>', 0);
         }
         $items = $items->paginate($this->controller_paginate());
+        foreach ($items as $item) {
+            if ($item->start_date && $item->end_date) {
+                $item->day = Carbon::parse($item->start_date)->diffInDays(Carbon::parse($item->end_date) ,false);
+            }
+            if ($item->time1 && $item->time2) {
+                $item->time = Carbon::parse($item->time1)->diffInMinutes(Carbon::parse($item->time2) ,false);
+            } else $item->time = 0;
+            
+            $item->start    = num2fa(my_jdate($item->start_date, 'Y/m/d'));
+            $item->end      = num2fa(my_jdate($item->end_date, 'Y/m/d'));
+        }
         $sub_items = '';
         if ($items->count()) {
             $sub_items = Contact::where('answered', 'no')->whereIn('belongs_to_item', $items->pluck('id') )->get();
@@ -132,5 +144,4 @@ class ContactController extends Controller {
         }
     }
 }
-
 

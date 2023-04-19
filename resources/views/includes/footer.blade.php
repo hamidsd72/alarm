@@ -5,18 +5,28 @@
             <div class="col">
                 @foreach ($network as $net)
                     @switch($net->config)
+                        @case("linkedin")
+                            <a href="{{$net->address}}" class="box mx-1">
+                                <i class="fab fa-linkedin" style="font-size: 22px;"></i>
+                            </a>
+                        @break
+                        @case("telegram")
+                            <a href="{{$net->address}}" class="box mx-1">
+                                <i class="fab fa-telegram" style="font-size: 22px;"></i>
+                            </a>
+                        @break
                         @case("instagram")
-                            <a href="{{$net->address}}" class="box mx-2">
+                            <a href="{{$net->address}}" class="box mx-1">
                                 <i class="fab fa-instagram" style="font-size: 20px;"></i>
                             </a>
                             @break
                         @case("whatsapp")
-                            <a href="{{$net->address}}" class="box mx-2">
+                            <a href="{{$net->address}}" class="box mx-1">
                                 <i class="fab fa-whatsapp" style="font-size: 20px;"></i>
                             </a>
                             @break
                         @case("email")
-                            <a href="#" onclick='sedarMail("{{$net->address}}")' class="box mx-2">
+                            <a href="#" onclick='sedarMail("{{$net->address}}")' class="box mx-1">
                                 <i class="fa fa-envelope" style="font-size: 20px;"></i>
                             </a>
                             @break
@@ -27,7 +37,7 @@
         </div>
     </div>
     <div class="container text-center">
-        <span class="text-secondary">All rights reserved by AdibGroup 2022</span>
+        <span class="text-secondary">All rights reserved by AdibGroup {{\Carbon\Carbon::today()->format('Y')}}</span>
     </div>
 </footer>
 

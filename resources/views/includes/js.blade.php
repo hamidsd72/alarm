@@ -55,8 +55,8 @@
 
     });
 </script>
-@if (auth()->user())
-    <script>
+<script>
+    @if (auth()->user())
         function loadDoc() {
             const xhttp = new XMLHttpRequest();
             xhttp.onload = function() {
@@ -67,13 +67,64 @@
             setTimeout(loadDoc, 100000);
         }
         loadDoc();
-    </script>
-@endif
-<script>
-    if ($('.carousel')[0]) {
-        $('.carousel').carousel({
-            interval: 3000
+        
+        function checkCalendar( offDays , offDays2 ) {
+            // جدول تقویم
+            let calendars = document.querySelectorAll('.table-days tbody tr td');
+            if (Array(calendars).length) {
+                    
+                // تقویم ها رو میگیره و روز تعطیل رو درست میکنه
+                calendars.forEach( (calendar, counter)  => {
+                    // اعمال روز تعطیل برای هر هفنه
+                    if (offDays.length) {
+                        
+                        if ( counter % 7 == 0 && counter > 0 ) {
+                            for (let index = 0; index < offDays.length; index++) {
+                                offDays[index] += 7;
+                            }
+                        }
+                        // خالی کردن مقدار دکمه تقویم
+                        if ( offDays.includes(counter) ) {
+                            calendar.setAttribute('data-unix', null);
+                            calendar.setAttribute('data-date', null);
+                            calendar.addEventListener( 'click', e => {
+                            })
+                            // تغییر سی اس اس
+                            calendar.children[0].classList.add('bg-danger');
+                            calendar.children[0].classList.add('text-white');
+                        }
+                    
+                    }
+                    if (offDays2.length) {
+
+                        // خالی کردن مقدار دکمه تقویم
+                        if ( offDays2.includes( calendar.getAttribute('data-date') ) ) {
+                            calendar.setAttribute('data-unix', null);
+                            calendar.setAttribute('data-date', null);
+                            calendar.addEventListener( 'click', e => {
+                            })
+                            // تغییر سی اس اس
+                            calendar.children[0].classList.add('bg-danger');
+                            calendar.children[0].classList.add('text-white');
+                        }
+                        
+                    }
+                })
+                console.log('run checkCalendar')
+                setTimeout(() => { checkCalendar( @json($offDaysList) , @json($offDaysList2) ); }, 3000);
+
+            }
+        }
+        
+        document.querySelector('.flex-shrink-0').addEventListener( 'click', e => {
+            checkCalendar( @json($offDaysList) , @json($offDaysList2) );
         })
+            
+
+    @endif
+
+    if ($('.carousel')[0]) {
+        $('.carousel').carousel({ interval: 3000 })
     }
     $('.date_p').persianDatepicker({
         observer: true,
@@ -81,11 +132,6 @@
         altField: '.observer-example-alt',
         initialValue:false,
     }); 
-    // $('.check-date-example').persianDatepicker({
-    //     checkDate: function(unix){
-    //         return new persianDate(unix).day() != 4;
-    //     }
-    // });
     $(document).ready(function () {
         $('select[name=state_id]').on('change', function () {
             $.get("{{url('/')}}/city-ajax/" + $(this).val(), function (data, status) {
@@ -99,4 +145,3 @@
     });
 </script>
 @yield('js')
-

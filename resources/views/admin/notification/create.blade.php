@@ -60,7 +60,7 @@
                                     <div class="form-group">
                                         <label for="role_name" >سمت ها و گروه های کاربری *</label>
                                         <select id="role_name" name="role_name" class="form-control select2">
-                                            @foreach (\App\Model\Role::all('name') as $key => $item)
+                                            @foreach ($roles as $key => $item)
                                                 @unless($item->name=='مدیر ارشد')
                                                     <option value="{{$item->name}}" {{ $key==0?'selected':''}}>{{$item->name}}</option>
                                                 @endunless

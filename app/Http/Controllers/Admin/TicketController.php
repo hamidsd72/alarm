@@ -17,7 +17,7 @@ class TicketController extends Controller {
         }
     }
     public function __construct() {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'SpecialUser']);
     }
     public function index() {
         if (Auth::user()->hasRole('مدیر')) {

@@ -17,7 +17,7 @@ class FormPriceController extends Controller {
     
     public function __construct()
     {
-        $this->middleware(['auth','isSuperAdmin']);
+        $this->middleware(['auth','isSuperAdmin', 'SpecialUser']);
     } 
 
     public function index()

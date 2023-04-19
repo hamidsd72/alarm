@@ -124,12 +124,20 @@ class ReportController extends Controller {
             return view('user.reports.show', compact('items','user_my_report','workDay','pie'), ['title1' => 'گزارش کارکرد اخیر', 'title2' => 'گزارش کارکرد های اخیر']);
         } elseif ($user_my_report=='job') {
 
-            $items  = ServicePackage::where('created_at', '>', Carbon::now()->startOfMonth()->subMonth())->where('user_id', auth()->user()->id)->take(100)->orderByDesc('sort_by')->get(['id','title']);
+            $items  = ServicePackage::where('created_at', '>', Carbon::now()->startOfMonth()->subMonth())->where('user_id', auth()->user()->id)->take(100)
+            ->orderByDesc('sort_by')->get(['id','title']);
             return view('user.reports.show', compact('user_my_report','items'), ['title1' => 'گزارش فعالیت اخیر', 'title2' => 'گزارش فعالیت های اخیر']);
         } elseif ($user_my_report=='leave-day') {
 
-            $items = LeaveDay::where('created_at', '>', Carbon::now()->startOfYear())->where('reagent_id', $this->user_id() )->where('user_id',auth()->user()->id)->get(['count','start_at','end_at','text']);
-            return view('user.reports.show', compact('user_my_report','items'), ['title1' => 'گزارش مرخصی اخیر', 'title2' => 'گزارش مرخصی های اخیر']);
+            $items  = LeaveDay::where('created_at', '>', Carbon::now()->startOfYear())->where('reagent_id', $this->user_id() )
+            ->where('user_id',auth()->user()->id)->get();
+
+            $leave  = $items->sum('count');
+            $sum    = $items->sum('minute');
+            // ۸ ساعت
+            // ۴۸۰دقیقه
+            if ($sum > 480) $leave += intVal($sum / 480);
+            return view('user.reports.show', compact('user_my_report','items','leave'), ['title1' => 'گزارش مرخصی اخیر', 'title2' => 'گزارش مرخصی های اخیر']);
         }
         
         abort('503');

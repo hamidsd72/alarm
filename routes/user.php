@@ -1,10 +1,15 @@
 <?php 
-  
+
 Route::resource('forms', 'FormController');
 Route::resource('job-report', 'JobReportController');
 Route::resource('notification', 'NotificationController');
 Route::get('/', 'GuestController@index')->name('home-goust');
+Route::get('/sign-up', 'GuestController@register')->name('home-guost-register');
 Route::get('/pwa', 'GuestController@create')->name('home-guost-pwa');
+Route::get('/remember-password/{number}', 'GuestController@remember_password')->name('remember-password');
+Route::get('/remember-password/set-password-by-token/{token}', 'GuestController@set_password_by_token')->name('set-password-by-token');
+Route::post('/remember-password/update-password-by-token/', 'GuestController@update_password_by_token')->name('update-password-by-token');
+Route::post('/store/new-user/', 'NewRegisterController@sign_up')->name('register.new.user');
 Route::get('/app', 'HomeController@index')->name('index');
 Route::get('/update-roll-call', 'HomeController@updateRollCall')->name('updateRollCall');
 Route::get('/services/{cat_id}', 'HomeController@services')->name('services');
@@ -12,7 +17,7 @@ Route::get('/service/{id}/{slug}', 'HomeController@service')->name('service');
 Route::get('/packages_category', 'HomeController@packages_category')->name('package.category');
 Route::get('/packages', 'HomeController@packages')->name('packages');
 Route::get('/package/{slug}', 'HomeController@package')->name('package');
-Route::get('/job/create/{package_id}', 'HomeController@job_create')->name('job_create');
+Route::get('/user-job/create/{package_id}', 'HomeController@job_create')->name('job_create');
 Route::get('/offline/job/create/{package_id}/{created_at}/{description}', 'HomeController@offline_job_create')->name('offline_job_create');
 Route::post('/job/stop', 'HomeController@job_stop')->name('job_stop');
 Route::get('/reserve/{type}/{slug}', 'HomeController@reserve')->name('reserve');

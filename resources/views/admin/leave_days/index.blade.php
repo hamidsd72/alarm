@@ -29,6 +29,7 @@
                                 <tr>
                                     <th>نام و نام خانوادگی</th>
                                     <th>تعداد روز</th>
+                                    <th>دقیقه (مرخصی ساعتی)</th>
                                     <th>توضیحات</th>
                                     <th>ثبت کننده گزارش</th>
                                     <th>مدیریت</th>
@@ -40,6 +41,14 @@
                                     <tr>
                                         <td>@item($item->user()?$item->user()->first_name.' '.$item->user()->last_name:'')</td>
                                         <td>@item($item->count)</td>
+                                        <td>
+                                            @if ($item->minute && $item->minute > 0)
+                                                {{ $item->minute > 60 ? intVal($item->minute / 60).' ساعت ' : ''}}
+                                                {{ $item->minute % 60 > 0 ? ($item->minute % 60).' دقیقه ' : '' }}
+                                            @else
+                                            ________
+                                            @endif
+                                        </td>
                                         <td class="small col-6">@item($item->text)</td>
                                         <td>@item($item->employee()?$item->employee()->first_name.' '.$item->employee()->last_name:'')</td>
                                         <td class="text-center">

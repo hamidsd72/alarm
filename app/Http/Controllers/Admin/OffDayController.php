@@ -35,7 +35,7 @@ class OffDayController extends Controller {
         return Setting::select('paginate')->where('user_id', $this->user_id())->first()->paginate;
     }
     public function __construct() {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'SpecialUser','Access']);
     }
     public function index() {
         $items = OffDay::where('user_id', $this->user_id() )->paginate($this->controller_paginate());

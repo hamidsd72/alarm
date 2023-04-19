@@ -12,7 +12,7 @@
                         <div class="card-body box-profile">
                             {{ Form::model($item,array('route' => array('admin.marketer.update', $item->id), 'method' => 'POST', 'files' => true)) }}
                                 <div class="row">
-                                    <div class="col-md-6 col-lg-2">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             {{ Form::label('company_name', 'نوع قرارداد') }}
                                             <select class="form-control" name="company_name" id="company_name">
@@ -21,13 +21,22 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-lg-5">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {{ Form::label('show', 'نمایش اطلاعات تماس به مجری') }}
+                                            <select class="form-control" name="show" id="show">
+                                                <option value="show" {{$item->show=='show'?'selected':''}} >نمایش</option>
+                                                <option value="hide" {{$item->show=='hide'?'selected':''}}>عدم نمایش</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             {{ Form::label('first_name', '* نام') }}
                                             {{ Form::text('first_name',null, array('class' => 'form-control', 'required' => 'required')) }}
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-lg-5">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             {{ Form::label('last_name', '* نام خانوادگی') }}
                                             {{ Form::text('last_name',null, array('class' => 'form-control', 'required' => 'required')) }}
@@ -154,14 +163,19 @@
         }
         });
     });
+
+    
+
+
 });
 </script>
-<script>
-    $('.date_p').persianDatepicker({
-        observer: true,
-        format: 'YYYY/MM/DD',
-        altField: '.observer-example-alt',
-        initialValue:false,
-    });
-</script>
 @endsection
+
+
+{{-- app.addGeolocation({
+    history: true,
+    onLoad: true,
+    onLoadCallback: function(){
+        console.log(app.states.user.latlng);
+    },
+}); --}}

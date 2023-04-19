@@ -19,7 +19,7 @@ class UserRequestController extends Controller {
         return Setting::select('paginate')->where('user_id', $this->user_id())->first()->paginate;
     }
     public function __construct() {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'SpecialUser','Access']);
     }
     function user_id() {
         if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') ) {
@@ -75,6 +75,13 @@ class UserRequestController extends Controller {
             $item->employee_id  = auth()->user()->id;
             $item->reagent_id   = $this->user_id();
             $item->save();
+
+            if ($request->ticket_id) {
+                $ticket = \App\Model\Contact::find($request->ticket_id);
+                $ticket->reply+=1;
+                $ticket->update();
+            }
+
             return redirect()->route('admin.user_request.index')->with('flash_message', 'درخواست با موفقیت ثبت شد.');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('err_message', 'مشکلی در ثبت درخواست بوجود آمده،مجددا تلاش کنید');

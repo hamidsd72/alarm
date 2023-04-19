@@ -11,10 +11,10 @@ class Withdrawal extends Notification
 {
     use Queueable;
 
-    public $counter;
-    public function __construct($counter)
+    public $link;
+    public function __construct($link)
     {
-        $this->counter = $counter; 
+        $this->link = $link; 
     }
 
     public function via($notifiable)
@@ -25,9 +25,10 @@ class Withdrawal extends Notification
     public function toMail($notifiable)
     { 
         return (new MailMessage)
-                    ->subject('Withdrawal')
-                    ->line($this->counter.' ada was deducted from your account')
-                    ->action('Withdrawal', url('/user/notifications'));
+                    ->subject('بازیابی رمزعبور')
+                    ->line(' درخواست لینک بازیابی رمز عبور')
+                    ->line(' جهت بازیابی روی لینک کلیک کنید')
+                    ->action('کلیک کنید', route('user.set-password-by-token', $this->link));
     }
 
     public function toArray($notifiable)

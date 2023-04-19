@@ -19,7 +19,7 @@ class MarteterController extends Controller {
         return Setting::select('paginate')->where('user_id', $this->user_id())->first()->paginate;
     }
     public function __construct() {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'SpecialUser','Access']);
     }
     function user_id() {
         if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') ) {
@@ -157,6 +157,7 @@ class MarteterController extends Controller {
             $item->mobile       = $request->mobile;
             $item->phone        = $request->phone;
             $item->text         = $request->text;
+            $item->show         = $request->show;
             $item->long_lat     = $request->long_lat;
             $item->update();
             return redirect()->route('admin.marketer.list')->with('flash_message', 'مشتری با موفقیت ویرایش شد.');

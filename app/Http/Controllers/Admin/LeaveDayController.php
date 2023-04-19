@@ -36,11 +36,11 @@ class LeaveDayController extends Controller {
         return Setting::select('paginate')->where('user_id', $this->user_id())->first()->paginate;
     }
     public function __construct() {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'SpecialUser','Access']);
     }
     public function index() {
         $users = User::where('reagent_id', $this->user_id() )->get(['id','first_name','last_name']);
-        $items = LeaveDay::where('reagent_id', $this->user_id() )->paginate($this->controller_paginate());
+        $items = LeaveDay::where('reagent_id', $this->user_id() )->orderByDesc('id')->paginate($this->controller_paginate());
         return view('admin.leave_days.index', compact('items','users'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
     public function show($leave_day) {
@@ -60,7 +60,6 @@ class LeaveDayController extends Controller {
     public function store(Request $request) {
         $this->validate($request, [
             'text' => 'required|max:240',
-            'count'  => 'required|integer',
             'user_id'  => 'required|integer',
             'start_at'  => 'required|max:40',
             'end_at'  => 'required|max:40',
@@ -84,11 +83,25 @@ class LeaveDayController extends Controller {
             $item->reagent_id   = $this->user_id();
             $item->employee_id  = auth()->user()->id;
             $item->user_id      = $user->id;
-            $item->count        = $request->count;
+            $item->type         = $request->type; 
             $item->text         = $request->text;
+            if ($request->type=='daily') {
+                $item->count    = $request->count;
+            } else {
+                $item->start_time   = $request->start_time;
+                $item->end_time     = $request->end_time;
+                $item->minute       = Carbon::parse($request->start_time)->diffInMinutes(Carbon::parse($request->end_time) ,false);
+                if ($request->minute) $item->minute    = $request->minute;
+            }
             $item->start_at     = j2g($this->toEnNumber($request->start_at));
             $item->end_at       = j2g($this->toEnNumber($request->end_at));
             $item->save();
+            if ($request->ticket_id) {
+                $ticket = \App\Model\Contact::find($request->ticket_id);
+                $ticket->reply+=1;
+                $ticket->update();
+            }
+
             return redirect()->route('admin.leave-day.index')->with('flash_message', ' مرخصی کاربر با موفقیت اضافه شد.');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('err_message', 'مشکلی در افزودن بوجود آمده،مجددا تلاش کنید');
@@ -109,7 +122,6 @@ class LeaveDayController extends Controller {
     public function update(Request $request, $leave_day) {
         $this->validate($request, [
             'text' => 'required|max:240',
-            'count'  => 'required|integer',
             'user_id'  => 'required|integer',
             'start_at'  => 'required|max:40',
             'end_at'  => 'required|max:40',
@@ -138,11 +150,17 @@ class LeaveDayController extends Controller {
                 }
             }
 
-            $item->user_id  = $user->id;
-            $item->count    = $request->count;
-            $item->text     = $request->text;
-            $item->start_at = j2g($this->toEnNumber($request->start_at));
-            $item->end_at   = j2g($this->toEnNumber($request->end_at));
+            $item->user_id      = $user->id;
+            if ($item->type=='daily') {
+                $item->count        = $request->count;
+            } else {
+                $item->start_time   = $request->start_time;
+                $item->end_time     = $request->end_time;
+                $item->minute       = Carbon::parse($request->start_time)->diffInMinutes(Carbon::parse($request->end_time) ,false);
+            }
+            $item->text         = $request->text;
+            $item->start_at     = j2g($this->toEnNumber($request->start_at));
+            $item->end_at       = j2g($this->toEnNumber($request->end_at));
             $item->update();
             return redirect()->route('admin.leave-day.index')->with('flash_message', ' مرخصی کاربر با موفقیت ویرایش شد.');
         } catch (\Exception $e) {

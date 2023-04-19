@@ -123,6 +123,7 @@ class HomeController extends Controller {
             }
         }
         if ($log=='انجام شد') $log=false;
+        
         return view('user.app', compact('log','serviceCat','sliders', 'about', 'packages','network','slidersPhotos','runningJob','setting'));
         // return view('user.index', compact('serviceCat','sliders', 'about', 'packages','network','slidersPhotos','runningJob','setting'));
         // return view('user.index', compact('serviceCat','sliders', 'about', 'packages', 'customers', 'service_custom','gold_package','slidersPhotos','network'));
@@ -133,19 +134,9 @@ class HomeController extends Controller {
             if ( $visits->count() ) {
 
                 $divice = (request()->userAgent())??'';
-                $location = 'UNKNOWN';
-                if (getenv('HTTP_CLIENT_IP'))
-                    $location = getenv('HTTP_CLIENT_IP');
-                else if (getenv('HTTP_X_FORWARDED_FOR'))
-                    $location = getenv('HTTP_X_FORWARDED_FOR');
-                else if (getenv('HTTP_X_FORWARDED'))
-                    $location = getenv('HTTP_X_FORWARDED');
-                else if (getenv('HTTP_FORWARDED_FOR'))
-                    $location = getenv('HTTP_FORWARDED_FOR');
-                else if (getenv('HTTP_FORWARDED'))
-                    $location = getenv('HTTP_FORWARDED');
-                else if (getenv('REMOTE_ADDR'))
-                    $location = getenv('REMOTE_ADDR');
+                $user_ip    = getenv('REMOTE_ADDR');
+                $geo        = unserialize(file_get_contents("http://www.geoplugin.net/php.gp?ip=$user_ip"));
+                $location   = $geo["geoplugin_latitude"].','.$geo["geoplugin_longitude"];
 
                 foreach ($visits as $visit) {
                     $visit->location = $location;
@@ -278,20 +269,11 @@ class HomeController extends Controller {
         }*/
     }
     public function job_create($package_id) {
-        $divice = (request()->userAgent())??'';
-        $location = 'UNKNOWN';
-        if (getenv('HTTP_CLIENT_IP'))
-            $location = getenv('HTTP_CLIENT_IP');
-        else if (getenv('HTTP_X_FORWARDED_FOR'))
-            $location = getenv('HTTP_X_FORWARDED_FOR');
-        else if (getenv('HTTP_X_FORWARDED'))
-            $location = getenv('HTTP_X_FORWARDED');
-        else if (getenv('HTTP_FORWARDED_FOR'))
-            $location = getenv('HTTP_FORWARDED_FOR');
-        else if (getenv('HTTP_FORWARDED'))
-            $location = getenv('HTTP_FORWARDED');
-        else if (getenv('REMOTE_ADDR'))
-            $location = getenv('REMOTE_ADDR');
+        $divice     = (request()->userAgent())??'';
+
+        $user_ip    = getenv('REMOTE_ADDR');
+        $geo        = unserialize(file_get_contents("http://www.geoplugin.net/php.gp?ip=$user_ip"));
+        $location   = $geo["geoplugin_latitude"].','.$geo["geoplugin_longitude"];
 
         if (ServicePackage::find($package_id)) {
             $runningJob = JobReport::where('user_id', auth()->user()->id)->where('status', 'start')->get();

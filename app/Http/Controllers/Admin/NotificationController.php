@@ -10,10 +10,11 @@ use App\Model\ServicePackage;
 use App\Model\Basket;
 use App\Model\Notification;
 use App\Model\Sms;
+use App\Model\Role;
 
 class NotificationController extends Controller { 
     public function __construct() {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'SpecialUser','Access']);
     }
     public function controller_title($type) {
         if ($type == 'sum') {
@@ -46,7 +47,8 @@ class NotificationController extends Controller {
         $users      = User::where('reagent_id', $this->user_id())->get(['id','first_name','last_name','mobile']);
         $packages   = ServicePackage::where('status', 'active')->where('reagent_id', $this->user_id())->orderByDesc('sort_by')->get();
         $services   = ServiceCat::where('user_id', $this->user_id())->where('status', 'active')->get();
-        return view('admin.notification.create', compact('users','packages','services'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
+        $roles      = Role::whereNotIn('name', ['مدیر','مدیر ارشد'])->whereIn('user_id',[ 1 , $this->user_id() ])->get('name');
+        return view('admin.notification.create', compact('roles','users','packages','services'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
     public function show($notification) {
         $item = Notification::where('reagent_id', $this->user_id())->findOrFail($notification);

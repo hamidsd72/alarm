@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use App\Model\About;
+use App\Model\Role;
 
 class UserController extends Controller {
     public function controller_title($type) {
@@ -32,7 +33,7 @@ class UserController extends Controller {
         return Setting::select('paginate')->where('user_id', $this->user_id())->first()->paginate;
     }
     public function __construct() {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'SpecialUser','Access']);
     }
     function user_id() {
         if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') ) {
@@ -58,12 +59,24 @@ class UserController extends Controller {
             }
             $user->assignRole($request->role_name);
         }
-        return back()->with('flash_message', 'رول با موفقیت تغییر یافت.');
+        return redirect()->back()->with('flash_message', 'رول با موفقیت تغییر یافت.');
+    }
+    public function addRole(Request $request) {
+        if ( auth()->user()->roles->first()->name != 'مدیر' ) abort('503');
+        $user_id        = auth()->user()->id;
+        if ( Role::where('name', $user_id.'_'.$request->name)->count() ) return redirect()->back()->with('err_message', 'با این نام قبلا رول ایجاد شده.');
+
+        Role::create([
+            'name'      => $user_id.'_'.$request->name,
+            'user_id'   => $user_id,
+        ]);
+        return redirect()->back()->with('flash_message', 'رول با موفقیت ایجاد شد.');
     }
     public function index() {
         // $items = User::role('کاربر')->where('referrer_id', auth()->user()->reagent_id )->paginate($this->controller_paginate());
         // if ( auth()->user()->hasRole('مدیر ارشد') || auth()->user()->hasRole('مدیر') ) {
-            $items = User::where('reagent_id', $this->user_id() )->paginate($this->controller_paginate());
+            $items  = User::where('reagent_id', $this->user_id() )->paginate($this->controller_paginate());
+            $roles  = Role::whereNotIn('name', ['مدیر','مدیر ارشد'])->whereIn('user_id',[ 1 , $this->user_id() ])->get('name');
             if ( auth()->user()->hasRole('مدیر ارشد') ) {
                 foreach ($items as $item) {
                     $item->web_site = 'غیرفعال';
@@ -73,7 +86,7 @@ class UserController extends Controller {
                 }
             }
         // }
-        return view('admin.user.index', compact('items'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
+        return view('admin.user.index', compact('items','roles'), ['title1' => $this->controller_title('single'), 'title2' => $this->controller_title('sum')]);
     }
     public function show($id) {
         if (auth()->user()->hasRole('مدیر ارشد')) {

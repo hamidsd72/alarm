@@ -17,7 +17,7 @@
                                 @if ( auth()->user()->hasRole('مدیر ارشد') )
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            {{ Form::label('company_name', '* عنوان شرکت یا مشتری') }}
+                                            {{ Form::label('company_name', '* عنوان کسب و کار') }}
                                             {{ Form::text('company_name',null, array('class' => 'form-control' , 'required' => 'required')) }}
                                         </div>
                                     </div>

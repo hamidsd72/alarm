@@ -104,10 +104,42 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="col-12 perTime" id="perDate">
+                                        <div class="row m-0 ms-3">
+                                            <div class="col p-0">
+                                                <div class="form-field form-text">
+                                                    <label class="contactMessageTextarea color-theme" for="date">از ساعت</label>
+                                                    <div class="row">
+                                                        <div class="col-10 p-0">
+                                                            <input id="apptTime1" class="col-12 round-small mb-0" type="time" name="time1" />
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <img src="https://img.icons8.com/ultraviolet/26/null/clock--v1.png"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col p-0">
+                                                <div class="form-field form-text">
+                                                    <label class="contactMessageTextarea color-theme" for="date">تا ساعت</label>
+                                                    <div class="row">
+                                                        <div class="col-10 p-0">
+                                                            <input id="apptTime2" class="col-12 round-small mb-0" type="time" name="time2" />
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <img src="https://img.icons8.com/ultraviolet/26/null/clock--v1.png"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div id="lorem-box">
                                         <div class="form-field form-text">
                                             <label class="contactMessageTextarea color-theme" for="lorem2">زمان مرخصی</label>
-                                            <select id="lorem2" name="lorem2" id="lorem2" class="form-control mb-3">
+                                            <select id="lorem2" name="lorem2" id="lorem2" class="form-control mb-3" onchange="changeTimeInput(this.value)">
                                                 <option value=" - مرخصی روزانه " selected>روزانه</option>
                                                 <option value=" - مرخصی ساعتی ">ساعتی</option>
                                                 <option value=" - مرخصی استعلاجی ">استعلاجی</option>
@@ -154,9 +186,18 @@
             } else if(req=='درخواست ثبت گزارش کار') {
                 document.getElementById("lorem-box").style.display = "none";
                 document.getElementById("perDate").style.display = "block";
+                document.querySelector(".perTime").style.display = "none";
             } else {
                 document.getElementById("perDate").style.display = "none";
                 document.getElementById("lorem-box").style.display = "none";
+                document.querySelector(".perTime").style.display = "none";
+            }
+        }
+        function changeTimeInput (value) {
+            if (value==' - مرخصی ساعتی ') {
+                document.querySelector(".perTime").style.display = "block";
+                document.querySelector("#apptTime1").value = "08:30";
+                document.querySelector("#apptTime2").value = "10:30";
             }
         }
     </script>

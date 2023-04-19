@@ -13,6 +13,9 @@
             <h4 class="mb-4">{{ \App\Model\Setting::find(1)->title }}</h4>
         </div>
         <div class="container">
+            <div class="alert-success alert-dismissible confirm-pass-alert py-2 d-none">
+                <div class="log">یک ایمیل حاوی لینک بازیابی رمزعبور برای شما ارسال شد</div>
+            </div>
             <div class="login-box">
                 <form method="POST" action="/sign-up-using-mobile/{{$number}}">
                     <div class="form-group floating-form-group">
@@ -40,6 +43,9 @@
                         <a href="#" data-toggle="modal" data-target="#modal" class="link">قوانین و مقررات</a>
                     </div>
                     <button type="submit" class="btn btn-block col-12 btn-info mt-2">تایید کد</button>
+                    <div class="text-center" id="confirm_pass_link">
+                        <button class="btn btn-link" onclick="confirmPass()">فراموشی رمزعبور</button>
+                    </div>
                     @method('patch')
                     @csrf
                 </form>
@@ -65,35 +71,46 @@
     </div>
 
     <script>
-        var number = 121;
-        return_number();
-        function return_number() {
-            if (this.number < 1) {
-                this.number = 121;
-                show_verify_code();
+        @if ($sms)
+            var number = 121;
+            return_number();
+            function return_number() {
+                if (this.number < 1) {
+                    this.number = 121;
+                    show_verify_code();
+                }
+                this.number -= 1;
+                document.getElementById("code_timer").innerHTML = ' ارسال مجدد کد تا '+this.number+' ثانیه دیگر ';
+                setTimeout(return_number, 1000);
             }
-            this.number -= 1;
-            document.getElementById("code_timer").innerHTML = ' ارسال مجدد کد تا '+this.number+' ثانیه دیگر ';
-            setTimeout(return_number, 1000);
-        }
-        function show_verify_code() {
-            document.getElementById("resend_verify_code").style.display = "block";
-            document.getElementById("code_timer").style.display = "none";
-        }
-        function resend_verify_code() {
-            event.preventDefault();
-            document.getElementById('resend-code').submit();
-            document.getElementById("resend_verify_code").style.display = "none";
-            document.getElementById("code_timer").style.display = "block";
-            number = 121;
-        }
-    </script>
-    <script>
+            function show_verify_code() {
+                document.getElementById("resend_verify_code").style.display = "block";
+                document.getElementById("code_timer").style.display = "none";
+            }
+            function resend_verify_code() {
+                event.preventDefault();
+                document.getElementById('resend-code').submit();
+                document.getElementById("resend_verify_code").style.display = "none";
+                document.getElementById("code_timer").style.display = "block";
+                number = 121;
+            }
+        @endif
         $(function(){
             $("input[name='mobile']").on('input', function (e) {
                 $(this).val($(this).val().replace(/[^0-9]/g, ''));
             });
         });
+        function confirmPass() {
+            document.querySelector('#confirm_pass_link').classList.add('d-none');
+            document.querySelector('.confirm-pass-alert').classList.remove('d-none');
+            console.log('{{ route("user.remember-password",$number) }}');
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                console.log(JSON.parse( this.responseText ));
+            }
+            xhttp.open("GET", '{{ route("user.remember-password",$number) }}');
+            xhttp.send();
+        }
     </script>
 @endsection
 

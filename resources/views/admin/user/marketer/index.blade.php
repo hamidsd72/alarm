@@ -26,6 +26,7 @@
                                         <th>نام و نام خانوادگی</th>
                                         <th>تلفن</th>
                                         <th>موبایل</th>
+                                        <th>اطلاعات تماس</th>
                                         <th>شهر</th>
                                         <th>آدرس</th>
                                         <th>توضیحات</th>
@@ -39,6 +40,7 @@
                                                 <td>@item($item->first_name) @item($item->last_name)</td>
                                                 <td>@item($item->phone)</td>
                                                 <td>@item($item->mobile)</td>
+                                                <td>@item($item->show=='show'?'نمایش':'عدم نمایش')</td>
                                                 <td>@item($item->city.' - '.$item->locate)</td>
                                                 <td>@item($item->address)</td>
                                                 <td>@item($item->text)</td>

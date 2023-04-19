@@ -2,11 +2,13 @@
 Route::get('/', 'AdminController@index')->name('index');
 Route::resource('off-day', 'OffDayController');
 Route::resource('job-report', 'JobReportController');
+Route::resource('job-reports', 'JobReportController');
 Route::resource('roll-call', 'RollCallController');
+Route::resource('items', 'ItemController');
 Route::get('roll-call/filter/users-date', 'RollCallController@filter')->name('job-call.filter');
-Route::post('job-report/adminAddReport', 'JobReportController@adminAddReport')->name('job-report-add-report');
-Route::get('job-report/map/{id}', 'JobReportController@map')->name('job-report-show-map');
-Route::get('job-report/filter/{id}', 'JobReportController@index')->name('job-report.filter');
+Route::post('job-reports/adminAddReport', 'JobReportController@adminAddReport')->name('job-report-add-report');
+Route::get('job-reports/map/{id}', 'JobReportController@map')->name('job-report-show-map');
+Route::get('job-reports/filter/{id}', 'JobReportController@index')->name('job-report.filter');
 Route::resource('jobs', 'JobController');
 Route::get('jobs/force/delete/{id}', 'JobController@destroy')->name('jobs.force.delete');
 Route::resource('user_request', 'UserRequestController');
@@ -47,7 +49,7 @@ Route::get('guide-edit', 'GuideController@edit')->name('guide.edit');
 Route::post('guide-update/{id}', 'GuideController@update')->name('guide.update');
 Route::get('about-destroy/{id}', 'GuideController@destroy')->name('about.destroy');
 // contact
-Route::get('contact-list/{type?}', 'ContactController@index')->name('contact.list');
+Route::get('contacts/{type?}', 'ContactController@index')->name('contact.list');
 Route::get('contact-filter/{id?}', 'ContactController@show')->name('contact.filter');
 Route::post('contact-send-email/{id}', 'ContactController@send_email')->name('contact.send.email');
 Route::post('contact-send-ticket/{id}', 'ContactController@send_ticket')->name('contact.send.ticket');
@@ -90,6 +92,7 @@ Route::post('password-update/{id}', 'ProfileController@password_update')->name('
 
 // user
 Route::post('user/role/update', 'UserController@userRole')->name('user-role.update');
+Route::post('user/role/add/new', 'UserController@addRole')->name('user-role.add-new');
 Route::get('user-list', 'UserController@index')->name('user.list');
 Route::get('user-show/{id}', 'UserController@show')->name('user.show');
 Route::get('user-create', 'UserController@create')->name('user.create');
@@ -111,11 +114,11 @@ Route::get('agent-destroy/{id}', 'AgentController@destroy')->name('agent.destroy
 
 // marketer
 Route::get('marketer-re_activate/{id}', 'MarteterController@re_activate')->name('marketer.re_activate');
-Route::get('marketer-list', 'MarteterController@index')->name('marketer.list');
+Route::get('marketer-lists', 'MarteterController@index')->name('marketer.list');
 Route::get('marketer-show/{id}', 'MarteterController@show')->name('marketer.show');
 Route::post('marketer-store', 'MarteterController@store')->name('marketer.store');
 Route::get('marketer-create', 'MarteterController@create')->name('marketer.create');
-Route::get('marketer-edit/{id}', 'MarteterController@edit')->name('marketer.edit');
+Route::get('marketer-edits/{id}', 'MarteterController@edit')->name('marketer.edit');
 Route::post('marketer-update/{id}', 'MarteterController@update')->name('marketer.update');
 Route::get('marketer-destroy/{id}', 'MarteterController@destroy')->name('marketer.destroy');
 Route::get('marketer-active/{id}/{type}', 'MarteterController@active')->name('marketer.active');

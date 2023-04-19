@@ -52,12 +52,6 @@
         border: 2px solid red;
         box-shadow: -407px 0 0 400px khaki;
     }
-    #checkbar .arrow {
-        position: relative;
-        @unless( $limit==0 )
-            left: {{ intval((100 * $leave_day_count) / $limit) }}%;
-        @endunless
-    }
     #checkbar .arrow .circle-num {
         border-radius: 50px;
         width: 28px;
@@ -65,6 +59,19 @@
         padding-top: 6px;
     }
 </style>
+@if ( $limit == 0 )
+    <style>
+        #checkbar .arrow {
+            position: relative;
+        }
+    </style>
+@else
+    <style>
+        #checkbar .arrow {
+            left: {{ intval((100 * $leave_day_count) / $limit) }}%;
+        }
+    </style>
+@endif
 @endsection
 @section('content')
 <section class="content">

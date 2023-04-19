@@ -11,6 +11,7 @@ use App\Model\Setting;
 use App\Model\Permission;
 use App\Model\ServiceBuy;
 use App\Model\ProvinceCity;
+use App\Model\OffDay;
 use App\Model\Agent;
 use App\Model\Meta;
 use App\Model\Visit;
@@ -73,8 +74,7 @@ class AppServiceProvider extends ServiceProvider
                                 getenv('REMOTE_ADDR');
             $date=date('Y-m-d');
             $visit_old=Visit::whereDate('created_at','=',$date)->where('ip',$ip)->first();
-            if($visit_old)
-            {
+            if($visit_old) {
                 $visit_old->view+=1;
                 $visit_old->update();
             }
@@ -98,7 +98,7 @@ class AppServiceProvider extends ServiceProvider
                     }
                 }
             }
-            $setting=Setting::where('user_id', $id)->first();
+            $setting = Setting::where('user_id', $id)->first();
             if (!is_null($seo)) {
                 $titleSeo = $seo->title;
                 $keywordsSeo = $seo->key_word;
@@ -117,11 +117,9 @@ class AppServiceProvider extends ServiceProvider
                 ->with('keywordsSeo', $keywordsSeo)
                 ->with('descriptionSeo', $descriptionSeo);
                 // ->with('ServiceCats', $ServiceCat);
-            if (Cookie::get('basket') != null){
-                $view->with('BasketCount', count(json_decode(Cookie::get('basket'))));
-            }else {
-                $view->with('BasketCount', '');
-            }
+            if (Cookie::get('basket') != null) $view->with('BasketCount', count(json_decode(Cookie::get('basket'))));
+            else $view->with('BasketCount', '');
+            
         });
         
         // view()->composer('layouts.auth', function ($view) {
@@ -184,6 +182,56 @@ class AppServiceProvider extends ServiceProvider
                 $setting->logo_site = Setting::first()->logo_site;
             }
             $view->with('setting', $setting);
+        });
+        view()->composer('includes.js', function ($view) {
+            if (auth()->user()) {
+                $id = auth()->user()->reagent_id;
+                if (in_array(auth()->user()->getRoleNames()->first(),['مدیر ارشد','مدیر'])) {
+                    $id = auth()->user()->id;
+                }
+                $offDaysList    = [];
+                $offDaysList2   = [];
+                $off_days   = Setting::where('user_id', $id)->first()->off_day;
+                $off_days2  = OffDay::where('user_id', $id)->pluck('date');
+    
+                if ($off_days2 != null) {
+                    foreach ($off_days2 as $off_day2) {
+                        array_push($offDaysList2, my_jdate($off_day2, 'Y,m,d') );
+                    }
+                }
+    
+                if ($off_days != null) {
+                    $off_days = explode(',', $off_days);
+                    foreach ($off_days as $off_day) {
+                        switch ($off_day) {
+                            case 'یکشنبه':
+                                array_push($offDaysList, 1);
+                                break;
+                            case 'دوشنبه':
+                                array_push($offDaysList, 2);
+                                break;
+                            case 'سه‌شنبه':
+                                array_push($offDaysList, 3);
+                                break;
+                            case 'چهارشنبه':
+                                array_push($offDaysList, 4);
+                                break;
+                            case 'پنجشنبه':
+                                array_push($offDaysList, 5);
+                                break;
+                            case 'جمعه':
+                                array_push($offDaysList, 6);
+                                break;
+                            default:
+                                array_push($offDaysList, 0);
+                                break;
+                        }
+                    }
+                }
+                
+                $view->with('offDaysList', $offDaysList);
+                $view->with('offDaysList2', $offDaysList2);
+            }
         });
     }
     

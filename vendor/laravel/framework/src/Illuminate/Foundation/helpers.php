@@ -73,6 +73,16 @@ if (!function_exists('img_resize')) {
     }
 }
 
+if (!function_exists('num2fa')) {
+    function num2fa($data)
+    {
+        $persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹', '۴', '۵', '۶'];
+        $english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '٤', '٥', '٦'];
+        $output = str_replace($english, $persian, $data);
+        return $output;
+    }
+}
+
 if (!function_exists('send_mail')) {
     function send_mail ($email,$subject,$masage)
     {

@@ -44,8 +44,12 @@
                                     </td>
                                     <td>
                                         @if ($item->location && $item->location!='UNKNOWN')
-                                            <a target="_blank" href="{{'https://www.google.com/maps/@'.$item->location}}">جهت نمایش مکان کلیک کنید</a>
-                                            {{-- <a target="_blank" href="{{route('admin.job-report-show-map',$item->id)}}">نمایش مکان از روی نقشه</a> --}}
+                                            @php $coords = explode(',',$item->location) @endphp
+                                            {{-- <a target="_blank" href="{{'https://www.google.com/maps/@'.$item->location}}">جهت نمایش مکان کلیک کنید</a>
+                                            <a target="_blank" href="{{route('admin.job-report-show-map',$item->id)}}">نمایش مکان از روی نقشه</a> --}}
+                                            @if ($coords[1]??'')
+                                                <a target="_blank" href="https://map.ir/lat/{{$coords[0]}}/lng/{{$coords[1]}}/z/14">جهت نمایش مکان کلیک کنید</a>
+                                            @endif
                                         @else مکان نامشخص @endif
                                     </td>
                                     <td>

@@ -1,22 +1,5 @@
 @extends('user.master')
-<style>
-    #mamad span:hover img {
-        padding: 18px;
-        transition: 0.4s;
-    }
-    #mamad span img {
-        padding: 12px;
-    }
-</style>
 @section('content')
-
-    @if ($log)
-        <div class="text-center p-0 m-0 mt-4 pt-5 pb-2 alert alert-danger" role="alert">
-            {{ $log }}
-            <button type="button" class="close h6 pb-2" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-        </div>
-    @endif
-
     @if ($runningJob)
         <div class="runningJob">
             <a href="#" class="text-danger" id="clickToOpenModal2"data-toggle="modal" data-target="#ModalTicket2">
@@ -44,43 +27,60 @@
             </form>
         </div>
     </div>
-
-    <!-- demo slider top -->
-    <div class="my-4 container">
-        <div id="demo" class="carousel slide" data-ride="carousel">
-            <ul class="carousel-indicators">
-                @for ($i = 0; $i < $sliders->count(); $i++)
-                    <li data-target="#demo" data-slide-to="{{$i}}" class="{{$i==0?'active':''}}"></li> 
-                @endfor
-            </ul>
-            <div class="carousel-inner">
-                @foreach ($sliders as $key => $slider)
-                    <div class="carousel-item {{$key==0?'active':''}}">
-                        <a href="{{$slider->link}}" >
-                            <img src="{{$slidersPhotos->where('pictures_id', $slider->id)->first()->path}}" alt="Los Angeles">
-                            <div class="carousel-caption p-1 p-lg-2" style="background: #20364bad;right: 2%;width: 96%;bottom: 4% !important;border-radius: 12px">
-                                <a href="{{$slider->link}}" class="px-2 text-white" style="font-size: 16px;">{{$slider->title}}</a>
-                                <div class="float-left">
-                                    <div class="tag-images-count text-white px-2">
-                                        <span class="vm px-1">{{($key+1).' از '.$sliders->count()}}</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon-size-16 vm" viewBox="0 0 512 512">
-                                            <title>ionicons-v5-e</title>
-                                            <path d="M432,112V96a48.14,48.14,0,0,0-48-48H64A48.14,48.14,0,0,0,16,96V352a48.14,48.14,0,0,0,48,48H80" style="fill:none;stroke:#000;stroke-linejoin:round;stroke-width:32px"></path>
-                                            <rect x="96" y="128" width="400" height="336" rx="45.99" ry="45.99" style="fill:none;stroke:#000;stroke-linejoin:round;stroke-width:32px"></rect>
-                                            <ellipse cx="372.92" cy="219.64" rx="30.77" ry="30.55" style="fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px"></ellipse>
-                                            <path d="M342.15,372.17,255,285.78a30.93,30.93,0,0,0-42.18-1.21L96,387.64" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></path>
-                                            <path d="M265.23,464,383.82,346.27a31,31,0,0,1,41.46-1.87L496,402.91" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-
-                            </div>   
-                        </a>
+    
+    @if ($log)
+        <div class="container" id="off_day">
+            <div class="card py-2 mt-4">
+                <div class="row m-0">
+                    <div class="col-auto" style="cursor: pointer" onclick="document.getElementById('off_day').classList.add('d-none')">
+                        <i class="fa fa-close text-secondary mt-1"></i>
                     </div>
-                @endforeach
-            </div> 
+                    <div class="col">
+                        <h6 class="text-info text-warning pt-1">{{ $log }}</h6>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    @endif
+
+    @if ($sliders->count())
+        <!-- demo slider top -->
+        <div class="my-4 container">
+            <div id="demo" class="carousel slide" data-ride="carousel">
+                <ul class="carousel-indicators">
+                    @for ($i = 0; $i < $sliders->count(); $i++)
+                        <li data-target="#demo" data-slide-to="{{$i}}" class="{{$i==0?'active':''}}"></li> 
+                    @endfor
+                </ul>
+                <div class="carousel-inner">
+                    @foreach ($sliders as $key => $slider)
+                        <div class="carousel-item {{$key==0?'active':''}}">
+                            <a href="{{$slider->link}}" >
+                                <img src="{{$slidersPhotos->where('pictures_id', $slider->id)->first()->path}}" alt="Los Angeles">
+                                <div class="carousel-caption p-1 p-lg-2" style="background: #20364bad;right: 2%;width: 96%;bottom: 4% !important;border-radius: 12px">
+                                    <a href="{{$slider->link}}" class="px-2 text-white" style="font-size: 16px;">{{$slider->title}}</a>
+                                    <div class="float-left">
+                                        <div class="tag-images-count text-white px-2">
+                                            <span class="vm px-1">{{($key+1).' از '.$sliders->count()}}</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon-size-16 vm" viewBox="0 0 512 512">
+                                                <title>ionicons-v5-e</title>
+                                                <path d="M432,112V96a48.14,48.14,0,0,0-48-48H64A48.14,48.14,0,0,0,16,96V352a48.14,48.14,0,0,0,48,48H80" style="fill:none;stroke:#000;stroke-linejoin:round;stroke-width:32px"></path>
+                                                <rect x="96" y="128" width="400" height="336" rx="45.99" ry="45.99" style="fill:none;stroke:#000;stroke-linejoin:round;stroke-width:32px"></rect>
+                                                <ellipse cx="372.92" cy="219.64" rx="30.77" ry="30.55" style="fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px"></ellipse>
+                                                <path d="M342.15,372.17,255,285.78a30.93,30.93,0,0,0-42.18-1.21L96,387.64" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></path>
+                                                <path d="M265.23,464,383.82,346.27a31,31,0,0,1,41.46-1.87L496,402.91" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                </div>   
+                            </a>
+                        </div>
+                    @endforeach
+                </div> 
+            </div>
+        </div>
+    @endif
 
     {{-- فعالیت ها --}}
     <div class="container mt-4">
@@ -228,6 +228,7 @@
         </div>
     </div>
 
+    {{-- گزارشات اخیر --}}
     <div class="container mt-2">
         <div class="card" id="addtodevice">               
             <div class="card-body">
@@ -297,6 +298,7 @@
                             @csrf
                             <fieldset>
                                 <input type="hidden" name="subject" id="subject" >
+                                <input type="hidden" name="type_ticket" id="type_ticket" value="daily">
                                                                 
                                 <div class="col-12" id="perDate">
                                     <div class="row m-0 ms-3">
@@ -305,7 +307,7 @@
                                                 <label class="contactMessageTextarea color-theme" for="date">از تاریخ</label>
                                                 <div class="row">
                                                     <div class="col-10 p-0">
-                                                        <input type="text" name="date" class="col-12 round-small mb-0 date_p" id="date">
+                                                        <input type="text" name="date" class="col-12 round-small mb-0 date_p" id="date" autocomplete="false" readonly>
                                                     </div>
                                                     <div class="col-2">
                                                         <img src="https://img.icons8.com/external-icematte-lafs/28/000000/external-Calendar-it-icematte-lafs.png">
@@ -318,7 +320,7 @@
                                                 <label class="contactMessageTextarea color-theme" for="date">تا تاریخ</label>
                                                 <div class="row">
                                                     <div class="col-10 p-0">
-                                                        <input type="text" name="date2" class="col-12 round-small mb-0 date_p" id="date">
+                                                        <input type="text" name="date2" class="col-12 round-small mb-0 date_p" id="date" autocomplete="false" readonly>
                                                     </div>
                                                     <div class="col-2">
                                                         <img src="https://img.icons8.com/external-icematte-lafs/28/000000/external-Calendar-it-icematte-lafs.png">
@@ -328,10 +330,42 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="col-12 perTime" id="perDate">
+                                    <div class="row m-0 ms-3">
+                                        <div class="col p-0">
+                                            <div class="form-field form-text">
+                                                <label class="contactMessageTextarea color-theme" for="date">از ساعت</label>
+                                                <div class="row">
+                                                    <div class="col-10 p-0">
+                                                        <input id="apptTime1" class="col-12 round-small mb-0" type="time" name="time1" />
+                                                    </div>
+                                                    <div class="col-2">
+                                                        {{-- <img src="https://img.icons8.com/ultraviolet/26/null/clock--v1.png"/> --}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col p-0">
+                                            <div class="form-field form-text">
+                                                <label class="contactMessageTextarea color-theme" for="date">تا ساعت</label>
+                                                <div class="row">
+                                                    <div class="col-10 p-0">
+                                                        <input id="apptTime2" class="col-12 round-small mb-0" type="time" name="time2" />
+                                                    </div>
+                                                    <div class="col-2">
+                                                        {{-- <img src="https://img.icons8.com/ultraviolet/26/null/clock--v1.png"/> --}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div id="lorem-box">
                                     <div class="form-field form-text">
                                         <label class="contactMessageTextarea color-theme" for="lorem2">زمان مرخصی</label>
-                                        <select id="lorem2" name="lorem2" id="lorem2" class="form-control mb-3">
+                                        <select id="lorem2" name="lorem2" class="form-control mb-3" onchange="changeTimeInput(this.value)">
                                             <option value=" - مرخصی روزانه " selected>روزانه</option>
                                             <option value=" - مرخصی ساعتی ">ساعتی</option>
                                             <option value=" - مرخصی استعلاجی ">استعلاجی</option>
@@ -442,8 +476,7 @@
             document.getElementById('closeToOpenModal3').click();
             check_job_started()
         }
-            
-        function check_job_started() {
+        function check_job_started () {
             let elementOne = `${localStorage.getItem("job_id")}show_job_time`;
             let elementTwo = `${localStorage.getItem("job_id")}job_staus_run_btn`;
             
@@ -502,21 +535,22 @@
                 }
             }
         }
-        
-        function openModal($name) {
+        function openModal(name) {
             document.getElementById('clickToOpenModal').click();
-            document.getElementById('subject').value = $name;
-            document.getElementById("modal-title").innerHTML = `<span>${$name}</span>`;
-            if ($name == 'درخواست مرخصی') {
+            document.getElementById('subject').value = name;
+            document.getElementById("modal-title").innerHTML = `<span>${name}</span>`;
+            if (name == 'درخواست مرخصی') {
                 document.getElementById("lorem-box").style.display = "block";
                 document.getElementById("perDate").style.display = "block";
             }
-            else if ($name == 'درخواست ثبت گزارش کار') {
+            else if (name == 'درخواست ثبت گزارش کار') {
                 document.getElementById("lorem-box").style.display = "none";
                 document.getElementById("perDate").style.display = "block";
+                document.querySelector(".perTime").style.display = "none";
             } else {
                 document.getElementById("lorem-box").style.display = "none";
                 document.getElementById("perDate").style.display = "none";
+                document.querySelector(".perTime").style.display = "none";
             }
         }
         function openModal2($id) {
@@ -542,8 +576,18 @@
             }
             traverse(document.body);
         }
+        function changeTimeInput (value) {
+            if (value==' - مرخصی ساعتی ') {
+                document.querySelector(".perTime").style.display = "block";
+                document.querySelector("#type_ticket").value = "hourly";
+                document.querySelector("#apptTime1").value = "08:30";
+                document.querySelector("#apptTime2").value = "10:30";
+            } else {
+                document.querySelector(".perTime").style.display = "none";
+                document.querySelector("#type_ticket").value = "daily";
+            }
+        }
         ConvertNumberToPersion()
         check_job_started()
     </script>
-
 @endsection

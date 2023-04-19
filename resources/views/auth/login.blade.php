@@ -34,6 +34,9 @@
                     </div>
                     <button type="submit" class="btn col-12 btn-block btn-info mt-2">ورود</button>
                 </div>
+                <div class="text-center mt-3">
+                    <a href="{{route('user.home-guost-register')}}">ثبت نام</a>
+                </div>
             </div>
         </main>
         @csrf

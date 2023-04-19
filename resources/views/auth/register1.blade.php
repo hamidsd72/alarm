@@ -10,11 +10,11 @@
                 <h4 class="mb-4 text-center">نصب ورژن PWA اپلیکیشن {{ \App\Model\Setting::find(1)->title }}</h4>
                 <h6 class="mb-3">در مرورگر سافاری (ios)</h6>
                 <p class="small-font text-secondary">
-                    <img src="https://pwa.mci.ir/static/media/ios_share_black_24dp.32f1d748.svg" alt="share">
+                    <i class="fa-solid fa-arrow-up-from-bracket mx-1"></i>
                     در نوار پایین روی دکمه Share کلیک کنید
                 </p>
                 <p class="small-font text-secondary">
-                    <img src="https://pwa.mci.ir/static/media/add_box_black_24dp.b2e62f60.svg" alt="add">
+                    <i class="fa-regular fa-square-plus mx-1"></i>
                     در منوی باز شده در قسمت پایین صفحه گزینه
                 </p>
                 <p class="small-font text-secondary">

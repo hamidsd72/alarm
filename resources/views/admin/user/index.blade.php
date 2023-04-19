@@ -136,7 +136,7 @@
                                 <div class="form-group">
                                     <label for="role_name" >نوع سمت</label>
                                     <select id="role_name" name="role_name" class="form-control col-lg-6 col-8">
-                                        @foreach (\App\Model\Role::all('name') as $key => $item)
+                                        @foreach ($roles as $key => $item)
                                             @unless($item->name=='مدیر ارشد' || $item->name=='مدیر')
                                                 <option value="{{$item->name}}" {{ $key==0?'selected':''}}>{{$item->name}}</option>
                                             @endunless

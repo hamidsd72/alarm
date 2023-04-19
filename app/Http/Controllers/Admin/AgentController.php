@@ -32,7 +32,7 @@ class AgentController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['auth','isAdmin']);
+        $this->middleware(['auth', 'SpecialUser','isAdmin']);
     }
 
     public function index()
